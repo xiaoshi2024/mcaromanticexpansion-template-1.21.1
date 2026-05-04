@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "mcaromanticexpansion:item/player_wedding_ring"
+  }
+}

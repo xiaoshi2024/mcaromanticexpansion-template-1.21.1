@@ -1,0 +1,52 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA Romantic Expansion",
+  "item.mcaromanticexpansion.player_bouquet": "Player Bouquet",
+  "item.mcaromanticexpansion.player_engagement_ring": "Player Engagement Ring",
+  "item.mcaromanticexpansion.player_wedding_ring": "Player Wedding Ring",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "Engagement Ring for %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Wedding Ring to %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Wedding Ring from %s",
+
+  "mcaromanticexpansion.gui.bouquet.title": "Received Bouquet",
+  "mcaromanticexpansion.gui.bouquet.question": "%s gave you a bouquet!",
+  "mcaromanticexpansion.gui.bouquet.accept": "Accept",
+  "mcaromanticexpansion.gui.bouquet.reject": "Reject",
+
+  "mcaromanticexpansion.gui.proposal.title": "Marriage Proposal",
+  "mcaromanticexpansion.gui.proposal.question": "%s wants to marry you!",
+  "mcaromanticexpansion.gui.proposal.accept": "I Accept!",
+  "mcaromanticexpansion.gui.proposal.reject": "Sorry, No",
+
+  "mcaromanticexpansion.gui.marriage.title": "Wedding Ceremony",
+  "mcaromanticexpansion.gui.marriage.question": "%s wants to exchange rings!\nBoth players need a wedding ring",
+  "mcaromanticexpansion.gui.marriage.confirm": "Exchange Rings",
+  "mcaromanticexpansion.gui.marriage.cancel": "Cancel",
+
+  "mcaromanticexpansion.message.cannot_propose": "Cannot propose: You are not compatible",
+  "mcaromanticexpansion.message.proposal_sent": "Proposal sent!",
+  "mcaromanticexpansion.message.proposal_accepted": "§a%s accepted your proposal!",
+  "mcaromanticexpansion.message.proposal_rejected": "§c%s rejected your proposal.",
+  "mcaromanticexpansion.message.proposal_declined": "§cProposal declined.",
+
+  "mcaromanticexpansion.message.cannot_marry": "Cannot marry: Both players need a wedding ring",
+  "mcaromanticexpansion.message.marriage_sent": "Wedding request sent!",
+  "mcaromanticexpansion.message.marriage_accepted": "§dCongratulations! You married %s!",
+  "mcaromanticexpansion.message.marriage_declined": "§cWedding cancelled.",
+  "mcaromanticexpansion.message.marriage_failed": "§cWedding failed. Make sure both have rings.",
+  "mcaromanticexpansion.message.missing_ring": "§cMissing wedding ring!",
+
+  "mcaromanticexpansion.message.bouquet_accepted": "%s accepted your bouquet!",
+  "mcaromanticexpansion.message.bouquet_rejected": "%s declined your bouquet.",
+  "mcaromanticexpansion.message.bouquet_received": "You received a bouquet from %s!",
+
+  "mcaromanticexpansion.message.not_opposite_gender": "§cCannot interact: You are not of opposite genders.",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "§7Engaged to: §f%s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "§7Married to: §f%s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "§d§oMay your love last forever!",
+
+  "mcaromanticexpansion.config.title": "MCA Romantic Expansion Config",
+  "mcaromanticexpansion.config.enable_opposite_gender_check": "Enable Opposite Gender Check",
+  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "If enabled, only opposite gender players can propose"
+}
