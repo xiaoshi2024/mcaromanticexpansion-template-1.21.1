@@ -6,10 +6,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.UUID;
 
+@OnlyIn(Dist.CLIENT)
 public class ProposalScreen extends Screen {
     private final UUID proposerUUID;
     private final String proposerName;  // 添加玩家名字

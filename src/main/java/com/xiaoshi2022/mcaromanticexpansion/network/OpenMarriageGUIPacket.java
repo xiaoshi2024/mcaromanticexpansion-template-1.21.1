@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
@@ -23,6 +25,7 @@ public record OpenMarriageGUIPacket(UUID partnerUUID) implements CustomPacketPay
         return TYPE;
     }
 
+    @OnlyIn(Dist.CLIENT)
     public void handle() {
         MCARomanticExpansion.LOGGER.info("CLIENT: OpenMarriageGUIPacket received! partnerUUID={}", partnerUUID);
         Minecraft.getInstance().execute(() -> {

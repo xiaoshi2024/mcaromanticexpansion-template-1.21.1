@@ -6,10 +6,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
-// OpenProposalGUIPacket.java
 public record OpenProposalGUIPacket(UUID proposerUUID, String proposerName) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenProposalGUIPacket> TYPE =
             new CustomPacketPayload.Type<>(MCARomanticExpansion.locate("open_proposal_gui"));
@@ -22,6 +23,7 @@ public record OpenProposalGUIPacket(UUID proposerUUID, String proposerName) impl
             buf -> new OpenProposalGUIPacket(buf.readUUID(), buf.readUtf(64))
     );
 
+    @OnlyIn(Dist.CLIENT)
     public void handle() {
         Minecraft.getInstance().execute(() -> {
             Minecraft.getInstance().setScreen(new ProposalScreen(proposerUUID(), proposerName()));
