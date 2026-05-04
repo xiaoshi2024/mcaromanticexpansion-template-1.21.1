@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.item.EngagementRingItem;
 import net.conczin.mca.registry.ItemsMCA;
 import net.conczin.mca.server.ServerInteractionManager;
@@ -30,7 +31,8 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
         return TYPE;
     }
 
-    public void handle(ServerPlayer responder) {  // responder 是被求婚者
+    // ProposalResponsePacket.java - 修改 handle 方法
+    public void handle(ServerPlayer responder) {
         if (responder.getServer() == null) return;
 
         ServerPlayer proposer = responder.getServer().getPlayerList().getPlayer(proposerUUID);
@@ -43,34 +45,41 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
                 proposer.getName().getString(), responder.getName().getString(), accepted);
 
         if (accepted) {
-            // 重要：让求婚者发起接受请求，而不是被求婚者
-            // 正确的方式是让求婚者调用 acceptProposal，参数为（求婚者，被求婚者）
-            // 根据 MCA 源码，acceptProposal 的第一个参数是主动方
-
-            // 尝试1：求婚者接受回应者的求婚
-            ServerInteractionManager.getInstance().acceptProposal(proposer, responder);
-
-            // 转移订婚戒指：从求婚者背包移除，添加到接受者背包
+            // 先转移戒指（在调用 MCA 方法之前）
             boolean found = false;
+            ItemStack ringWithNBT = null;
             for (int i = 0; i < proposer.getInventory().getContainerSize(); i++) {
                 ItemStack stack = proposer.getInventory().getItem(i);
                 if (!stack.isEmpty() && stack.getItem() instanceof EngagementRingItem) {
+                    ringWithNBT = stack.copy();
+                    ringWithNBT.setCount(1);
+                    // 清除原有自定义名称
+                    ringWithNBT.remove(net.minecraft.core.component.DataComponents.CUSTOM_NAME);
+                    RingNBTUtil.setEngagementRingTarget(ringWithNBT, responder);
                     stack.shrink(1);
                     found = true;
                     MCARomanticExpansion.LOGGER.info("Removed engagement ring from proposer");
                     break;
                 }
             }
-            if (found) {
-                responder.getInventory().add(new ItemStack(ItemsMCA.ENGAGEMENT_RING));
-                MCARomanticExpansion.LOGGER.info("Added engagement ring to responder");
+
+            // 然后调用 MCA 的接受求婚方法
+            try {
+                ServerInteractionManager.getInstance().acceptProposal(proposer, responder);
+                MCARomanticExpansion.LOGGER.info("MCA acceptProposal called successfully");
+            } catch (Exception e) {
+                MCARomanticExpansion.LOGGER.error("MCA acceptProposal failed", e);
             }
 
-            // 发送成功消息
-            responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.proposal.accepted", proposer.getName()));
-            proposer.sendSystemMessage(Component.translatable("mcaromanticexpansion.proposal.accepted", responder.getName()));
+            if (found && ringWithNBT != null) {
+                responder.getInventory().add(ringWithNBT);
+                MCARomanticExpansion.LOGGER.info("Added custom engagement ring to responder");
+            }
+
+            // 发送成功消息 - 使用不同的格式避免与 MCA 冲突
+            responder.sendSystemMessage(Component.literal("§d§o" + proposer.getName().getString() + " 向你求婚了！你接受了！"));
+            proposer.sendSystemMessage(Component.literal("§a§o" + responder.getName().getString() + " 接受了你的求婚！"));
         } else {
-            // 拒绝求婚
             ServerInteractionManager.getInstance().rejectProposal(proposer, responder);
             responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.proposal.rejected"));
             proposer.sendSystemMessage(Component.translatable("mcaromanticexpansion.proposal.rejected_by", responder.getName()));

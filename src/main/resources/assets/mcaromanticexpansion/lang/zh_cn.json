@@ -48,5 +48,14 @@
 
   "mcaromanticexpansion.config.title": "MCA 浪漫扩展配置",
   "mcaromanticexpansion.config.enable_opposite_gender_check": "启用异性检查",
-  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "启用后，只有异性玩家才能求婚"
+  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "启用后，只有异性玩家才能求婚",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s 接受了你的求婚！",
+  "mcaromanticexpansion.proposal.rejected": "§c求婚被拒绝了。",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s 拒绝了你的求婚。",
+
+  "mcaromanticexpansion.marriage.declined": "§c婚礼已取消。",
+  "mcaromanticexpansion.marriage.missing_ring": "§c双方都需要拥有结婚戒指！",
+  "mcaromanticexpansion.marriage.success": "§d恭喜你们！你和 %s 结为夫妻了！",
+  "mcaromanticexpansion.marriage.failed": "§c婚礼失败，请确保双方都有戒指。"
 }

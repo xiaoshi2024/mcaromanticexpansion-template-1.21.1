@@ -1,5 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
+import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -54,8 +55,14 @@ public class RingNBTUtil {
     }
 
     // 为结婚戒指设置对方信息
+    // RingNBTUtil.java - 添加调试日志
     public static ItemStack setWeddingRingPartner(ItemStack ring, Player partner, boolean isReceiver) {
-        if (ring.isEmpty()) return ring;
+        if (ring.isEmpty()) {
+            MCARomanticExpansion.LOGGER.warn("setWeddingRingPartner called with empty ring");
+            return ring;
+        }
+
+        MCARomanticExpansion.LOGGER.info("Setting wedding ring partner: {}, isReceiver={}", partner.getName().getString(), isReceiver);
 
         CustomData customData = getOrCreateCustomData(ring);
         CompoundTag tag = customData.copyTag();
@@ -67,6 +74,9 @@ public class RingNBTUtil {
 
         setCustomData(ring, tag);
 
+        MCARomanticExpansion.LOGGER.info("NBT data saved: PartnerName={}, PartnerUUID={}",
+                tag.getString(TAG_PARTNER_NAME), tag.getUUID(TAG_PARTNER_UUID));
+
         // 根据持有者身份设置不同显示名称
         Component displayName;
         if (isReceiver) {
@@ -76,9 +86,10 @@ public class RingNBTUtil {
         }
         ring.set(DataComponents.CUSTOM_NAME, displayName);
 
+        MCARomanticExpansion.LOGGER.info("Set custom name: {}", displayName.getString());
+
         return ring;
     }
-
     // 获取戒指关联的玩家名字
     public static String getPartnerName(ItemStack ring) {
         CustomData customData = ring.get(DataComponents.CUSTOM_DATA);

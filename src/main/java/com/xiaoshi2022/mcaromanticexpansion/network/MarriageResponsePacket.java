@@ -1,9 +1,11 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.item.WeddingRingItem;
 import net.conczin.mca.registry.ItemsMCA;
 import net.conczin.mca.server.world.data.PlayerSaveData;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -50,22 +52,27 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
             return;
         }
 
-        // 使用 MCA 的婚姻系统 - 注意 marry 方法需要传入 Player 而不是 PlayerSaveData
+        // 使用 MCA 的婚姻系统
         try {
             PlayerSaveData receiverData = PlayerSaveData.get(receiver);
             PlayerSaveData partnerData = PlayerSaveData.get(partner);
 
-            // 正确的调用方式：marry(PlayerSaveData) 或 marry(Player)
-            // 根据错误信息，marry 应该接受 PlayerSaveData 参数
             receiverData.marry(partner);
             partnerData.marry(receiver);
 
             MCARomanticExpansion.LOGGER.info("Successfully married {} and {}",
                     receiver.getName().getString(), partner.getName().getString());
 
-            // 交换戒指
-            receiver.getInventory().add(partnerRing);
-            partner.getInventory().add(receiverRing);
+            // ========== 关键修复：使用 createWeddingRingWithPartner 方法 ==========
+            // 创建带有对方名字的结婚戒指
+            ItemStack customReceiverRing = createWeddingRingWithPartner(receiverRing, partner, true);
+            ItemStack customPartnerRing = createWeddingRingWithPartner(partnerRing, receiver, false);
+
+            // 添加定制戒指（而不是原始戒指）
+            receiver.getInventory().add(customReceiverRing);
+            partner.getInventory().add(customPartnerRing);
+
+            MCARomanticExpansion.LOGGER.info("Added custom wedding rings to both players");
 
             receiver.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success", partner.getName()));
             partner.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success", receiver.getName()));
@@ -88,5 +95,23 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    // 创建带有伴侣名字的结婚戒指
+    private ItemStack createWeddingRingWithPartner(ItemStack originalRing, ServerPlayer partner, boolean isReceiver) {
+        if (originalRing.isEmpty()) {
+            originalRing = new ItemStack(ItemsMCA.WEDDING_RING);
+        } else {
+            originalRing = originalRing.copy();
+            originalRing.setCount(1);
+        }
+
+        // 清除原有的自定义名称
+        originalRing.remove(DataComponents.CUSTOM_NAME);
+
+        // 设置伴侣信息
+        ItemStack result = RingNBTUtil.setWeddingRingPartner(originalRing, partner, isReceiver);
+        MCARomanticExpansion.LOGGER.info("Created wedding ring for: {} (isReceiver={})", partner.getName().getString(), isReceiver);
+        return result;
     }
 }

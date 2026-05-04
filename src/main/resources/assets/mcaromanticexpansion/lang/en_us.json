@@ -48,5 +48,14 @@
 
   "mcaromanticexpansion.config.title": "MCA Romantic Expansion Config",
   "mcaromanticexpansion.config.enable_opposite_gender_check": "Enable Opposite Gender Check",
-  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "If enabled, only opposite gender players can propose"
+  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "If enabled, only opposite gender players can propose",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s accepted your proposal!",
+  "mcaromanticexpansion.proposal.rejected": "§cProposal rejected.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s rejected your proposal.",
+
+  "mcaromanticexpansion.marriage.declined": "§cWedding cancelled.",
+  "mcaromanticexpansion.marriage.missing_ring": "§cBoth players need a wedding ring!",
+  "mcaromanticexpansion.marriage.success": "§dCongratulations! You married %s!",
+  "mcaromanticexpansion.marriage.failed": "§cWedding failed. Make sure both have rings."
 }
