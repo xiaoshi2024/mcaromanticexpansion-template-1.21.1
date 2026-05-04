@@ -78,7 +78,7 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
 
 ## License
 
-MIT License
+GPL-3.0 License
 
 ## Credits
 
