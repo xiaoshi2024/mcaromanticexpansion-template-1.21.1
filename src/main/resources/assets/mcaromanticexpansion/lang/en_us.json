@@ -3,10 +3,14 @@
   "item.mcaromanticexpansion.player_bouquet": "Player Bouquet",
   "item.mcaromanticexpansion.player_engagement_ring": "Player Engagement Ring",
   "item.mcaromanticexpansion.player_wedding_ring": "Player Wedding Ring",
-
-  "item.mcaromanticexpansion.engagement_ring.target": "Engagement Ring for %s",
-  "item.mcaromanticexpansion.wedding_ring.given": "Wedding Ring to %s",
-  "item.mcaromanticexpansion.wedding_ring.received": "Wedding Ring from %s",
+  "item.mcaromanticexpansion.gift_box": "Gift Box",
+  "item.mcaromanticexpansion.gift_box.valentine": "Valentine Gift Box",
+  "item.mcaromanticexpansion.gift_box.christmas": "Christmas Gift Box",
+  "item.mcaromanticexpansion.gift_box.halloween": "Halloween Gift Box",
+  "item.mcaromanticexpansion.gift_box.birthday": "Birthday Gift Box",
+  "item.mcaromanticexpansion.engagement_ring.target": "Engagement Ring - With %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Wedding Ring - From %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Wedding Ring - To %s",
 
   "mcaromanticexpansion.gui.bouquet.title": "Received Bouquet",
   "mcaromanticexpansion.gui.bouquet.question": "%s gave you a bouquet!",
@@ -23,33 +27,6 @@
   "mcaromanticexpansion.gui.marriage.confirm": "Exchange Rings",
   "mcaromanticexpansion.gui.marriage.cancel": "Cancel",
 
-  "mcaromanticexpansion.message.cannot_propose": "Cannot propose: You are not compatible",
-  "mcaromanticexpansion.message.proposal_sent": "Proposal sent!",
-  "mcaromanticexpansion.message.proposal_accepted": "§a%s accepted your proposal!",
-  "mcaromanticexpansion.message.proposal_rejected": "§c%s rejected your proposal.",
-  "mcaromanticexpansion.message.proposal_declined": "§cProposal declined.",
-
-  "mcaromanticexpansion.message.cannot_marry": "Cannot marry: Both players need a wedding ring",
-  "mcaromanticexpansion.message.marriage_sent": "Wedding request sent!",
-  "mcaromanticexpansion.message.marriage_accepted": "§dCongratulations! You married %s!",
-  "mcaromanticexpansion.message.marriage_declined": "§cWedding cancelled.",
-  "mcaromanticexpansion.message.marriage_failed": "§cWedding failed. Make sure both have rings.",
-  "mcaromanticexpansion.message.missing_ring": "§cMissing wedding ring!",
-
-  "mcaromanticexpansion.message.bouquet_accepted": "%s accepted your bouquet!",
-  "mcaromanticexpansion.message.bouquet_rejected": "%s declined your bouquet.",
-  "mcaromanticexpansion.message.bouquet_received": "You received a bouquet from %s!",
-
-  "mcaromanticexpansion.message.not_opposite_gender": "§cCannot interact: You are not of opposite genders.",
-
-  "mcaromanticexpansion.ring.tooltip.engaged_to": "§7Engaged to: §f%s",
-  "mcaromanticexpansion.ring.tooltip.married_to": "§7Married to: §f%s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "§d§oMay your love last forever!",
-
-  "mcaromanticexpansion.config.title": "MCA Romantic Expansion Config",
-  "mcaromanticexpansion.config.enable_opposite_gender_check": "Enable Opposite Gender Check",
-  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "If enabled, only opposite gender players can propose",
-
   "mcaromanticexpansion.proposal.accepted": "§a%s accepted your proposal!",
   "mcaromanticexpansion.proposal.rejected": "§cProposal rejected.",
   "mcaromanticexpansion.proposal.rejected_by": "§c%s rejected your proposal.",
@@ -57,5 +34,29 @@
   "mcaromanticexpansion.marriage.declined": "§cWedding cancelled.",
   "mcaromanticexpansion.marriage.missing_ring": "§cBoth players need a wedding ring!",
   "mcaromanticexpansion.marriage.success": "§dCongratulations! You married %s!",
-  "mcaromanticexpansion.marriage.failed": "§cWedding failed. Make sure both have rings."
+  "mcaromanticexpansion.marriage.failed": "§cWedding failed. Make sure both have rings.",
+
+  "mcaromanticexpansion.message.cannot_propose": "Cannot propose: You are not compatible",
+  "mcaromanticexpansion.message.proposal_sent": "Proposal sent!",
+  "mcaromanticexpansion.message.cannot_marry": "Cannot marry: Both players need a wedding ring",
+  "mcaromanticexpansion.message.marriage_sent": "Wedding request sent!",
+  "mcaromanticexpansion.message.married": "Congratulations on your marriage!",
+  "mcaromanticexpansion.message.divorce_success": "Divorce successful",
+  "mcaromanticexpansion.message.gift_placed": "Item placed in gift box",
+  "mcaromanticexpansion.message.gift_opened": "Opened gift box and received item",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§aBirthday set to: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.success": "§eYour birthday is: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§cYou haven't set your birthday! Usage: /birthday set <month> <day>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 Happy Birthday! Today is your birthday!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eYour birthday is: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§cYou haven't set your birthday!",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "Engaged to %s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "Married to %s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "Blessings to you both",
+
+  "mcaromanticexpansion.command.birthday.check.other.success": "%s's birthday is %d/%d",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s has not set their birthday!"
+
 }

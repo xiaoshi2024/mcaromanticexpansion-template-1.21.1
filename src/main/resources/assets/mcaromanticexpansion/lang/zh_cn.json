@@ -3,10 +3,14 @@
   "item.mcaromanticexpansion.player_bouquet": "玩家花束",
   "item.mcaromanticexpansion.player_engagement_ring": "玩家订婚戒指",
   "item.mcaromanticexpansion.player_wedding_ring": "玩家结婚戒指",
-
-  "item.mcaromanticexpansion.engagement_ring.target": "送给 %s 的订婚戒指",
-  "item.mcaromanticexpansion.wedding_ring.given": "送给 %s 的结婚戒指",
-  "item.mcaromanticexpansion.wedding_ring.received": "%s 赠送的结婚戒指",
+  "item.mcaromanticexpansion.gift_box": "礼盒",
+  "item.mcaromanticexpansion.gift_box.valentine": "情人节礼盒",
+  "item.mcaromanticexpansion.gift_box.christmas": "圣诞礼盒",
+  "item.mcaromanticexpansion.gift_box.halloween": "万圣节礼盒",
+  "item.mcaromanticexpansion.gift_box.birthday": "生日礼盒",
+  "item.mcaromanticexpansion.engagement_ring.target": "订婚戒指 - 与 %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "婚戒 - 来自 %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "婚戒 - 送给 %s",
 
   "mcaromanticexpansion.gui.bouquet.title": "收到花束",
   "mcaromanticexpansion.gui.bouquet.question": "%s 送给你一束花！",
@@ -23,33 +27,6 @@
   "mcaromanticexpansion.gui.marriage.confirm": "交换戒指",
   "mcaromanticexpansion.gui.marriage.cancel": "取消",
 
-  "mcaromanticexpansion.message.cannot_propose": "无法求婚：你们不合适",
-  "mcaromanticexpansion.message.proposal_sent": "求婚请求已发送！",
-  "mcaromanticexpansion.message.proposal_accepted": "§a%s 接受了你的求婚！",
-  "mcaromanticexpansion.message.proposal_rejected": "§c%s 拒绝了你的求婚。",
-  "mcaromanticexpansion.message.proposal_declined": "§c求婚被拒绝了。",
-
-  "mcaromanticexpansion.message.cannot_marry": "无法结婚：双方都需要拥有结婚戒指",
-  "mcaromanticexpansion.message.marriage_sent": "婚礼请求已发送！",
-  "mcaromanticexpansion.message.marriage_accepted": "§d恭喜你们！你和 %s 结为夫妻了！",
-  "mcaromanticexpansion.message.marriage_declined": "§c婚礼已取消。",
-  "mcaromanticexpansion.message.marriage_failed": "§c婚礼失败，请确保双方都有戒指。",
-  "mcaromanticexpansion.message.missing_ring": "§c缺少结婚戒指！",
-
-  "mcaromanticexpansion.message.bouquet_accepted": "%s 收下了你的花束！",
-  "mcaromanticexpansion.message.bouquet_rejected": "%s 拒收了你的花束。",
-  "mcaromanticexpansion.message.bouquet_received": "你收到了来自 %s 的花束！",
-
-  "mcaromanticexpansion.message.not_opposite_gender": "§c无法交互：你们不是异性。",
-
-  "mcaromanticexpansion.ring.tooltip.engaged_to": "§7已订婚：§f%s",
-  "mcaromanticexpansion.ring.tooltip.married_to": "§7已结婚：§f%s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "§d§o愿你们的爱情永恒！",
-
-  "mcaromanticexpansion.config.title": "MCA 浪漫扩展配置",
-  "mcaromanticexpansion.config.enable_opposite_gender_check": "启用异性检查",
-  "mcaromanticexpansion.config.enable_opposite_gender_check.tooltip": "启用后，只有异性玩家才能求婚",
-
   "mcaromanticexpansion.proposal.accepted": "§a%s 接受了你的求婚！",
   "mcaromanticexpansion.proposal.rejected": "§c求婚被拒绝了。",
   "mcaromanticexpansion.proposal.rejected_by": "§c%s 拒绝了你的求婚。",
@@ -57,5 +34,28 @@
   "mcaromanticexpansion.marriage.declined": "§c婚礼已取消。",
   "mcaromanticexpansion.marriage.missing_ring": "§c双方都需要拥有结婚戒指！",
   "mcaromanticexpansion.marriage.success": "§d恭喜你们！你和 %s 结为夫妻了！",
-  "mcaromanticexpansion.marriage.failed": "§c婚礼失败，请确保双方都有戒指。"
+  "mcaromanticexpansion.marriage.failed": "§c婚礼失败，请确保双方都有戒指。",
+
+  "mcaromanticexpansion.message.cannot_propose": "无法求婚：你们不合适",
+  "mcaromanticexpansion.message.proposal_sent": "求婚请求已发送！",
+  "mcaromanticexpansion.message.cannot_marry": "无法结婚：双方都需要拥有结婚戒指",
+  "mcaromanticexpansion.message.marriage_sent": "婚礼请求已发送！",
+  "mcaromanticexpansion.message.married": "恭喜你们结婚了！",
+  "mcaromanticexpansion.message.divorce_success": "离婚成功",
+  "mcaromanticexpansion.message.gift_placed": "已将物品放入礼盒",
+  "mcaromanticexpansion.message.gift_opened": "打开礼盒获得了物品",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§a生日已设置为: %1$d月%2$d日",
+  "mcaromanticexpansion.command.birthday.check.success": "§e你的生日是: %1$d月%2$d日",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§c你还没有设置生日！使用方法: /birthday set <月份> <日期>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 生日快乐！今天是你的生日！",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§e你的生日是: %1$d月%2$d日",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§c你还没有设置生日！",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "已与 %s 订婚",
+  "mcaromanticexpansion.ring.tooltip.married_to": "已与 %s 结婚",
+  "mcaromanticexpansion.ring.tooltip.blessing": "祝你们幸福美满",
+
+  "mcaromanticexpansion.command.birthday.check.other.success": "%s 的生日是 %d月%d日",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s 还没有设置生日！"
 }

@@ -8,6 +8,8 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
 - **订婚系统**：使用 MCA 订婚戒指右键玩家发送求婚请求（只需一方有戒指）
 - **结婚系统**：使用 MCA 结婚戒指右键玩家进行婚礼（双方都需要拥有结婚戒指）
 - **戒指交换**：结婚时双方交换戒指，就像真实婚礼一样
+- **离婚系统**：使用 MCA 离婚协议书右键配偶触发离婚
+- **礼盒系统**：制作礼盒，放入礼物送给爱人
 - 完全集成 MCA 已有的关系管理系统
 
 ## 如何使用
@@ -18,6 +20,7 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
    - 花束 (Bouquet)
    - 订婚戒指 (Engagement Ring)
    - 结婚戒指 (Wedding Ring)
+   - 离婚协议书 (Divorce Papers)
 
 2. **花束互动**
    - 右键其他玩家使用花束
@@ -37,7 +40,18 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
    - 点击「交换戒指」：双方交换戒指并正式结婚
    - 点击「取消」：取消婚礼
 
-5. **使用 MCA 命令进行更多操作**
+5. **离婚流程**
+   - 获得离婚协议书（可通过 MCA 命令获取）
+   - 右键你的配偶使用离婚协议书
+   - 自动执行离婚，消耗离婚协议书
+
+6. **礼盒系统**
+   - **制作礼盒**：获取礼盒物品
+   - **放入礼物**：主手拿礼盒，副手拿要放入的物品，Shift+右键
+   - **赠送礼盒**：将礼盒丢给或交易给对方
+   - **打开礼盒**：右键空地打开礼盒获得里面的物品
+
+7. **使用 MCA 命令进行更多操作**
    - `/mca proposals` - 查看你的求婚列表
    - `/mca accept <玩家>` - 接受某人的求婚
    - `/mca reject <玩家>` - 拒绝某人的求婚
@@ -63,6 +77,16 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
    - 将玩家 B 的戒指放入玩家 A 的背包
 3. **意义**：象征着双方在婚姻中的承诺和结合
 
+## 礼盒系统说明
+
+礼盒是一个浪漫的礼物传递方式：
+
+1. **空礼盒**：可以放入任意物品作为礼物
+2. **放入礼物**：主手拿着礼盒，副手拿着要放入的物品，按住 Shift+右键
+3. **赠送方式**：可以通过丢给对方或交易的方式赠送
+4. **打开礼盒**：右键空地即可打开礼盒获得里面的物品
+5. **重复使用**：打开后的礼盒会变成空礼盒，可以再次放入物品
+
 ## 要求
 
 - Minecraft 1.21.1
@@ -78,7 +102,7 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
 
 ## License
 
-GPL-3.0 License
+GNU General Public License v3.0 (GPL-3.0)
 
 ## Credits
 
