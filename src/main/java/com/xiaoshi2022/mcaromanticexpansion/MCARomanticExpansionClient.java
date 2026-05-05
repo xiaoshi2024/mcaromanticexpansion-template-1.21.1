@@ -1,5 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
+import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -8,6 +9,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 @EventBusSubscriber(modid = MCARomanticExpansion.MODID, value = Dist.CLIENT)
 public class MCARomanticExpansionClient {
@@ -20,5 +22,11 @@ public class MCARomanticExpansionClient {
                     ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "variant"),
                     (stack, level, entity, seed) -> GiftBoxItem.getModelVariantValue(stack));
         });
+
+    }
+    // 新增：注册模型层定义
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(WeddingClothesModel.LAYER_LOCATION, WeddingClothesModel::createBodyLayer);
     }
 }

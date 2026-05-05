@@ -3,12 +3,16 @@ package com.xiaoshi2022.mcaromanticexpansion.compat.curios;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.bus.api.SubscribeEvent;
+import top.theillusivec4.curios.api.SlotContext;
 
 @EventBusSubscriber(modid = MCARomanticExpansion.MODID)
 public class CuriosIntegration {
@@ -65,6 +69,60 @@ public class CuriosIntegration {
         registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:wedding_ring_rg");
         registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:engagement_ring");
         registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:engagement_ring_rg");
+
+        // ========== 胸花渲染 ==========
+        CorsageRenderer corsageRenderer = new CorsageRenderer();
+        Object corsageProxy = java.lang.reflect.Proxy.newProxyInstance(
+                CuriosIntegration.class.getClassLoader(),
+                new Class[]{iCurioRendererClass},
+                (proxy, method, args) -> {
+                    if ("render".equals(method.getName()) && args != null && args.length >= 12) {
+                        corsageRenderer.render(
+                                (ItemStack) args[0],
+                                (SlotContext) args[1],
+                                (PoseStack) args[2],
+                                (RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
+                                (MultiBufferSource) args[4],
+                                (int) args[5], (float) args[6], (float) args[7],
+                                (float) args[8], (float) args[9], (float) args[10], (float) args[11]
+                        );
+                    }
+                    return null;
+                }
+        );
+
+        registerRingRenderer(curiosRendererRegistryClass, corsageProxy, "mcaromanticexpansion:rose_brooch_red");
+        registerRingRenderer(curiosRendererRegistryClass, corsageProxy, "mcaromanticexpansion:rose_brooch_pink");
+        registerRingRenderer(curiosRendererRegistryClass, corsageProxy, "mcaromanticexpansion:rose_brooch_white");
+
+
+        // ========== 婚服渲染 ==========
+        WeddingClothesRenderer weddingRenderer = new WeddingClothesRenderer();
+        Object weddingProxy = java.lang.reflect.Proxy.newProxyInstance(
+                CuriosIntegration.class.getClassLoader(),
+                new Class[]{iCurioRendererClass},
+                (proxy, method, args) -> {
+                    if ("render".equals(method.getName()) && args != null && args.length >= 12) {
+                        weddingRenderer.render(
+                                (ItemStack) args[0],
+                                (SlotContext) args[1],
+                                (PoseStack) args[2],
+                                (RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
+                                (MultiBufferSource) args[4],
+                                (int) args[5], (float) args[6], (float) args[7],
+                                (float) args[8], (float) args[9], (float) args[10], (float) args[11]
+                        );
+                    }
+                    return null;
+                }
+        );
+
+// 注册婚服物品
+        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:chinese_wedding_male");
+        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:chinese_wedding_female");
+        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:western_wedding_male");
+        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:western_wedding_female");
+
     }
 
     // 独立的 InvocationHandler 类

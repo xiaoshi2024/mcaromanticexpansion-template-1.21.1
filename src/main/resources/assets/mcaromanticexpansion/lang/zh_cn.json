@@ -12,6 +12,20 @@
   "item.mcaromanticexpansion.wedding_ring.given": "婚戒 - 来自 %s",
   "item.mcaromanticexpansion.wedding_ring.received": "婚戒 - 送给 %s",
 
+  "item.mcaromanticexpansion.rose_brooch_red": "红玫瑰胸针",
+  "item.mcaromanticexpansion.rose_brooch_pink": "粉玫瑰胸针",
+  "item.mcaromanticexpansion.rose_brooch_white": "白玫瑰胸针",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7佩戴在胸前的精美胸针",
+  "tooltip.mcaromanticexpansion.corsage.red": "§c红玫瑰 - 热情似火",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§d粉玫瑰 - 甜蜜温柔",
+  "tooltip.mcaromanticexpansion.corsage.white": "§f白玫瑰 - 纯洁无瑕",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "中式新郎婚服",
+  "item.mcaromanticexpansion.chinese_wedding_female": "中式新娘婚服",
+  "item.mcaromanticexpansion.western_wedding_male": "西式新郎西装",
+  "item.mcaromanticexpansion.western_wedding_female": "西式新娘婚纱",
+
   "mcaromanticexpansion.gui.bouquet.title": "收到花束",
   "mcaromanticexpansion.gui.bouquet.question": "%s 送给你一束花！",
   "mcaromanticexpansion.gui.bouquet.accept": "收下",

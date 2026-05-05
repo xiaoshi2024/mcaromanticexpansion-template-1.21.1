@@ -12,6 +12,20 @@
   "item.mcaromanticexpansion.wedding_ring.given": "Wedding Ring - From %s",
   "item.mcaromanticexpansion.wedding_ring.received": "Wedding Ring - To %s",
 
+  "item.mcaromanticexpansion.rose_brooch_red": "Red Rose Brooch",
+  "item.mcaromanticexpansion.rose_brooch_pink": "Pink Rose Brooch",
+  "item.mcaromanticexpansion.rose_brooch_white": "White Rose Brooch",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7A beautiful brooch to wear on your chest",
+  "tooltip.mcaromanticexpansion.corsage.red": "§cRed rose - Romantic love",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§dPink rose - Sweet and gentle",
+  "tooltip.mcaromanticexpansion.corsage.white": "§fWhite rose - Pure and innocent",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "Chinese Wedding Groom Outfit",
+  "item.mcaromanticexpansion.chinese_wedding_female": "Chinese Wedding Bride Outfit",
+  "item.mcaromanticexpansion.western_wedding_male": "Western Wedding Groom Suit",
+  "item.mcaromanticexpansion.western_wedding_female": "Western Wedding Bride Dress",
+
   "mcaromanticexpansion.gui.bouquet.title": "Received Bouquet",
   "mcaromanticexpansion.gui.bouquet.question": "%s gave you a bouquet!",
   "mcaromanticexpansion.gui.bouquet.accept": "Accept",
