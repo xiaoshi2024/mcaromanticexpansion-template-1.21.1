@@ -1,0 +1,59 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA Романтическое Расширение",
+  "item.mcaromanticexpansion.player_bouquet": "Букет Игрока",
+  "item.mcaromanticexpansion.player_engagement_ring": "Кольцо Невесты Игрока",
+  "item.mcaromanticexpansion.player_wedding_ring": "Обручальное Кольцо Игрока",
+  "item.mcaromanticexpansion.gift_box": "Подарочная Коробка",
+  "item.mcaromanticexpansion.gift_box.valentine": "Валентинова Подарочная Коробка",
+  "item.mcaromanticexpansion.gift_box.christmas": "Рождественская Подарочная Коробка",
+  "item.mcaromanticexpansion.gift_box.halloween": "Хеллоуинская Подарочная Коробка",
+  "item.mcaromanticexpansion.gift_box.birthday": "Подарочная Коробка на День Рождения",
+
+  "mcaromanticexpansion.gui.bouquet.title": "Получен Букет",
+  "mcaromanticexpansion.gui.bouquet.question": "%s подарил вам букет!",
+  "mcaromanticexpansion.gui.bouquet.accept": "Принять",
+  "mcaromanticexpansion.gui.bouquet.reject": "Отклонить",
+
+  "mcaromanticexpansion.gui.proposal.title": "Предложение",
+  "mcaromanticexpansion.gui.proposal.question": "%s хочет на вас жениться!",
+  "mcaromanticexpansion.gui.proposal.accept": "Да, согласна!",
+  "mcaromanticexpansion.gui.proposal.reject": "Извините, нет",
+
+  "mcaromanticexpansion.gui.marriage.title": "Свадебная Церемония",
+  "mcaromanticexpansion.gui.marriage.question": "%s хочет обменяться кольцами!\nОбоим игрокам нужны обручальные кольца",
+  "mcaromanticexpansion.gui.marriage.confirm": "Обменяться Кольцами",
+  "mcaromanticexpansion.gui.marriage.cancel": "Отмена",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s принял ваше предложение!",
+  "mcaromanticexpansion.proposal.rejected": "§cПредложение отклонено.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s отклонил ваше предложение.",
+
+  "mcaromanticexpansion.marriage.declined": "§cСвадьба отменена.",
+  "mcaromanticexpansion.marriage.missing_ring": "§cОбоим игрокам нужны обручальные кольца!",
+  "mcaromanticexpansion.marriage.success": "§dПоздравляем! Вы поженились на %s!",
+  "mcaromanticexpansion.marriage.failed": "§cСвадьба не удалась. Убедитесь, что у обоих есть кольца.",
+
+  "mcaromanticexpansion.message.cannot_propose": "Невозможно предложить: вы не подходите друг другу",
+  "mcaromanticexpansion.message.proposal_sent": "Предложение отправлено!",
+  "mcaromanticexpansion.message.cannot_marry": "Невозможно пожениться: обоим игрокам нужны обручальные кольца",
+  "mcaromanticexpansion.message.marriage_sent": "Заявка на свадьбу отправлена!",
+  "mcaromanticexpansion.message.married": "Поздравляем со свадьбой!",
+  "mcaromanticexpansion.message.divorce_success": "Развод успешен",
+  "mcaromanticexpansion.message.gift_placed": "Предмет положен в подарочную коробку",
+  "mcaromanticexpansion.message.gift_opened": "Подарочная коробка открыта, предмет получен",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§aДень рождения установлен: %1$d.%2$d",
+  "mcaromanticexpansion.command.birthday.check.success": "§eВаш день рождения: %1$d.%2$d",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§cВы еще не установили день рождения! Использование: /birthday set <месяц> <день>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 С Днем Рождения! Сегодня ваш день рождения!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eВаш день рождения: %1$d.%2$d",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§cВы еще не установили день рождения!",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "Кольцо Невесты - С %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Обручальное Кольцо - От %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Обручальное Кольцо - Для %s",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "Обручен с %s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "Женат/Замужем за %s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "Благословение вам обоим"
+}

@@ -1,0 +1,59 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA浪漫拡張",
+  "item.mcaromanticexpansion.player_bouquet": "プレイヤーブーケ",
+  "item.mcaromanticexpansion.player_engagement_ring": "プレイヤー婚約指輪",
+  "item.mcaromanticexpansion.player_wedding_ring": "プレイヤー結婚指輪",
+  "item.mcaromanticexpansion.gift_box": "ギフトボックス",
+  "item.mcaromanticexpansion.gift_box.valentine": "バレンタイングiftボックス",
+  "item.mcaromanticexpansion.gift_box.christmas": "クリスマスイフトボックス",
+  "item.mcaromanticexpansion.gift_box.halloween": "ハロウィングiftボックス",
+  "item.mcaromanticexpansion.gift_box.birthday": "誕生日ギフトボックス",
+
+  "mcaromanticexpansion.gui.bouquet.title": "ブーケを受け取りました",
+  "mcaromanticexpansion.gui.bouquet.question": "%sがあなたにブーケを贈りました！",
+  "mcaromanticexpansion.gui.bouquet.accept": "受け取る",
+  "mcaromanticexpansion.gui.bouquet.reject": "断る",
+
+  "mcaromanticexpansion.gui.proposal.title": "求婚",
+  "mcaromanticexpansion.gui.proposal.question": "%sがあなたと結婚したがっています！",
+  "mcaromanticexpansion.gui.proposal.accept": "喜んで！",
+  "mcaromanticexpansion.gui.proposal.reject": "ごめんなさい",
+
+  "mcaromanticexpansion.gui.marriage.title": "結婚式",
+  "mcaromanticexpansion.gui.marriage.question": "%sが指輪の交換を求めています！\n両方のプレイヤーが結婚指輪を持っている必要があります",
+  "mcaromanticexpansion.gui.marriage.confirm": "指輪を交換する",
+  "mcaromanticexpansion.gui.marriage.cancel": "キャンセル",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%sがあなたの求婚を受け入れました！",
+  "mcaromanticexpansion.proposal.rejected": "§c求婚が断られました。",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%sがあなたの求婚を断りました。",
+
+  "mcaromanticexpansion.marriage.declined": "§c結婚がキャンセルされました。",
+  "mcaromanticexpansion.marriage.missing_ring": "§c両方のプレイヤーが結婚指輪を持っている必要があります！",
+  "mcaromanticexpansion.marriage.success": "§dおめでとうございます！あなたは%sと結婚しました！",
+  "mcaromanticexpansion.marriage.failed": "§c結婚に失敗しました。両方が指輪を持っていることを確認してください。",
+
+  "mcaromanticexpansion.message.cannot_propose": "求婚できません：あなたがたは相性がよくありません",
+  "mcaromanticexpansion.message.proposal_sent": "求婚を送りました！",
+  "mcaromanticexpansion.message.cannot_marry": "結婚できません：両方のプレイヤーが結婚指輪を持っている必要があります",
+  "mcaromanticexpansion.message.marriage_sent": "結婚申請を送りました！",
+  "mcaromanticexpansion.message.married": "ご結婚おめでとうございます！",
+  "mcaromanticexpansion.message.divorce_success": "離婚が成立しました",
+  "mcaromanticexpansion.message.gift_placed": "アイテムをギフトボックスに入れました",
+  "mcaromanticexpansion.message.gift_opened": "ギフトボックスを開けてアイテムを受け取りました",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§a誕生日を%1$d月%2$d日に設定しました",
+  "mcaromanticexpansion.command.birthday.check.success": "§eあなたの誕生日は%1$d月%2$d日です",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§c誕生日が設定されていません！使用方法: /birthday set <月> <日>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 お誕生日おめでとうございます！今天是是你的生日！",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eあなたの誕生日は%1$d月%2$d日です",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§c誕生日が設定されていません！",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "婚約指輪 - %s と",
+  "item.mcaromanticexpansion.wedding_ring.given": "結婚指輪 - %s から",
+  "item.mcaromanticexpansion.wedding_ring.received": "結婚指輪 - %s へ",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "%s と婚約中",
+  "mcaromanticexpansion.ring.tooltip.married_to": "%s と結婚中",
+  "mcaromanticexpansion.ring.tooltip.blessing": "二人の幸せを祈ります"
+}

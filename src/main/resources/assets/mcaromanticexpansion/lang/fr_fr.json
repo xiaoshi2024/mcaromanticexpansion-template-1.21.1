@@ -1,0 +1,59 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA Extension Romantique",
+  "item.mcaromanticexpansion.player_bouquet": "Bouquet de Joueur",
+  "item.mcaromanticexpansion.player_engagement_ring": "Bague de Fiançailles Joueur",
+  "item.mcaromanticexpansion.player_wedding_ring": "Bague de Mariage Joueur",
+  "item.mcaromanticexpansion.gift_box": "Boîte Cadeau",
+  "item.mcaromanticexpansion.gift_box.valentine": "Boîte Cadeau Saint-Valentin",
+  "item.mcaromanticexpansion.gift_box.christmas": "Boîte Cadeau Noël",
+  "item.mcaromanticexpansion.gift_box.halloween": "Boîte Cadeau Halloween",
+  "item.mcaromanticexpansion.gift_box.birthday": "Boîte Cadeau Anniversaire",
+
+  "mcaromanticexpansion.gui.bouquet.title": "Bouquet Reçu",
+  "mcaromanticexpansion.gui.bouquet.question": "%s vous a offert un bouquet !",
+  "mcaromanticexpansion.gui.bouquet.accept": "Accepter",
+  "mcaromanticexpansion.gui.bouquet.reject": "Refuser",
+
+  "mcaromanticexpansion.gui.proposal.title": "Demande en Mariage",
+  "mcaromanticexpansion.gui.proposal.question": "%s veut vous épouser !",
+  "mcaromanticexpansion.gui.proposal.accept": "Oui, je le veux !",
+  "mcaromanticexpansion.gui.proposal.reject": "Désolé, non",
+
+  "mcaromanticexpansion.gui.marriage.title": "Cérémonie de Mariage",
+  "mcaromanticexpansion.gui.marriage.question": "%s veut échanger les alliances !\nLes deux joueurs doivent avoir une alliance",
+  "mcaromanticexpansion.gui.marriage.confirm": "Échanger les Alliances",
+  "mcaromanticexpansion.gui.marriage.cancel": "Annuler",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s a accepté votre demande !",
+  "mcaromanticexpansion.proposal.rejected": "§cDemande rejetée.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s a rejeté votre demande.",
+
+  "mcaromanticexpansion.marriage.declined": "§cMariage annulé.",
+  "mcaromanticexpansion.marriage.missing_ring": "§cLes deux joueurs doivent avoir une alliance !",
+  "mcaromanticexpansion.marriage.success": "§dFélicitations ! Vous êtes marié avec %s !",
+  "mcaromanticexpansion.marriage.failed": "§cÉchec du mariage. Assurez-vous que les deux ont des alliances.",
+
+  "mcaromanticexpansion.message.cannot_propose": "Impossible de proposer : vous n'êtes pas compatible",
+  "mcaromanticexpansion.message.proposal_sent": "Demande envoyée !",
+  "mcaromanticexpansion.message.cannot_marry": "Impossible de se marier : les deux joueurs doivent avoir une alliance",
+  "mcaromanticexpansion.message.marriage_sent": "Demande de mariage envoyée !",
+  "mcaromanticexpansion.message.married": "Félicitations pour votre mariage !",
+  "mcaromanticexpansion.message.divorce_success": "Divorce réussi",
+  "mcaromanticexpansion.message.gift_placed": "Objet placé dans la boîte cadeau",
+  "mcaromanticexpansion.message.gift_opened": "Boîte ouverte et objet reçu",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§aAnniversaire défini au : %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.success": "§eVotre anniversaire est le : %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§cVous n'avez pas défini votre anniversaire ! Utilisation : /birthday set <mois> <jour>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 Joyeux Anniversaire ! C'est votre jour !",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eVotre anniversaire est le : %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§cVous n'avez pas défini votre anniversaire !",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "Bague de Fiançailles - Avec %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Alliance - De %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Alliance - Pour %s",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "Fiancé(e) de %s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "Marié(e) à %s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "Bénédictions à vous deux"
+}

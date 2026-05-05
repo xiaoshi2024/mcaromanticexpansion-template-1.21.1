@@ -1,0 +1,59 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA Expansão Romântica",
+  "item.mcaromanticexpansion.player_bouquet": "Buquê do Jogador",
+  "item.mcaromanticexpansion.player_engagement_ring": "Aliança de Noivado do Jogador",
+  "item.mcaromanticexpansion.player_wedding_ring": "Aliança de Casamento do Jogador",
+  "item.mcaromanticexpansion.gift_box": "Caixa de Presente",
+  "item.mcaromanticexpansion.gift_box.valentine": "Caixa de Presente de Valentines Day",
+  "item.mcaromanticexpansion.gift_box.christmas": "Caixa de Presente de Natal",
+  "item.mcaromanticexpansion.gift_box.halloween": "Caixa de Presente de Halloween",
+  "item.mcaromanticexpansion.gift_box.birthday": "Caixa de Presente de Aniversário",
+
+  "mcaromanticexpansion.gui.bouquet.title": "Buquê Recebido",
+  "mcaromanticexpansion.gui.bouquet.question": "%s te deu um buquê!",
+  "mcaromanticexpansion.gui.bouquet.accept": "Aceitar",
+  "mcaromanticexpansion.gui.bouquet.reject": "Recusar",
+
+  "mcaromanticexpansion.gui.proposal.title": "Pedido de Casamento",
+  "mcaromanticexpansion.gui.proposal.question": "%s quer se casar com você!",
+  "mcaromanticexpansion.gui.proposal.accept": "Sim, eu aceito!",
+  "mcaromanticexpansion.gui.proposal.reject": "Desculpe, não",
+
+  "mcaromanticexpansion.gui.marriage.title": "Cerimônia de Casamento",
+  "mcaromanticexpansion.gui.marriage.question": "%s quer trocar as alianças!\nAmbos os jogadores precisam ter uma aliança",
+  "mcaromanticexpansion.gui.marriage.confirm": "Trocar as Alianças",
+  "mcaromanticexpansion.gui.marriage.cancel": "Cancelar",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s aceitou seu pedido!",
+  "mcaromanticexpansion.proposal.rejected": "§cPedido recusado.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s recusou seu pedido.",
+
+  "mcaromanticexpansion.marriage.declined": "§cCasamento cancelado.",
+  "mcaromanticexpansion.marriage.missing_ring": "§cAmbos os jogadores precisam ter uma aliança!",
+  "mcaromanticexpansion.marriage.success": "§dParabéns! Você se casou com %s!",
+  "mcaromanticexpansion.marriage.failed": "§cCasamento falhou. Certifique-se de que ambos têm alianças.",
+
+  "mcaromanticexpansion.message.cannot_propose": "Não é possível propor: vocês não são compatíveis",
+  "mcaromanticexpansion.message.proposal_sent": "Pedido enviado!",
+  "mcaromanticexpansion.message.cannot_marry": "Não é possível casar: ambos os jogadores precisam ter uma aliança",
+  "mcaromanticexpansion.message.marriage_sent": "Solicitação de casamento enviada!",
+  "mcaromanticexpansion.message.married": "Parabéns pelo casamento!",
+  "mcaromanticexpansion.message.divorce_success": "Divórcio bem-sucedido",
+  "mcaromanticexpansion.message.gift_placed": "Item colocado na caixa de presente",
+  "mcaromanticexpansion.message.gift_opened": "Caixa de presente aberta e item recebido",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§aAniversário definido: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.success": "§eSeu aniversário é: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§cVocê ainda não definiu seu aniversário! Uso: /birthday set <mês> <dia>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 Feliz Aniversário! Hoje é o seu dia!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eSeu aniversário é: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§cVocê ainda não definiu seu aniversário!",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "Aliança de Noivado - Com %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Aliança de Casamento - De %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Aliança de Casamento - Para %s",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "Noivado com %s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "Casado com %s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "Bênçãos para vocês dois"
+}

@@ -1,0 +1,59 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA 로맨틱 익스팬션",
+  "item.mcaromanticexpansion.player_bouquet": "플레이어 꽃다발",
+  "item.mcaromanticexpansion.player_engagement_ring": "플레이어 약혼 반지",
+  "item.mcaromanticexpansion.player_wedding_ring": "플레이어 결혼 반지",
+  "item.mcaromanticexpansion.gift_box": "선물 상자",
+  "item.mcaromanticexpansion.gift_box.valentine": "발렌타인 선물 상자",
+  "item.mcaromanticexpansion.gift_box.christmas": "크리스마스 선물 상자",
+  "item.mcaromanticexpansion.gift_box.halloween": "할로윈 선물 상자",
+  "item.mcaromanticexpansion.gift_box.birthday": "생일 선물 상자",
+
+  "mcaromanticexpansion.gui.bouquet.title": "꽃다발을 받았습니다",
+  "mcaromanticexpansion.gui.bouquet.question": "%s님이 당신에게 꽃다발을 선물했습니다!",
+  "mcaromanticexpansion.gui.bouquet.accept": "받기",
+  "mcaromanticexpansion.gui.bouquet.reject": "거절",
+
+  "mcaromanticexpansion.gui.proposal.title": "결혼 제안",
+  "mcaromanticexpansion.gui.proposal.question": "%s님이 당신과 결혼하고 싶어합니다!",
+  "mcaromanticexpansion.gui.proposal.accept": "기꺼이!",
+  "mcaromanticexpansion.gui.proposal.reject": "미안해요",
+
+  "mcaromanticexpansion.gui.marriage.title": "웨딩 ceremony",
+  "mcaromanticexpansion.gui.marriage.question": "%s님이 반지를 교환하고 싶어합니다!\n두 플레이어 모두 결혼 반지를 가지고 있어야 합니다",
+  "mcaromanticexpansion.gui.marriage.confirm": "반지 교환",
+  "mcaromanticexpansion.gui.marriage.cancel": "취소",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s님이あなたの求婚を受け入れました！",
+  "mcaromanticexpansion.proposal.rejected": "§c求婚이 거절되었습니다.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s님이あなたの求婚を거절しました。",
+
+  "mcaromanticexpansion.marriage.declined": "§c 결혼이 취소되었습니다.",
+  "mcaromanticexpansion.marriage.missing_ring": "§c두 플레이어 모두 결혼 반지를 가지고 있어야 합니다!",
+  "mcaromanticexpansion.marriage.success": "§d축하합니다! 당신은 %s님과 결혼했습니다!",
+  "mcaromanticexpansion.marriage.failed": "§c결혼에 실패했습니다. 두 사람 모두 반지를 가지고 있는지 확인하세요.",
+
+  "mcaromanticexpansion.message.cannot_propose": "제안할 수 없음: 당신들은 적합하지 않습니다",
+  "mcaromanticexpansion.message.proposal_sent": "결혼 제안을 보냈습니다!",
+  "mcaromanticexpansion.message.cannot_marry": "결혼할 수 없음: 두 플레이어 모두 결혼 반지를 가지고 있어야 합니다",
+  "mcaromanticexpansion.message.marriage_sent": "결혼 신청을 보냈습니다!",
+  "mcaromanticexpansion.message.married": "결혼 축하합니다!",
+  "mcaromanticexpansion.message.divorce_success": "이혼 성공",
+  "mcaromanticexpansion.message.gift_placed": "선물 상자에 아이템을 넣었습니다",
+  "mcaromanticexpansion.message.gift_opened": "선물 상자를 열어서 아이템을 받았습니다",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§a생일을 %1$d월 %2$d일로 설정했습니다",
+  "mcaromanticexpansion.command.birthday.check.success": "§e당신의 생일은 %1$d월 %2$d일입니다",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§c생일이 설정되지 않았습니다! 사용법: /birthday set <월> <일>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂生日快乐！오늘이 당신의 생일입니다!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§e당신의 생일은 %1$d월 %2$d일입니다",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§c생일이 설정되지 않았습니다!",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "약혼 반지 - %s 와",
+  "item.mcaromanticexpansion.wedding_ring.given": "결혼 반지 - %s 로부터",
+  "item.mcaromanticexpansion.wedding_ring.received": "결혼 반지 - %s 에게",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "%s 와 약혼 중",
+  "mcaromanticexpansion.ring.tooltip.married_to": "%s 와 결혼 중",
+  "mcaromanticexpansion.ring.tooltip.blessing": "둘의 행복을 기원합니다"
+}

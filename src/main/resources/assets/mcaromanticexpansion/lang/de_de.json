@@ -1,0 +1,59 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA Romantische Erweiterung",
+  "item.mcaromanticexpansion.player_bouquet": "Spieler-Strauß",
+  "item.mcaromanticexpansion.player_engagement_ring": "Spieler Verlobungsring",
+  "item.mcaromanticexpansion.player_wedding_ring": "Spieler Ehering",
+  "item.mcaromanticexpansion.gift_box": "Geschenkbox",
+  "item.mcaromanticexpansion.gift_box.valentine": "Valentins-Geschenkbox",
+  "item.mcaromanticexpansion.gift_box.christmas": "Weihnachts-Geschenkbox",
+  "item.mcaromanticexpansion.gift_box.halloween": "Halloween-Geschenkbox",
+  "item.mcaromanticexpansion.gift_box.birthday": "Geburtstags-Geschenkbox",
+
+  "mcaromanticexpansion.gui.bouquet.title": "Blumenstrauß erhalten",
+  "mcaromanticexpansion.gui.bouquet.question": "%s hat dir einen Blumenstrauß geschenkt!",
+  "mcaromanticexpansion.gui.bouquet.accept": "Annehmen",
+  "mcaromanticexpansion.gui.bouquet.reject": "Ablehnen",
+
+  "mcaromanticexpansion.gui.proposal.title": "Heiratsantrag",
+  "mcaromanticexpansion.gui.proposal.question": "%s möchte dich heiraten!",
+  "mcaromanticexpansion.gui.proposal.accept": "Ja, ich will!",
+  "mcaromanticexpansion.gui.proposal.reject": "Entschuldigung, nein",
+
+  "mcaromanticexpansion.gui.marriage.title": "Hochzeitszeremonie",
+  "mcaromanticexpansion.gui.marriage.question": "%s möchte Ringe tauschen!\nBeide Spieler müssen einen Ehering haben",
+  "mcaromanticexpansion.gui.marriage.confirm": "Ringe tauschen",
+  "mcaromanticexpansion.gui.marriage.cancel": "Abbrechen",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s hat deinen Antrag angenommen!",
+  "mcaromanticexpansion.proposal.rejected": "§cAntrag abgelehnt.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s hat deinen Antrag abgelehnt.",
+
+  "mcaromanticexpansion.marriage.declined": "§cHochzeit abgebrochen.",
+  "mcaromanticexpansion.marriage.missing_ring": "§cBeide Spieler müssen einen Ehering haben!",
+  "mcaromanticexpansion.marriage.success": "§dHerzlichen Glückwunsch! Du hast %s geheiratet!",
+  "mcaromanticexpansion.marriage.failed": "§cHochzeit fehlgeschlagen. Stelle sicher, dass beide Ringe haben.",
+
+  "mcaromanticexpansion.message.cannot_propose": "Kann nicht vorschlagen: Ihr seid nicht kompatibel",
+  "mcaromanticexpansion.message.proposal_sent": "Heiratsantrag gesendet!",
+  "mcaromanticexpansion.message.cannot_marry": "Kann nicht heiraten: Beide Spieler müssen einen Ehering haben",
+  "mcaromanticexpansion.message.marriage_sent": "Hochzeitsanfrage gesendet!",
+  "mcaromanticexpansion.message.married": "Herzlichen Glückwunsch zur Hochzeit!",
+  "mcaromanticexpansion.message.divorce_success": "Scheidung erfolgreich",
+  "mcaromanticexpansion.message.gift_placed": "Gegenstand in Geschenkbox gelegt",
+  "mcaromanticexpansion.message.gift_opened": "Geschenkbox geöffnet und Gegenstand erhalten",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§aGeburtstag gesetzt: %1$d.%2$d",
+  "mcaromanticexpansion.command.birthday.check.success": "§eDein Geburtstag ist: %1$d.%2$d",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§cDu hast deinen Geburtstag noch nicht gesetzt! Verwendung: /birthday set <Monat> <Tag>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 Alles Gute zum Geburtstag! Heute ist dein Geburtstag!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eDein Geburtstag ist: %1$d.%2$d",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§cDu hast deinen Geburtstag noch nicht gesetzt!",
+
+  "item.mcaromanticexpansion.engagement_ring.target": "Verlobungsring - Mit %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Ehering - Von %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Ehering - Für %s",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "Verlobt mit %s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "Verheiratet mit %s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "Segen euch beiden"
+}
