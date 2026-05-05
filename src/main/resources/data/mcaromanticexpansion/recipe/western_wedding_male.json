@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WBW",
+    "GAG",
+    "WBW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "B": { "item": "minecraft:black_dye" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "A": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "id": "mcaromanticexpansion:western_wedding_male",
+    "count": 1
+  }
+}

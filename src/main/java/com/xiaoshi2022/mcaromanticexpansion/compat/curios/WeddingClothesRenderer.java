@@ -84,28 +84,28 @@ public class WeddingClothesRenderer implements ICurioRenderer {
         poseStack.pushPose();
         playerModel.rightArm.translateAndRotate(poseStack);
         // 右臂模型需要额外的偏移来对齐
-        poseStack.translate(0.3F, 0.6F, 0.0F);  // 如果需要微调
+        poseStack.translate(0.32F, 0.6F, 0.0F);  // 如果需要微调
         model.getRightArm().render(poseStack, consumer, light, overlay, color);
         poseStack.popPose();
 
         // ========== 4. 渲染左臂 - 跟随玩家左臂 ==========
         poseStack.pushPose();
         playerModel.leftArm.translateAndRotate(poseStack);
-        poseStack.translate(-0.3F, 0.6F, 0.0F);  // 如果需要微调
+        poseStack.translate(-0.32F, 0.6F, 0.0F);  // 如果需要微调
         model.getLeftArm().render(poseStack, consumer, light, overlay, color);
         poseStack.popPose();
 
         // ========== 5. 渲染右腿 - 跟随玩家右腿 ==========
         poseStack.pushPose();
         playerModel.rightLeg.translateAndRotate(poseStack);
-        poseStack.translate(0.1F, -0.8F, 0.0F);  // 如果需要微调
+        poseStack.translate(0.12F, -0.8F, 0.0F);  // 如果需要微调
         model.getRightLeg().render(poseStack, consumer, light, overlay, color);
         poseStack.popPose();
 
         // ========== 6. 渲染左腿 - 跟随玩家左腿 ==========
         poseStack.pushPose();
         playerModel.leftLeg.translateAndRotate(poseStack);
-        poseStack.translate(-0.1F, -0.8F, 0.0F);  // 如果需要微调
+        poseStack.translate(-0.12F, -0.8F, 0.0F);  // 如果需要微调
         model.getLeftLeg().render(poseStack, consumer, light, overlay, color);
         poseStack.popPose();
     }
