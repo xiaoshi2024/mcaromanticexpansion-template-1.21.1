@@ -2,8 +2,8 @@ package com.xiaoshi2022.mcaromanticexpansion.compat.curios;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
-import com.xiaoshi2022.mcaromanticexpansion.item.CorsageItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.HairPinItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
-public class CorsageRenderer implements ICurioRenderer {
+public class HeadAdornmentRenderer implements ICurioRenderer {
 
     @Override
     public <T extends LivingEntity, M extends EntityModel<T>> void render(
@@ -33,7 +33,7 @@ public class CorsageRenderer implements ICurioRenderer {
             float netHeadYaw,
             float headPitch) {
 
-        if (!(itemStack.getItem() instanceof CorsageItem)) {
+        if (!(itemStack.getItem() instanceof RedVeilItem) && !(itemStack.getItem() instanceof HairPinItem)) {
             return;
         }
 
@@ -41,21 +41,25 @@ public class CorsageRenderer implements ICurioRenderer {
 
         if (renderLayerParent.getModel() instanceof HumanoidModel<?> humanoidModel) {
             @SuppressWarnings("unchecked")
-            HumanoidModel<LivingEntity> armedModel = (HumanoidModel<LivingEntity>) humanoidModel;
+            HumanoidModel<LivingEntity> playerModel = (HumanoidModel<LivingEntity>) humanoidModel;
 
-            // 应用身体变换
-            armedModel.body.translateAndRotate(poseStack);
+            playerModel.head.translateAndRotate(poseStack);
 
-            // 调整到胸前位置
-            poseStack.translate(0.16F, 0.25F, -0.15F);
-            poseStack.scale(0.3F, 0.3F, 0.3F);
-            poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            if (itemStack.getItem() instanceof RedVeilItem) {
+                poseStack.translate(0.0F, -0.26F, 0.0F);
+                poseStack.scale(0.6F, 0.6F, 0.6F);
+                // 旋转戒指使其朝向正确
+                poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+            } else if (itemStack.getItem() instanceof HairPinItem) {
+                poseStack.translate(0.0F, -0.25F, 0.05F);
+                poseStack.scale(0.6F, 0.6F, 0.6F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+            }
 
-            // 直接使用 ItemRenderer 渲染（这是正确的方式）
             Minecraft.getInstance().getItemRenderer().renderStatic(
                     itemStack,
-                    ItemDisplayContext.FIXED,
+                    ItemDisplayContext.HEAD,
                     light,
                     OverlayTexture.NO_OVERLAY,
                     poseStack,

@@ -76,7 +76,7 @@ public class WeddingClothesRenderer implements ICurioRenderer {
         // ========== 2. 渲染身体 - 跟随玩家身体 ==========
         poseStack.pushPose();
         playerModel.body.translateAndRotate(poseStack);
-        poseStack.translate(0.0F, 0.7F, 0.0F);  // 如果需要微调
+        poseStack.translate(0.0F, 0.74F, 0.0F);  // 如果需要微调
         model.getBody().render(poseStack, consumer, light, overlay, color);
         poseStack.popPose();
 

@@ -3,6 +3,8 @@ package com.xiaoshi2022.mcaromanticexpansion.registry;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.item.CorsageItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.HairPinItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.WeddingClothesItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -53,12 +55,19 @@ public class ModItems {
                     WeddingClothesItem.WeddingType.WESTERN,
                     WeddingClothesItem.Gender.FEMALE));
 
+    // 头饰
+    public static final DeferredHolder<Item, RedVeilItem> RED_VEIL = ITEMS.register("red_veil",
+            () -> new RedVeilItem(new Item.Properties().stacksTo(1)));
+
+    public static final DeferredHolder<Item, HairPinItem> GOLDEN_HAIRPIN = ITEMS.register("golden_hairpin",
+            () -> new HairPinItem(new Item.Properties().stacksTo(1)));
+
     // 注册物品组选项卡
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROMANTIC_TAB = CREATIVE_TABS.register(
             "romantic_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.mcaromanticexpansion"))
-                    .icon(() -> new ItemStack(GIFT_BOX.get()))
+                    .icon(() -> new ItemStack(ROSE_BROOCH_RED.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(GIFT_BOX.get());
                         output.accept(ROSE_BROOCH_RED.get());
@@ -68,6 +77,8 @@ public class ModItems {
                         output.accept(CHINESE_WEDDING_FEMALE.get());
                         output.accept(WESTERN_WEDDING_MALE.get());
                         output.accept(WESTERN_WEDDING_FEMALE.get());
+                        output.accept(RED_VEIL.get());
+                        output.accept(GOLDEN_HAIRPIN.get());
                     })
                     .build()
     );

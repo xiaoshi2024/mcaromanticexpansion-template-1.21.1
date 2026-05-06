@@ -26,6 +26,12 @@
   "item.mcaromanticexpansion.western_wedding_male": "西式新郎西装",
   "item.mcaromanticexpansion.western_wedding_female": "西式新娘婚纱",
 
+  "item.mcaromanticexpansion.red_veil": "红盖头",
+  "item.mcaromanticexpansion.golden_hairpin": "金发簪",
+
+  "curios.identifier.wedding": "婚服",
+
+
   "mcaromanticexpansion.gui.bouquet.title": "收到花束",
   "mcaromanticexpansion.gui.bouquet.question": "%s 送给你一束花！",
   "mcaromanticexpansion.gui.bouquet.accept": "收下",

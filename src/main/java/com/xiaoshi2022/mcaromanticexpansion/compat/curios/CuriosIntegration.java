@@ -123,6 +123,30 @@ public class CuriosIntegration {
         registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:western_wedding_male");
         registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:western_wedding_female");
 
+        // ========== 头饰渲染 ==========
+        HeadAdornmentRenderer headRenderer = new HeadAdornmentRenderer();
+        Object headProxy = java.lang.reflect.Proxy.newProxyInstance(
+                CuriosIntegration.class.getClassLoader(),
+                new Class[]{iCurioRendererClass},
+                (proxy, method, args) -> {
+                    if ("render".equals(method.getName()) && args != null && args.length >= 12) {
+                        headRenderer.render(
+                                (ItemStack) args[0],
+                                (SlotContext) args[1],
+                                (PoseStack) args[2],
+                                (RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
+                                (MultiBufferSource) args[4],
+                                (int) args[5], (float) args[6], (float) args[7],
+                                (float) args[8], (float) args[9], (float) args[10], (float) args[11]
+                        );
+                    }
+                    return null;
+                }
+        );
+
+        registerRingRenderer(curiosRendererRegistryClass, headProxy, "mcaromanticexpansion:red_veil");
+        registerRingRenderer(curiosRendererRegistryClass, headProxy, "mcaromanticexpansion:golden_hairpin");
+
     }
 
     // 独立的 InvocationHandler 类

@@ -26,6 +26,11 @@
   "item.mcaromanticexpansion.western_wedding_male": "Western Wedding Groom Suit",
   "item.mcaromanticexpansion.western_wedding_female": "Western Wedding Bride Dress",
 
+  "item.mcaromanticexpansion.red_veil": "Red Veil",
+  "item.mcaromanticexpansion.golden_hairpin": "Golden Hairpin",
+
+  "curios.identifier.wedding": "Wedding",
+
   "mcaromanticexpansion.gui.bouquet.title": "Received Bouquet",
   "mcaromanticexpansion.gui.bouquet.question": "%s gave you a bouquet!",
   "mcaromanticexpansion.gui.bouquet.accept": "Accept",
