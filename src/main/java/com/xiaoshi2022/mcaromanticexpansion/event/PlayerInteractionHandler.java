@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.event;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenMarriageGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
@@ -304,6 +305,9 @@ public class PlayerInteractionHandler {
                     } else {
                         player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
                         target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
+                        
+                        // 触发成就：红妆揭面
+                        CriterionTriggerRegister.UNVEIL_VEIL.get().trigger(player);
                     }
                 }
             }

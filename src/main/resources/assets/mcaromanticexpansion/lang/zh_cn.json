@@ -77,5 +77,8 @@
   "mcaromanticexpansion.ring.tooltip.blessing": "祝你们幸福美满",
 
   "mcaromanticexpansion.command.birthday.check.other.success": "%s 的生日是 %d月%d日",
-  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s 还没有设置生日！"
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s 还没有设置生日！",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "红妆揭面",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "在婚礼仪式上，新郎亲手揭下新娘的红盖头"
 }

@@ -76,6 +76,10 @@
   "mcaromanticexpansion.ring.tooltip.blessing": "Blessings to you both",
 
   "mcaromanticexpansion.command.birthday.check.other.success": "%s's birthday is %d/%d",
-  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s has not set their birthday!"
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s has not set their birthday!",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "Unveil Red Veil",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "In the wedding ceremony, the groom manually removes the bride's red veil"
+
 
 }

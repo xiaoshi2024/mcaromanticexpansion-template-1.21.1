@@ -1,5 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
+import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
 import com.xiaoshi2022.mcaromanticexpansion.command.BirthdayCommand;
 import com.xiaoshi2022.mcaromanticexpansion.event.PlayerInteractionHandler;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
@@ -21,6 +22,7 @@ public class MCARomanticExpansion {
         ModItems.ITEMS.register(modEventBus);
         ModItems.CREATIVE_TABS.register(modEventBus);  // 新增：注册物品组
         RomanceNetwork.registerPackets(modEventBus);
+        CriterionTriggerRegister.TRIGGER_TYPES.register(modEventBus);
         NeoForge.EVENT_BUS.register(PlayerInteractionHandler.class);
         NeoForge.EVENT_BUS.register(this);
     }
