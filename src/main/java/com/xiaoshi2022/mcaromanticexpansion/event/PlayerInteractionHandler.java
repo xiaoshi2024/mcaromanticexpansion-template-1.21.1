@@ -7,6 +7,7 @@ import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.util.CooldownManager;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import net.conczin.mca.item.BouquetItem;
 import net.conczin.mca.item.EngagementRingItem;
 import net.conczin.mca.item.WeddingRingItem;
@@ -64,6 +65,8 @@ public class PlayerInteractionHandler {
         } else if (item == ItemsMCA.DIVORCE_PAPERS) {
             handleDivorcePapers(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
+        } else if (stack.isEmpty()) {
+            handleUnveilVeil(serverPlayer, targetServerPlayer);
         }
     }
 
@@ -246,5 +249,55 @@ public class PlayerInteractionHandler {
         OpenMarriageGUIPacket packet = new OpenMarriageGUIPacket(sender.getUUID());
         MCARomanticExpansion.LOGGER.info("Sending OpenMarriageGUIPacket to {}", receiver.getName().getString());
         receiver.connection.send(packet);
+    }
+
+    private static void handleUnveilVeil(ServerPlayer player, ServerPlayer target) {
+        if (!com.xiaoshi2022.mcaromanticexpansion.compat.curios.CuriosIntegration.isCuriosAvailable()) {
+            return;
+        }
+
+        PlayerSaveData playerData = PlayerSaveData.get(player);
+        PlayerSaveData targetData = PlayerSaveData.get(target);
+
+        boolean playerIsMarried = playerData.getRelationshipState() == RelationshipState.MARRIED_TO_PLAYER;
+        boolean targetIsSpouse = playerData.getPartnerUUID().isPresent() && 
+                playerData.getPartnerUUID().get().equals(target.getUUID());
+
+        if (!playerIsMarried || !targetIsSpouse) {
+            return;
+        }
+
+        try {
+            Class<?> curiosApiClass = Class.forName("top.theillusivec4.curios.api.CuriosApi");
+            Class<?> slotResultClass = Class.forName("top.theillusivec4.curios.api.SlotResult");
+
+            Object curiosApi = curiosApiClass.getMethod("getInstance").invoke(null);
+            Object optionalResult = curiosApiClass.getMethod("findCurios", net.minecraft.world.entity.LivingEntity.class, String.class)
+                    .invoke(curiosApi, target, "head");
+
+            if (optionalResult instanceof java.util.Optional<?> opt && opt.isPresent()) {
+                Object slotResult = opt.get();
+                java.util.List<?> stacks = (java.util.List<?>) slotResultClass.getMethod("stacks").invoke(slotResult);
+
+                for (int i = 0; i < stacks.size(); i++) {
+                    ItemStack stack = (ItemStack) stacks.get(i);
+                    if (!stack.isEmpty() && stack.getItem() instanceof RedVeilItem) {
+                        ItemStack veilStack = stack.copy();
+                        stack.setCount(0);
+
+                        if (!player.getInventory().add(veilStack)) {
+                            target.drop(veilStack, false);
+                            player.sendSystemMessage(Component.literal("§c背包已满，红盖头掉落在地上！").withStyle(ChatFormatting.RED));
+                        } else {
+                            player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
+                            target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
+                        }
+                        return;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.warn("Failed to check for red veil: {}", e.getMessage());
+        }
     }
 }

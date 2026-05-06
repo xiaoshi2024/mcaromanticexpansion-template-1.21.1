@@ -13,17 +13,14 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.client.ICurioRenderer;
 
-public class HeadAdornmentRenderer implements ICurioRenderer {
+public class HeadAdornmentRenderer {
 
-    @Override
-    public <T extends LivingEntity, M extends EntityModel<T>> void render(
+    public void render(
             ItemStack itemStack,
-            SlotContext slotContext,
+            Object slotContext,
             PoseStack poseStack,
-            RenderLayerParent<T, M> renderLayerParent,
+            RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>> renderLayerParent,
             MultiBufferSource multiBufferSource,
             int light,
             float limbSwing,
@@ -48,7 +45,7 @@ public class HeadAdornmentRenderer implements ICurioRenderer {
             if (itemStack.getItem() instanceof RedVeilItem) {
                 poseStack.translate(0.0F, -0.26F, 0.0F);
                 poseStack.scale(0.6F, 0.6F, 0.6F);
-                // 旋转戒指使其朝向正确
+                // 旋转使其朝向正确
                 poseStack.mulPose(Axis.YP.rotationDegrees(0.0F));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
             } else if (itemStack.getItem() instanceof HairPinItem) {
@@ -64,7 +61,7 @@ public class HeadAdornmentRenderer implements ICurioRenderer {
                     OverlayTexture.NO_OVERLAY,
                     poseStack,
                     multiBufferSource,
-                    slotContext.entity().level(),
+                    null,
                     0
             );
         }

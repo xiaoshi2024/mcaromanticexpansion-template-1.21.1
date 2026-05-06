@@ -3,6 +3,7 @@ package com.xiaoshi2022.mcaromanticexpansion.compat.curios;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +13,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.bus.api.SubscribeEvent;
-import top.theillusivec4.curios.api.SlotContext;
 
 @EventBusSubscriber(modid = MCARomanticExpansion.MODID)
 public class CuriosIntegration {
@@ -79,9 +79,9 @@ public class CuriosIntegration {
                     if ("render".equals(method.getName()) && args != null && args.length >= 12) {
                         corsageRenderer.render(
                                 (ItemStack) args[0],
-                                (SlotContext) args[1],
+                                args[1],
                                 (PoseStack) args[2],
-                                (RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
+                                (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
                                 (MultiBufferSource) args[4],
                                 (int) args[5], (float) args[6], (float) args[7],
                                 (float) args[8], (float) args[9], (float) args[10], (float) args[11]
@@ -103,15 +103,50 @@ public class CuriosIntegration {
                 new Class[]{iCurioRendererClass},
                 (proxy, method, args) -> {
                     if ("render".equals(method.getName()) && args != null && args.length >= 12) {
-                        weddingRenderer.render(
-                                (ItemStack) args[0],
-                                (SlotContext) args[1],
-                                (PoseStack) args[2],
-                                (RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
-                                (MultiBufferSource) args[4],
-                                (int) args[5], (float) args[6], (float) args[7],
-                                (float) args[8], (float) args[9], (float) args[10], (float) args[11]
-                        );
+                        ItemStack stack = (ItemStack) args[0];
+                        Object slotContext = args[1];  // SlotContext
+                        PoseStack poseStack = (PoseStack) args[2];
+                        @SuppressWarnings("unchecked")
+                        RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>> renderLayerParent =
+                                (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3];
+                        MultiBufferSource buffer = (MultiBufferSource) args[4];
+                        int light = (int) args[5];
+                        float limbSwing = (float) args[6];
+                        float limbSwingAmount = (float) args[7];
+                        float partialTicks = (float) args[8];
+                        float ageInTicks = (float) args[9];
+                        float netHeadYaw = (float) args[10];
+                        float headPitch = (float) args[11];
+
+                        // 从 SlotContext 获取实体
+                        LivingEntity entity = null;
+                        try {
+                            java.lang.reflect.Method getEntityMethod = slotContext.getClass().getMethod("entity");
+                            entity = (LivingEntity) getEntityMethod.invoke(slotContext);
+                        } catch (Exception e) {
+                            MCARomanticExpansion.LOGGER.warn("Failed to get entity from SlotContext: {}", e.getMessage());
+                            return null;
+                        }
+
+                        if (renderLayerParent.getModel() instanceof HumanoidModel<?> humanoidModel) {
+                            @SuppressWarnings("unchecked")
+                            HumanoidModel<LivingEntity> playerModel = (HumanoidModel<LivingEntity>) humanoidModel;
+
+                            weddingRenderer.render(
+                                    stack,
+                                    entity,
+                                    playerModel,
+                                    poseStack,
+                                    buffer,
+                                    light,
+                                    limbSwing,
+                                    limbSwingAmount,
+                                    partialTicks,
+                                    ageInTicks,
+                                    netHeadYaw,
+                                    headPitch
+                            );
+                        }
                     }
                     return null;
                 }
@@ -132,9 +167,9 @@ public class CuriosIntegration {
                     if ("render".equals(method.getName()) && args != null && args.length >= 12) {
                         headRenderer.render(
                                 (ItemStack) args[0],
-                                (SlotContext) args[1],
+                                args[1],
                                 (PoseStack) args[2],
-                                (RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
+                                (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
                                 (MultiBufferSource) args[4],
                                 (int) args[5], (float) args[6], (float) args[7],
                                 (float) args[8], (float) args[9], (float) args[10], (float) args[11]
@@ -162,9 +197,9 @@ public class CuriosIntegration {
             if ("render".equals(method.getName()) && args != null && args.length >= 12) {
                 renderer.render(
                         (net.minecraft.world.item.ItemStack) args[0],
-                        (top.theillusivec4.curios.api.SlotContext) args[1],  // 强制转换 SlotContext
+                        args[1],  // 使用 Object 避免强依赖
                         (com.mojang.blaze3d.vertex.PoseStack) args[2],
-                        (net.minecraft.client.renderer.entity.RenderLayerParent<LivingEntity, EntityModel<LivingEntity>>) args[3],
+                        (net.minecraft.client.renderer.entity.RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
                         (net.minecraft.client.renderer.MultiBufferSource) args[4],
                         (int) args[5],
                         (float) args[6],
