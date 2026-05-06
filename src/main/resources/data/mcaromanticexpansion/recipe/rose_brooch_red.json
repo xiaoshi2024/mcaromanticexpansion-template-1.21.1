@@ -6,10 +6,11 @@
     " R "
   ],
   "key": {
-    "R": { "item": "minecraft:red_rose" },
+    "R": { "item": "minecraft:poppy" },
     "G": { "item": "minecraft:gold_nugget" }
   },
   "result": {
-    "id": "mcaromanticexpansion:rose_brooch_red"
+    "id": "mcaromanticexpansion:rose_brooch_red",
+    "count": 1
   }
 }

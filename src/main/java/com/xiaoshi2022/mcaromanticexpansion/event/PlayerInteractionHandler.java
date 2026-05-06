@@ -67,6 +67,7 @@ public class PlayerInteractionHandler {
             event.setCanceled(true);
         } else if (stack.isEmpty()) {
             handleUnveilVeil(serverPlayer, targetServerPlayer);
+            event.setCanceled(true);
         }
     }
 
@@ -269,35 +270,46 @@ public class PlayerInteractionHandler {
 
         try {
             Class<?> curiosApiClass = Class.forName("top.theillusivec4.curios.api.CuriosApi");
-            Class<?> slotResultClass = Class.forName("top.theillusivec4.curios.api.SlotResult");
+            
+            Object optionalCuriosInventory = curiosApiClass.getDeclaredMethod("getCuriosInventory", net.minecraft.world.entity.LivingEntity.class)
+                    .invoke(null, target);
 
-            Object curiosApi = curiosApiClass.getMethod("getInstance").invoke(null);
-            Object optionalResult = curiosApiClass.getMethod("findCurios", net.minecraft.world.entity.LivingEntity.class, String.class)
-                    .invoke(curiosApi, target, "head");
+            if (optionalCuriosInventory instanceof java.util.Optional<?> opt && opt.isPresent()) {
+                Object curiosInventory = opt.get();
+                Class<?> inventoryClass = curiosInventory.getClass();
 
-            if (optionalResult instanceof java.util.Optional<?> opt && opt.isPresent()) {
-                Object slotResult = opt.get();
-                java.util.List<?> stacks = (java.util.List<?>) slotResultClass.getMethod("stacks").invoke(slotResult);
+                Object optionalSlotResult = inventoryClass.getDeclaredMethod("findFirstCurio", java.util.function.Predicate.class)
+                        .invoke(curiosInventory, (java.util.function.Predicate<ItemStack>) stack -> 
+                            !stack.isEmpty() && stack.getItem() instanceof RedVeilItem);
 
-                for (int i = 0; i < stacks.size(); i++) {
-                    ItemStack stack = (ItemStack) stacks.get(i);
-                    if (!stack.isEmpty() && stack.getItem() instanceof RedVeilItem) {
-                        ItemStack veilStack = stack.copy();
-                        stack.setCount(0);
+                if (optionalSlotResult instanceof java.util.Optional<?> slotOpt && slotOpt.isPresent()) {
+                    Object slotResult = slotOpt.get();
+                    Class<?> slotResultClass = slotResult.getClass();
 
-                        if (!player.getInventory().add(veilStack)) {
-                            target.drop(veilStack, false);
-                            player.sendSystemMessage(Component.literal("§c背包已满，红盖头掉落在地上！").withStyle(ChatFormatting.RED));
-                        } else {
-                            player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
-                            target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
-                        }
-                        return;
+                    ItemStack stack = (ItemStack) slotResultClass.getDeclaredMethod("stack").invoke(slotResult);
+                    ItemStack veilStack = stack.copy();
+                    
+                    Object slotContext = slotResultClass.getDeclaredMethod("slotContext").invoke(slotResult);
+                    Class<?> slotContextClass = slotContext.getClass();
+                    
+                    String identifier = (String) slotContextClass.getDeclaredMethod("identifier").invoke(slotContext);
+                    int index = (int) slotContextClass.getDeclaredMethod("index").invoke(slotContext);
+                    
+                    inventoryClass.getDeclaredMethod("setEquippedCurio", String.class, int.class, ItemStack.class)
+                            .invoke(curiosInventory, identifier, index, ItemStack.EMPTY);
+
+                    if (!player.getInventory().add(veilStack)) {
+                        target.drop(veilStack, false);
+                        player.sendSystemMessage(Component.literal("§c背包已满，红盖头掉落在地上！").withStyle(ChatFormatting.RED));
+                    } else {
+                        player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
+                        target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
                     }
                 }
             }
         } catch (Exception e) {
             MCARomanticExpansion.LOGGER.warn("Failed to check for red veil: {}", e.getMessage());
+            e.printStackTrace();
         }
     }
 }
