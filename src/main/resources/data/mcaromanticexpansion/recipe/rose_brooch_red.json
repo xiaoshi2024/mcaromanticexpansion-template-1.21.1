@@ -1,9 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    " R ",
-    "RGR",
-    " R "
+    "GRG",
+    "R R",
+    "GRG"
   ],
   "key": {
     "R": { "item": "minecraft:poppy" },
