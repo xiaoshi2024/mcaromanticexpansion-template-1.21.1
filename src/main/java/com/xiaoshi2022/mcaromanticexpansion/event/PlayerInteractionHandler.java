@@ -5,7 +5,6 @@ import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenMarriageGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
-import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.util.CooldownManager;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
@@ -307,7 +306,14 @@ public class PlayerInteractionHandler {
                         target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
                         
                         // 触发成就：红妆揭面
-                        CriterionTriggerRegister.UNVEIL_VEIL.get().trigger(player);
+                        try {
+                            MCARomanticExpansion.LOGGER.info("Attempting to trigger unveil_veil advancement for player: {}", player.getName().getString());
+                            CriterionTriggerRegister.UNVEIL_VEIL.get().trigger(player);
+                            MCARomanticExpansion.LOGGER.info("Successfully triggered unveil_veil advancement!");
+                        } catch (Exception ex) {
+                            MCARomanticExpansion.LOGGER.error("Failed to trigger unveil_veil advancement: {}", ex.getMessage());
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }

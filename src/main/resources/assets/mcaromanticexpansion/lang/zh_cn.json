@@ -31,6 +31,8 @@
 
   "curios.identifier.wedding": "婚服",
 
+  "advancements.mcaromanticexpansion.root.title": "MC 浪漫扩展",
+  "advancements.mcaromanticexpansion.root.description": "一段浪漫的旅程开始了",
 
   "mcaromanticexpansion.gui.bouquet.title": "收到花束",
   "mcaromanticexpansion.gui.bouquet.question": "%s 送给你一束花！",
