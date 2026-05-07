@@ -82,5 +82,24 @@
   "mcaromanticexpansion.command.birthday.check.other.not_set": "%s 还没有设置生日！",
 
   "advancements.mcaromanticexpansion.unveil_veil.title": "红妆揭面",
-  "advancements.mcaromanticexpansion.unveil_veil.description": "在婚礼仪式上，新郎亲手揭下新娘的红盖头"
+  "advancements.mcaromanticexpansion.unveil_veil.description": "在婚礼仪式上，新郎亲手揭下新娘的红盖头",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§d你与 %s 进入了备孕期！",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§d你与 %s 进入了备孕期！",
+  "message.mcaromanticexpansion.pregnancy_success": "§a恭喜！你成功怀孕了！",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§a恭喜！%s 成功怀孕了！",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§c你的伴侣不幸离世，备孕期已结束",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§e备孕期进行中: 已过 %d tick / 共 %d tick (剩余 %d tick)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§c你当前不在备孕期",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "%s 的备孕期进行中: 已过 %d tick / 共 %d tick (剩余 %d tick)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s 当前不在备孕期",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§a备孕期已完成！婴儿已出生！",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§c你当前不在备孕期！",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a%s 的备孕期已完成！",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s 当前不在备孕期！",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§a备孕期已取消",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§c你当前不在备孕期！",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a已取消 %s 的备孕期",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 当前不在备孕期！"
 }

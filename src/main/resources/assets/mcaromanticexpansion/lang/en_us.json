@@ -82,7 +82,24 @@
   "mcaromanticexpansion.command.birthday.check.other.not_set": "%s has not set their birthday!",
 
   "advancements.mcaromanticexpansion.unveil_veil.title": "Unveil Red Veil",
-  "advancements.mcaromanticexpansion.unveil_veil.description": "In the wedding ceremony, the groom manually removes the bride's red veil"
+  "advancements.mcaromanticexpansion.unveil_veil.description": "In the wedding ceremony, the groom manually removes the bride's red veil",
 
+  "message.mcaromanticexpansion.pregnancy_start": "§dYou and %s have entered the conception period!",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§dYou and %s have entered the conception period!",
+  "message.mcaromanticexpansion.pregnancy_success": "§aCongratulations! You're pregnant!",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§aCongratulations! %s is pregnant!",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§cYour partner has passed away, conception period ended",
 
+  "mcaromanticexpansion.command.pregnancy.status.active": "§eConception period in progress: %d ticks / %d total (remaining %d ticks)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§cYou are not in a conception period",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "%s's conception period: %d ticks / %d total (remaining %d ticks)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s is not in a conception period",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§aConception period completed! Baby has been born!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§cYou are not in a conception period!",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a%s's conception period completed!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s is not in a conception period!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§aConception period cancelled",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§cYou are not in a conception period!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aCancelled %s's conception period",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s is not in a conception period!"
 }
