@@ -1,15 +1,10 @@
 package com.xiaoshi2022.mcaromanticexpansion.registry;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
-import com.xiaoshi2022.mcaromanticexpansion.item.CorsageItem;
-import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
-import com.xiaoshi2022.mcaromanticexpansion.item.HairPinItem;
-import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
-import com.xiaoshi2022.mcaromanticexpansion.item.WeddingClothesItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;

@@ -1,7 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.compat.curios;
 
-import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -9,16 +9,32 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.bus.api.SubscribeEvent;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
 
 @EventBusSubscriber(modid = MCARomanticExpansion.MODID)
 public class CuriosIntegration {
 
     private static boolean curiosAvailable = false;
     private static final String RING_SLOT = "ring";
+
+    // ========== 反射缓存 ==========
+    // 缓存 Curios API 相关的方法
+    private static Class<?> curiosRendererRegistryClass;
+    private static Class<?> iCurioRendererClass;
+    private static Method registerRendererMethod;
+    private static Method getFromRegistryMethod;
+
+    // 缓存 SlotContext 的 getEntity 方法
+    private static final ConcurrentHashMap<Class<?>, Method> getEntityMethodCache = new ConcurrentHashMap<>();
+
+    // 缓存 BuiltInRegistries.ITEM 的 get 方法
+    private static Method registryGetMethod;
 
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -28,11 +44,44 @@ public class CuriosIntegration {
                 Class.forName("top.theillusivec4.curios.api.type.capability.ICurioItem");
 
                 curiosAvailable = true;
+
+                // 预先缓存反射方法
+                cacheReflectionMethods();
+
                 MCARomanticExpansion.LOGGER.info("Curios mod detected, enabling ring slot integration");
 
             } catch (ClassNotFoundException e) {
                 curiosAvailable = false;
                 MCARomanticExpansion.LOGGER.info("Curios mod not detected, skipping ring slot integration");
+            } catch (Exception e) {
+                MCARomanticExpansion.LOGGER.warn("Failed to cache Curios reflection methods: {}", e.getMessage());
+            }
+        });
+    }
+
+    private static void cacheReflectionMethods() throws Exception {
+        // 缓存 CuriosRendererRegistry 相关
+        curiosRendererRegistryClass = Class.forName("top.theillusivec4.curios.api.client.CuriosRendererRegistry");
+        iCurioRendererClass = Class.forName("top.theillusivec4.curios.api.client.ICurioRenderer");
+        registerRendererMethod = curiosRendererRegistryClass.getMethod("register",
+                Class.forName("net.minecraft.world.item.Item"),
+                java.util.function.Supplier.class);
+
+        // 缓存 BuiltInRegistries.ITEM 的 get 方法
+        registryGetMethod = net.minecraft.core.registries.BuiltInRegistries.ITEM.getClass()
+                .getMethod("get", ResourceLocation.class);
+    }
+
+    // 获取 SlotContext 的 getEntity 方法（带缓存）
+    private static Method getGetEntityMethod(Class<?> slotContextClass) {
+        return getEntityMethodCache.computeIfAbsent(slotContextClass, clazz -> {
+            try {
+                Method method = clazz.getMethod("entity");
+                method.setAccessible(true);
+                return method;
+            } catch (NoSuchMethodException e) {
+                MCARomanticExpansion.LOGGER.warn("Failed to find entity method for {}", clazz.getName());
+                return null;
             }
         });
     }
@@ -52,59 +101,65 @@ public class CuriosIntegration {
     }
 
     private static void registerCuriosRenderers() throws Exception {
-        Class<?> curiosRendererRegistryClass = Class.forName("top.theillusivec4.curios.api.client.CuriosRendererRegistry");
-
+        // 戒指渲染器
         RingCuriosRenderer ringCuriosRenderer = new RingCuriosRenderer();
-
-        Class<?> iCurioRendererClass = Class.forName("top.theillusivec4.curios.api.client.ICurioRenderer");
-
-        // 创建一个简单的 ICurioRenderer 实例，而不是使用代理
-        Object renderer = java.lang.reflect.Proxy.newProxyInstance(
+        Object ringRendererProxy = java.lang.reflect.Proxy.newProxyInstance(
                 CuriosIntegration.class.getClassLoader(),
                 new Class[]{iCurioRendererClass},
                 new RingRenderInvocationHandler(ringCuriosRenderer)
         );
 
-        registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:wedding_ring");
-        registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:wedding_ring_rg");
-        registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:engagement_ring");
-        registerRingRenderer(curiosRendererRegistryClass, renderer, "mca:engagement_ring_rg");
+        registerRingRendererCached(ringRendererProxy, "mca:wedding_ring");
+        registerRingRendererCached(ringRendererProxy, "mca:wedding_ring_rg");
+        registerRingRendererCached(ringRendererProxy, "mca:engagement_ring");
+        registerRingRendererCached(ringRendererProxy, "mca:engagement_ring_rg");
 
-        // ========== 胸花渲染 ==========
+        // 胸花渲染器
         CorsageRenderer corsageRenderer = new CorsageRenderer();
-        Object corsageProxy = java.lang.reflect.Proxy.newProxyInstance(
+        Object corsageProxy = createRenderProxy(corsageRenderer, "corsage");
+        registerRingRendererCached(corsageProxy, "mcaromanticexpansion:rose_brooch_red");
+        registerRingRendererCached(corsageProxy, "mcaromanticexpansion:rose_brooch_pink");
+        registerRingRendererCached(corsageProxy, "mcaromanticexpansion:rose_brooch_white");
+
+        // 婚服渲染器（需要特殊处理，因为需要获取 entity）
+        WeddingClothesRenderer weddingRenderer = new WeddingClothesRenderer();
+        Object weddingProxy = createWeddingRenderProxy(weddingRenderer);
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:chinese_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:chinese_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:western_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:western_wedding_female");
+
+        // 头饰渲染器
+        HeadAdornmentRenderer headRenderer = new HeadAdornmentRenderer();
+        Object headProxy = createRenderProxy(headRenderer, "head");
+        registerRingRendererCached(headProxy, "mcaromanticexpansion:red_veil");
+        registerRingRendererCached(headProxy, "mcaromanticexpansion:golden_hairpin");
+    }
+
+    // 创建简单的渲染代理（不需要获取 entity）
+    private static Object createRenderProxy(Object renderer, String name) {
+        return java.lang.reflect.Proxy.newProxyInstance(
                 CuriosIntegration.class.getClassLoader(),
                 new Class[]{iCurioRendererClass},
                 (proxy, method, args) -> {
                     if ("render".equals(method.getName()) && args != null && args.length >= 12) {
-                        corsageRenderer.render(
-                                (ItemStack) args[0],
-                                args[1],
-                                (PoseStack) args[2],
-                                (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
-                                (MultiBufferSource) args[4],
-                                (int) args[5], (float) args[6], (float) args[7],
-                                (float) args[8], (float) args[9], (float) args[10], (float) args[11]
-                        );
+                        // 使用缓存的方法调用
+                        invokeRender(renderer, args);
                     }
                     return null;
                 }
         );
+    }
 
-        registerRingRenderer(curiosRendererRegistryClass, corsageProxy, "mcaromanticexpansion:rose_brooch_red");
-        registerRingRenderer(curiosRendererRegistryClass, corsageProxy, "mcaromanticexpansion:rose_brooch_pink");
-        registerRingRenderer(curiosRendererRegistryClass, corsageProxy, "mcaromanticexpansion:rose_brooch_white");
-
-
-        // ========== 婚服渲染 ==========
-        WeddingClothesRenderer weddingRenderer = new WeddingClothesRenderer();
-        Object weddingProxy = java.lang.reflect.Proxy.newProxyInstance(
+    // 创建婚服渲染代理（需要获取 entity）
+    private static Object createWeddingRenderProxy(WeddingClothesRenderer renderer) {
+        return java.lang.reflect.Proxy.newProxyInstance(
                 CuriosIntegration.class.getClassLoader(),
                 new Class[]{iCurioRendererClass},
                 (proxy, method, args) -> {
                     if ("render".equals(method.getName()) && args != null && args.length >= 12) {
                         ItemStack stack = (ItemStack) args[0];
-                        Object slotContext = args[1];  // SlotContext
+                        Object slotContext = args[1];
                         PoseStack poseStack = (PoseStack) args[2];
                         @SuppressWarnings("unchecked")
                         RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>> renderLayerParent =
@@ -118,73 +173,75 @@ public class CuriosIntegration {
                         float netHeadYaw = (float) args[10];
                         float headPitch = (float) args[11];
 
-                        // 从 SlotContext 获取实体
-                        LivingEntity entity = null;
-                        try {
-                            java.lang.reflect.Method getEntityMethod = slotContext.getClass().getMethod("entity");
-                            entity = (LivingEntity) getEntityMethod.invoke(slotContext);
-                        } catch (Exception e) {
-                            MCARomanticExpansion.LOGGER.warn("Failed to get entity from SlotContext: {}", e.getMessage());
+                        // 使用缓存的方法获取 entity
+                        LivingEntity entity = getEntityFromSlotContext(slotContext);
+                        if (entity == null) {
                             return null;
                         }
 
                         if (renderLayerParent.getModel() instanceof HumanoidModel<?> humanoidModel) {
                             @SuppressWarnings("unchecked")
                             HumanoidModel<LivingEntity> playerModel = (HumanoidModel<LivingEntity>) humanoidModel;
-
-                            weddingRenderer.render(
-                                    stack,
-                                    entity,
-                                    playerModel,
-                                    poseStack,
-                                    buffer,
-                                    light,
-                                    limbSwing,
-                                    limbSwingAmount,
-                                    partialTicks,
-                                    ageInTicks,
-                                    netHeadYaw,
-                                    headPitch
-                            );
+                            renderer.render(stack, entity, playerModel, poseStack, buffer, light,
+                                    limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
                         }
                     }
                     return null;
                 }
         );
-
-// 注册婚服物品
-        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:chinese_wedding_male");
-        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:chinese_wedding_female");
-        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:western_wedding_male");
-        registerRingRenderer(curiosRendererRegistryClass, weddingProxy, "mcaromanticexpansion:western_wedding_female");
-
-        // ========== 头饰渲染 ==========
-        HeadAdornmentRenderer headRenderer = new HeadAdornmentRenderer();
-        Object headProxy = java.lang.reflect.Proxy.newProxyInstance(
-                CuriosIntegration.class.getClassLoader(),
-                new Class[]{iCurioRendererClass},
-                (proxy, method, args) -> {
-                    if ("render".equals(method.getName()) && args != null && args.length >= 12) {
-                        headRenderer.render(
-                                (ItemStack) args[0],
-                                args[1],
-                                (PoseStack) args[2],
-                                (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
-                                (MultiBufferSource) args[4],
-                                (int) args[5], (float) args[6], (float) args[7],
-                                (float) args[8], (float) args[9], (float) args[10], (float) args[11]
-                        );
-                    }
-                    return null;
-                }
-        );
-
-        registerRingRenderer(curiosRendererRegistryClass, headProxy, "mcaromanticexpansion:red_veil");
-        registerRingRenderer(curiosRendererRegistryClass, headProxy, "mcaromanticexpansion:golden_hairpin");
-
     }
 
-    // 独立的 InvocationHandler 类
+    // 从 SlotContext 获取实体（使用缓存的方法）
+    private static LivingEntity getEntityFromSlotContext(Object slotContext) {
+        if (slotContext == null) return null;
+
+        Method getEntityMethod = getGetEntityMethod(slotContext.getClass());
+        if (getEntityMethod == null) return null;
+
+        try {
+            return (LivingEntity) getEntityMethod.invoke(slotContext);
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.warn("Failed to get entity from SlotContext: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    // 通用的渲染调用方法
+    private static void invokeRender(Object renderer, Object[] args) {
+        // 根据 renderer 类型调用对应的方法
+        if (renderer instanceof CorsageRenderer) {
+            ((CorsageRenderer) renderer).render(
+                    (ItemStack) args[0], args[1], (PoseStack) args[2],
+                    (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
+                    (MultiBufferSource) args[4], (int) args[5], (float) args[6], (float) args[7],
+                    (float) args[8], (float) args[9], (float) args[10], (float) args[11]);
+        } else if (renderer instanceof HeadAdornmentRenderer) {
+            ((HeadAdornmentRenderer) renderer).render(
+                    (ItemStack) args[0], args[1], (PoseStack) args[2],
+                    (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
+                    (MultiBufferSource) args[4], (int) args[5], (float) args[6], (float) args[7],
+                    (float) args[8], (float) args[9], (float) args[10], (float) args[11]);
+        }
+    }
+
+    // 使用缓存的反射方法注册渲染器
+    private static void registerRingRendererCached(Object renderer, String itemId) {
+        try {
+            Class<?> itemClass = Class.forName("net.minecraft.world.item.Item");
+            Object item = registryGetMethod.invoke(net.minecraft.core.registries.BuiltInRegistries.ITEM,
+                    ResourceLocation.parse(itemId));
+
+            if (item != null) {
+                java.util.function.Supplier<?> supplier = () -> renderer;
+                registerRendererMethod.invoke(null, item, supplier);
+                MCARomanticExpansion.LOGGER.info("Registered ring renderer for {}", itemId);
+            }
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.warn("Failed to register ring renderer for {}: {}", itemId, e.getMessage());
+        }
+    }
+
+    // 独立的 InvocationHandler 类（戒指渲染）
     private static class RingRenderInvocationHandler implements java.lang.reflect.InvocationHandler {
         private final RingCuriosRenderer renderer;
 
@@ -193,42 +250,15 @@ public class CuriosIntegration {
         }
 
         @Override
-        public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
+        public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) {
             if ("render".equals(method.getName()) && args != null && args.length >= 12) {
                 renderer.render(
-                        (net.minecraft.world.item.ItemStack) args[0],
-                        args[1],  // 使用 Object 避免强依赖
-                        (com.mojang.blaze3d.vertex.PoseStack) args[2],
-                        (net.minecraft.client.renderer.entity.RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
-                        (net.minecraft.client.renderer.MultiBufferSource) args[4],
-                        (int) args[5],
-                        (float) args[6],
-                        (float) args[7],
-                        (float) args[8],
-                        (float) args[9],
-                        (float) args[10],
-                        (float) args[11]
-                );
+                        (ItemStack) args[0], args[1], (PoseStack) args[2],
+                        (RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>>) args[3],
+                        (MultiBufferSource) args[4], (int) args[5], (float) args[6], (float) args[7],
+                        (float) args[8], (float) args[9], (float) args[10], (float) args[11]);
             }
             return null;
-        }
-    }
-
-    private static void registerRingRenderer(Class<?> registryClass, Object renderer, String ringId) {
-        try {
-            Class<?> itemClass = Class.forName("net.minecraft.world.item.Item");
-            Object registry = net.minecraft.core.registries.BuiltInRegistries.ITEM;
-            Object item = registry.getClass().getMethod("get", ResourceLocation.class)
-                    .invoke(registry, ResourceLocation.parse(ringId));
-
-            if (item != null) {
-                java.util.function.Supplier<?> supplier = () -> renderer;
-                registryClass.getMethod("register", itemClass, java.util.function.Supplier.class)
-                        .invoke(null, item, supplier);
-                MCARomanticExpansion.LOGGER.info("Registered ring renderer for {}", ringId);
-            }
-        } catch (Exception e) {
-            MCARomanticExpansion.LOGGER.warn("Failed to register ring renderer for {}: {}", ringId, e.getMessage());
         }
     }
 

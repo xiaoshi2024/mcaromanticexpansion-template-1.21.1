@@ -1,7 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.minecraft.commands.CommandSourceStack;
@@ -13,7 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class PregnancyCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("pregnancy")
-                .requires(source -> source.hasPermission(0))
+                .requires(source -> source.hasPermission(2))
 
                 // 查看备孕期状态
                 .then(Commands.literal("status")

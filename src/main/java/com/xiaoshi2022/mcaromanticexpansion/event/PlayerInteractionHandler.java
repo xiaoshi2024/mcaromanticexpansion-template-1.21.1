@@ -2,19 +2,19 @@ package com.xiaoshi2022.mcaromanticexpansion.event;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
+import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenMarriageGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.util.CooldownManager;
-import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
-import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
+import net.conczin.mca.entity.ai.relationship.RelationshipState;
 import net.conczin.mca.item.BouquetItem;
 import net.conczin.mca.item.EngagementRingItem;
 import net.conczin.mca.item.WeddingRingItem;
-import net.conczin.mca.server.world.data.PlayerSaveData;
-import net.conczin.mca.server.ServerInteractionManager;
-import net.conczin.mca.entity.ai.relationship.RelationshipState;
 import net.conczin.mca.registry.ItemsMCA;
+import net.conczin.mca.server.ServerInteractionManager;
+import net.conczin.mca.server.world.data.PlayerSaveData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -308,8 +308,13 @@ public class PlayerInteractionHandler {
                         // 触发成就：红妆揭面
                         try {
                             MCARomanticExpansion.LOGGER.info("Attempting to trigger unveil_veil advancement for player: {}", player.getName().getString());
-                            CriterionTriggerRegister.UNVEIL_VEIL.get().trigger(player);
-                            MCARomanticExpansion.LOGGER.info("Successfully triggered unveil_veil advancement!");
+                            var trigger = CriterionTriggerRegister.UNVEIL_VEIL.get();
+                            if (trigger != null) {
+                                trigger.trigger(player);
+                                MCARomanticExpansion.LOGGER.info("Successfully triggered unveil_veil advancement!");
+                            } else {
+                                MCARomanticExpansion.LOGGER.error("UnveilVeilTrigger is null, cannot trigger advancement");
+                            }
                         } catch (Exception ex) {
                             MCARomanticExpansion.LOGGER.error("Failed to trigger unveil_veil advancement: {}", ex.getMessage());
                             ex.printStackTrace();

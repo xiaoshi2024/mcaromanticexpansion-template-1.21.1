@@ -3,7 +3,6 @@ package com.xiaoshi2022.mcaromanticexpansion.network;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.item.EngagementRingItem;
-import net.conczin.mca.registry.ItemsMCA;
 import net.conczin.mca.server.ServerInteractionManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

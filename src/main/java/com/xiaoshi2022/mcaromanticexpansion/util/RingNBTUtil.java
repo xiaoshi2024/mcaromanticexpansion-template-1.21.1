@@ -3,8 +3,6 @@ package com.xiaoshi2022.mcaromanticexpansion.util;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
