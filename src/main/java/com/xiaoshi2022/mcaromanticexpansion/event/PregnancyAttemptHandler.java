@@ -4,6 +4,7 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.server.world.data.PlayerSaveData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -262,11 +263,12 @@ public class PregnancyAttemptHandler {
                 MCARomanticExpansion.LOGGER.info("One or both players have UNASSIGNED gender, pregnancy check skipped");
                 // 提示玩家设置性别
                 if (gender1 == Gender.UNASSIGNED) {
-                    player1.sendSystemMessage(Component.literal("§c请使用 /mca gender set " + player1.getName().getString() + " MALE/FEMALE 设置性别"));
+                    player1.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别！")
+                            .withStyle(ChatFormatting.RED));
                 }
                 if (gender2 == Gender.UNASSIGNED) {
-                    player2.sendSystemMessage(Component.literal("§c请使用 /mca gender set " + player2.getName().getString() + " MALE/FEMALE 设置性别"));
-                }
+                    player2.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别！")
+                            .withStyle(ChatFormatting.RED));                }
             }
             return;
         }
@@ -318,7 +320,7 @@ public class PregnancyAttemptHandler {
      * 直接从 NBT 读取性别 - 绕过 MCA 的 getGender() Bug
      * 优先读取大写 "Gender" 字段（Genetics实际保存的位置）
      */
-    private static Gender getGenderFromNBT(ServerPlayer player) {
+    public static Gender getGenderFromNBT(ServerPlayer player) {
         synchronized (genderCheckLock) {
             try {
                 PlayerSaveData data = PlayerSaveData.get(player);

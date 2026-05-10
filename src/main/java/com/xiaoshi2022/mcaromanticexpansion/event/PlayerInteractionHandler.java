@@ -8,6 +8,8 @@ import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenMarriageGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.util.CooldownManager;
+import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
+import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.entity.ai.relationship.RelationshipState;
 import net.conczin.mca.item.BouquetItem;
 import net.conczin.mca.item.EngagementRingItem;
@@ -212,6 +214,28 @@ public class PlayerInteractionHandler {
             sender.sendSystemMessage(Component.literal("§c请等待 " + (remaining / 1000) + " 秒后再举行婚礼！")
                     .withStyle(ChatFormatting.RED));
             return;
+        }
+
+        // ========== 检查性别 ==========
+        Gender senderGender = PregnancyAttemptHandler.getGenderFromNBT(sender);
+        Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
+
+        if (senderGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
+            sender.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别后再结婚！")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        // 如果是同性结婚，检查是否允许
+        if (senderGender == targetGender) {
+            boolean senderAllowed = MarriageConfig.isSameGenderMarriageAllowed(sender);
+            boolean targetAllowed = MarriageConfig.isSameGenderMarriageAllowed(target);
+
+            if (!senderAllowed || !targetAllowed) {
+                sender.sendSystemMessage(Component.literal("§c同性结婚已被禁止！如需启用请联系管理员使用 /marriageconfig allowSameGender true")
+                        .withStyle(ChatFormatting.RED));
+                return;
+            }
         }
 
         boolean senderHasRing = false;

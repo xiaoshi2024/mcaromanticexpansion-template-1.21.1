@@ -77,6 +77,13 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
    - 将玩家 B 的戒指放入玩家 A 的背包
 3. **意义**：象征着双方在婚姻中的承诺和结合
 
+## 婚姻系统说明
+
+- 默认仅支持异性结婚（符合传统婚姻观念）
+- 如需开启同性结婚，服主可使用指令：
+  `/marriageconfig allowSameGender true`
+- 同性结婚后，怀孕机制也会相应生效
+
 ## 礼盒系统说明
 
 礼盒是一个浪漫的礼物传递方式：

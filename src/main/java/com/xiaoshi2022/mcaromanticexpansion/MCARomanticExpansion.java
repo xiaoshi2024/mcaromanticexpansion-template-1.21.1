@@ -3,6 +3,7 @@ package com.xiaoshi2022.mcaromanticexpansion;
 import com.mojang.logging.LogUtils;
 import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
 import com.xiaoshi2022.mcaromanticexpansion.command.BirthdayCommand;
+import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
 import com.xiaoshi2022.mcaromanticexpansion.event.PlayerInteractionHandler;
 import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
@@ -42,6 +43,7 @@ public class MCARomanticExpansion {
     public void onCommandsRegister(RegisterCommandsEvent event) {
         BirthdayCommand.register(event.getDispatcher());
         PregnancyCommand.register(event.getDispatcher());
+        MarriageConfigCommand.register(event.getDispatcher()); // 新增
     }
 
     @SubscribeEvent
