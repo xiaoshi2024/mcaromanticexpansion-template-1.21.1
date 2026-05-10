@@ -1,9 +1,13 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
+import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
 import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
+import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.item.EngagementRingItem;
 import net.conczin.mca.server.ServerInteractionManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -44,6 +48,27 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
                 proposer.getName().getString(), responder.getName().getString(), accepted);
 
         if (accepted) {
+
+            // ========== 验证性别 ==========
+            Gender responderGender = PregnancyAttemptHandler.getGenderFromNBT(responder);
+            Gender proposerGender = PregnancyAttemptHandler.getGenderFromNBT(proposer);
+
+            if (responderGender == Gender.UNASSIGNED || proposerGender == Gender.UNASSIGNED) {
+                responder.sendSystemMessage(Component.literal("§c请双方都设置性别后再求婚！").withStyle(ChatFormatting.RED));
+                return;
+            }
+
+            if (responderGender == proposerGender) {
+                boolean responderAllowed = MarriageConfig.isSameGenderMarriageAllowed(responder);
+                boolean proposerAllowed = MarriageConfig.isSameGenderMarriageAllowed(proposer);
+
+                if (!responderAllowed || !proposerAllowed) {
+                    responder.sendSystemMessage(Component.literal("§c同性求婚已被禁止！").withStyle(ChatFormatting.RED));
+                    proposer.sendSystemMessage(Component.literal("§c" + responder.getName().getString() + " 拒绝了你的求婚（同性求婚被禁止）").withStyle(ChatFormatting.RED));
+                    return;
+                }
+            }
+
             // 先转移戒指（在调用 MCA 方法之前）
             boolean found = false;
             ItemStack ringWithNBT = null;

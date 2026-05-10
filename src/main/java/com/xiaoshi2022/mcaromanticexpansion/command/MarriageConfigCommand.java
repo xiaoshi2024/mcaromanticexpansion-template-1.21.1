@@ -29,6 +29,15 @@ public class MarriageConfigCommand {
                                 })
                         )
                 )
+                // 在 MarriageConfigCommand.java 中添加
+                .then(Commands.literal("reload")
+                        .executes(context -> {
+                            MarriageConfig.reload();
+                            context.getSource().sendSuccess(() ->
+                                    Component.literal("§a已重新加载同性结婚配置！"), true);
+                            return 1;
+                        })
+                )
                 .then(Commands.literal("player")
                         .then(Commands.argument("target", EntityArgument.player())
                                 .then(Commands.literal("allowSameGender")

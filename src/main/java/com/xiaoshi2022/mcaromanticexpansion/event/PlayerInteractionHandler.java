@@ -190,6 +190,28 @@ public class PlayerInteractionHandler {
             return;
         }
 
+        // ========== 新增：检查性别 ==========
+        Gender proposerGender = PregnancyAttemptHandler.getGenderFromNBT(proposer);
+        Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
+
+        if (proposerGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
+            proposer.sendSystemMessage(Component.literal("§c请双方都使用 /mca editor 设置性别后再求婚！")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        if (proposerGender == targetGender) {
+            boolean proposerAllowed = MarriageConfig.isSameGenderMarriageAllowed(proposer);
+            boolean targetAllowed = MarriageConfig.isSameGenderMarriageAllowed(target);
+
+            if (!proposerAllowed || !targetAllowed) {
+                proposer.sendSystemMessage(Component.literal("§c同性求婚已被禁止！如需启用请联系管理员使用 /marriageconfig allowSameGender true")
+                        .withStyle(ChatFormatting.RED));
+                return;
+            }
+        }
+
+        // 检查戒指...
         int ringCount = 0;
         for (int i = 0; i < proposer.getInventory().getContainerSize(); i++) {
             var stack = proposer.getInventory().getItem(i);

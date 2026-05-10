@@ -1,24 +1,93 @@
-// 文件路径: src/main/java/com/xiaoshi2022/mcaromanticexpansion/util/MarriageConfig.java
-
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.fml.loading.FMLPaths;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MarriageConfig {
     // 全局配置：默认不允许同性结婚
     private static boolean allowSameGenderMarriage = false;
 
-    // 玩家覆盖配置（用于管理员单独设置某个玩家）
+    // 玩家覆盖配置
     private static final ConcurrentHashMap<String, Boolean> playerOverrides = new ConcurrentHashMap<>();
 
+    // 配置文件路径
+    private static final Path CONFIG_PATH = FMLPaths.CONFIGDIR.get().resolve("mcaromanticexpansion-marriage.properties");
+
+    // 静态初始化块：加载配置文件
+    static {
+        loadConfig();
+    }
+
     /**
-     * 检查是否允许同性结婚
-     * @param player 要检查的玩家（可选，用于玩家级覆盖）
-     * @return 是否允许同性结婚
+     * 从配置文件加载设置
      */
+    public static void loadConfig() {
+        Properties props = new Properties();
+
+        if (Files.exists(CONFIG_PATH)) {
+            try (InputStream in = Files.newInputStream(CONFIG_PATH)) {
+                props.load(in);
+
+                // 加载全局设置
+                allowSameGenderMarriage = Boolean.parseBoolean(props.getProperty("allowSameGender", "false"));
+
+                // 加载玩家覆盖设置
+                playerOverrides.clear();
+                String playerOverridesStr = props.getProperty("playerOverrides", "");
+                if (!playerOverridesStr.isEmpty()) {
+                    for (String entry : playerOverridesStr.split(",")) {
+                        String[] parts = entry.split("=");
+                        if (parts.length == 2) {
+                            playerOverrides.put(parts[0], Boolean.parseBoolean(parts[1]));
+                        }
+                    }
+                }
+
+                MCARomanticExpansion.LOGGER.info("Loaded marriage config: allowSameGender={}, playerOverrides={}",
+                        allowSameGenderMarriage, playerOverrides.size());
+            } catch (IOException e) {
+                MCARomanticExpansion.LOGGER.warn("Failed to load marriage config: {}", e.getMessage());
+            }
+        } else {
+            // 配置文件不存在，创建默认配置
+            saveConfig();
+        }
+    }
+
+    /**
+     * 保存配置到文件
+     */
+    public static void saveConfig() {
+        Properties props = new Properties();
+
+        props.setProperty("allowSameGender", String.valueOf(allowSameGenderMarriage));
+
+        // 保存玩家覆盖设置
+        StringBuilder sb = new StringBuilder();
+        for (var entry : playerOverrides.entrySet()) {
+            if (sb.length() > 0) sb.append(",");
+            sb.append(entry.getKey()).append("=").append(entry.getValue());
+        }
+        props.setProperty("playerOverrides", sb.toString());
+        props.setProperty("version", "1.0");
+
+        try (OutputStream out = Files.newOutputStream(CONFIG_PATH)) {
+            props.store(out, "MCARomanticExpansion Marriage Config");
+            MCARomanticExpansion.LOGGER.info("Saved marriage config to: {}", CONFIG_PATH);
+        } catch (IOException e) {
+            MCARomanticExpansion.LOGGER.error("Failed to save marriage config: {}", e.getMessage());
+        }
+    }
+
+    // ========== 原有方法（修改后自动保存） ==========
+
     public static boolean isSameGenderMarriageAllowed(ServerPlayer player) {
         if (player != null) {
             String playerName = player.getName().getString();
@@ -29,45 +98,38 @@ public class MarriageConfig {
         return allowSameGenderMarriage;
     }
 
-    /**
-     * 设置全局同性结婚权限
-     */
     public static void setGlobalAllowSameGenderMarriage(boolean allow) {
         allowSameGenderMarriage = allow;
+        saveConfig();  // 自动保存
         MCARomanticExpansion.LOGGER.info("Global same-gender marriage setting changed to: {}", allow);
     }
 
-    /**
-     * 获取全局同性结婚权限
-     */
     public static boolean isGlobalAllowSameGenderMarriage() {
         return allowSameGenderMarriage;
     }
 
-    /**
-     * 设置玩家的同性结婚权限（覆盖全局设置）
-     */
     public static void setPlayerAllowSameGenderMarriage(String playerName, Boolean allow) {
         if (allow == null) {
             playerOverrides.remove(playerName);
         } else {
             playerOverrides.put(playerName, allow);
         }
+        saveConfig();  // 自动保存
         MCARomanticExpansion.LOGGER.info("Player {} same-gender marriage setting changed to: {}", playerName, allow);
     }
 
-    /**
-     * 获取玩家的同性结婚权限
-     * @return null 表示使用全局设置，否则返回具体设置
-     */
     public static Boolean getPlayerAllowSameGenderMarriage(String playerName) {
         return playerOverrides.get(playerName);
     }
 
-    /**
-     * 获取所有覆盖设置的玩家
-     */
     public static ConcurrentHashMap<String, Boolean> getAllPlayerOverrides() {
         return new ConcurrentHashMap<>(playerOverrides);
+    }
+
+    /**
+     * 重新加载配置（用于热重载）
+     */
+    public static void reload() {
+        loadConfig();
     }
 }
