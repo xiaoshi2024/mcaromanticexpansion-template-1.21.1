@@ -84,12 +84,28 @@ public class PlayerInteractionHandler {
 
         // 礼盒操作：Shift+右键放入物品
         if (item instanceof GiftBoxItem && player.isShiftKeyDown()) {
+            // ========== 修复：检查礼盒是否已经有礼物 ==========
+            if (GiftBoxItem.hasGift(stack)) {
+                serverPlayer.sendSystemMessage(Component.literal("§c礼盒中已经有礼物了！不能重复放入！")
+                        .withStyle(ChatFormatting.RED));
+                event.setCanceled(true);
+                return;
+            }
+
             // 获取另一只手的物品
             ItemStack otherHandItem = hand == net.minecraft.world.InteractionHand.MAIN_HAND
                     ? serverPlayer.getOffhandItem()
                     : serverPlayer.getMainHandItem();
 
             if (!otherHandItem.isEmpty()) {
+                // ========== 额外检查：不能放入另一个礼盒 ==========
+                if (otherHandItem.getItem() instanceof GiftBoxItem) {
+                    serverPlayer.sendSystemMessage(Component.literal("§c不能将礼盒放入另一个礼盒中！")
+                            .withStyle(ChatFormatting.RED));
+                    event.setCanceled(true);
+                    return;
+                }
+
                 GiftBoxItem.saveGiftItem(stack, otherHandItem);
 
                 // 清空另一只手
@@ -117,14 +133,36 @@ public class PlayerInteractionHandler {
         var stack = event.getItemStack();
         var item = stack.getItem();
 
-        // 右键方块打开礼盒（当玩家对准方块但想打开礼盒时）
-        if (item instanceof GiftBoxItem && GiftBoxItem.hasGift(stack)) {
-            // 打开礼盒获得物品
+        // 右键方块打开礼盒
+        if (item instanceof GiftBoxItem) {
+            // 检查是否有礼物
+            if (!GiftBoxItem.hasGift(stack)) {
+                serverPlayer.sendSystemMessage(Component.literal("§c礼盒是空的！请先放入物品。")
+                        .withStyle(ChatFormatting.RED));
+                event.setCanceled(true);
+                return;
+            }
+
+            // 检查是否是生日礼盒
+            if (GiftBoxItem.isBirthdayGift(stack)) {
+                GiftBoxItem.openBirthdayGift(serverPlayer, stack);
+                event.setCanceled(true);
+                return;
+            }
+
+            // 普通礼盒打开
             ItemStack giftItem = GiftBoxItem.loadGiftItem(stack);
             if (!giftItem.isEmpty()) {
-                serverPlayer.getInventory().add(giftItem);
+                boolean added = serverPlayer.getInventory().add(giftItem);
+                if (!added) {
+                    serverPlayer.drop(giftItem, false);
+                    serverPlayer.sendSystemMessage(Component.literal("§c背包已满，礼物掉落在了地上！")
+                            .withStyle(ChatFormatting.RED));
+                } else {
+                    serverPlayer.sendSystemMessage(Component.literal("§a打开礼盒获得了物品！")
+                            .withStyle(ChatFormatting.GREEN));
+                }
                 GiftBoxItem.clearGift(stack);
-                serverPlayer.sendSystemMessage(Component.literal("§a打开礼盒获得了物品！").withStyle(ChatFormatting.GREEN));
                 event.setCanceled(true);
             }
         }

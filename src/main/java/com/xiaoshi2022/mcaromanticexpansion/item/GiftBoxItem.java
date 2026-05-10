@@ -116,6 +116,12 @@ public class GiftBoxItem extends Item {
     }
 
     public static void saveGiftItem(ItemStack giftBox, ItemStack giftItem) {
+        // 检查是否已经有礼物
+        if (hasGift(giftBox)) {
+            MCARomanticExpansion.LOGGER.warn("Cannot save gift to box that already has a gift!");
+            return;
+        }
+
         // 防止将礼盒放入自己
         if (giftItem.getItem() instanceof GiftBoxItem) {
             MCARomanticExpansion.LOGGER.warn("Cannot put gift box inside another gift box!");
