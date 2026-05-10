@@ -23,15 +23,20 @@ public record OpenProposalGUIPacket(UUID proposerUUID, String proposerName) impl
             buf -> new OpenProposalGUIPacket(buf.readUUID(), buf.readUtf(64))
     );
 
-    @OnlyIn(Dist.CLIENT)
-    public void handle() {
-        Minecraft.getInstance().execute(() -> {
-            Minecraft.getInstance().setScreen(new ProposalScreen(proposerUUID(), proposerName()));
-        });
-    }
-
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
+    }
+
+    // 添加客户端处理方法
+    @OnlyIn(Dist.CLIENT)
+    public void handleClient() {
+        MCARomanticExpansion.LOGGER.info("CLIENT: OpenProposalGUIPacket received! proposerUUID={}, proposerName={}",
+                proposerUUID, proposerName);
+        Minecraft.getInstance().execute(() -> {
+            MCARomanticExpansion.LOGGER.info("CLIENT: Opening ProposalScreen for UUID: {}", proposerUUID);
+            Minecraft.getInstance().setScreen(new ProposalScreen(proposerUUID, proposerName));
+            MCARomanticExpansion.LOGGER.info("CLIENT: ProposalScreen opened successfully!");
+        });
     }
 }

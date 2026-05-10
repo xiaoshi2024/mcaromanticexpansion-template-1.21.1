@@ -15,11 +15,13 @@ import java.util.UUID;
 @OnlyIn(Dist.CLIENT)
 public class MarriageScreen extends Screen {
     private final UUID partnerUUID;
+    private final String partnerName;
     private long lastClickTime = 0;
 
-    public MarriageScreen(UUID partnerUUID) {
+    public MarriageScreen(UUID partnerUUID, String partnerName) {
         super(Component.translatable("mcaromanticexpansion.gui.marriage.title"));
         this.partnerUUID = partnerUUID;
+        this.partnerName = partnerName;
     }
 
     @Override
@@ -80,6 +82,9 @@ public class MarriageScreen extends Screen {
         guiGraphics.fill(centerX - 100, centerY - 60, centerX + 100, centerY + 60, 0x77000000);
         guiGraphics.drawCenteredString(this.font, this.title, centerX, centerY - 45, 0xFFFFFFFF);
         guiGraphics.hLine(centerX - 80, centerX + 80, centerY - 35, 0xAAFFFFFF);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("mcaromanticexpansion.gui.marriage.question"), centerX, centerY - 20, 0xFFFFFFFF);
+
+        // 显示询问信息，包含对方名字
+        Component question = Component.translatable("mcaromanticexpansion.gui.marriage.question", partnerName);
+        guiGraphics.drawCenteredString(this.font, question, centerX, centerY - 20, 0xFFFFFFFF);
     }
 }

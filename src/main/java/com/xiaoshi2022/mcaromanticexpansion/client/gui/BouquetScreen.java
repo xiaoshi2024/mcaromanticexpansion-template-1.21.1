@@ -15,11 +15,14 @@ import java.util.UUID;
 @OnlyIn(Dist.CLIENT)
 public class BouquetScreen extends Screen {
     private final UUID giverUUID;
+    private final String giverName;  // 添加赠送者名字
     private long lastClickTime = 0;
 
-    public BouquetScreen(UUID giverUUID) {
+    // 修改构造函数，添加 giverName 参数
+    public BouquetScreen(UUID giverUUID, String giverName) {
         super(Component.translatable("mcaromanticexpansion.gui.bouquet.title"));
         this.giverUUID = giverUUID;
+        this.giverName = giverName;
     }
 
     @Override
@@ -80,6 +83,9 @@ public class BouquetScreen extends Screen {
         guiGraphics.fill(centerX - 100, centerY - 60, centerX + 100, centerY + 40, 0x77000000);
         guiGraphics.drawCenteredString(this.font, this.title, centerX, centerY - 45, 0xFFFFFFFF);
         guiGraphics.hLine(centerX - 80, centerX + 80, centerY - 35, 0xAAFFFFFF);
-        guiGraphics.drawCenteredString(this.font, Component.translatable("mcaromanticexpansion.gui.bouquet.question"), centerX, centerY - 20, 0xFFFFFFFF);
+
+        // 显示带名字的询问信息
+        Component question = Component.translatable("mcaromanticexpansion.gui.bouquet.question", giverName);
+        guiGraphics.drawCenteredString(this.font, question, centerX, centerY - 20, 0xFFFFFFFF);
     }
 }

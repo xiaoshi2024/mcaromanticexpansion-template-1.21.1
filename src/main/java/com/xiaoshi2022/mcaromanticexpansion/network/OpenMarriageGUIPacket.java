@@ -11,13 +11,16 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
-public record OpenMarriageGUIPacket(UUID partnerUUID) implements CustomPacketPayload {
+public record OpenMarriageGUIPacket(UUID partnerUUID, String partnerName) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenMarriageGUIPacket> TYPE =
             new CustomPacketPayload.Type<>(MCARomanticExpansion.locate("open_marriage_gui"));
 
     public static final StreamCodec<FriendlyByteBuf, OpenMarriageGUIPacket> STREAM_CODEC = StreamCodec.of(
-            (buf, packet) -> buf.writeUUID(packet.partnerUUID()),
-            buf -> new OpenMarriageGUIPacket(buf.readUUID())
+            (buf, packet) -> {
+                buf.writeUUID(packet.partnerUUID());
+                buf.writeUtf(packet.partnerName(), 64);
+            },
+            buf -> new OpenMarriageGUIPacket(buf.readUUID(), buf.readUtf(64))
     );
 
     @Override
@@ -25,12 +28,14 @@ public record OpenMarriageGUIPacket(UUID partnerUUID) implements CustomPacketPay
         return TYPE;
     }
 
+    // 添加客户端处理方法
     @OnlyIn(Dist.CLIENT)
-    public void handle() {
-        MCARomanticExpansion.LOGGER.info("CLIENT: OpenMarriageGUIPacket received! partnerUUID={}", partnerUUID);
+    public void handleClient() {
+        MCARomanticExpansion.LOGGER.info("CLIENT: OpenMarriageGUIPacket received! partnerUUID={}, partnerName={}",
+                partnerUUID, partnerName);
         Minecraft.getInstance().execute(() -> {
             MCARomanticExpansion.LOGGER.info("CLIENT: Opening MarriageScreen for UUID: {}", partnerUUID);
-            Minecraft.getInstance().setScreen(new MarriageScreen(partnerUUID));
+            Minecraft.getInstance().setScreen(new MarriageScreen(partnerUUID, partnerName));
             MCARomanticExpansion.LOGGER.info("CLIENT: MarriageScreen opened successfully!");
         });
     }

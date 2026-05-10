@@ -211,7 +211,7 @@ public class PlayerInteractionHandler {
 
         // 检查发送者是否已婚且配偶是目标玩家
         boolean senderIsMarried = senderData.getRelationshipState() == RelationshipState.MARRIED_TO_PLAYER;
-        boolean targetIsSpouse = senderData.getPartnerUUID().isPresent() && 
+        boolean targetIsSpouse = senderData.getPartnerUUID().isPresent() &&
                 senderData.getPartnerUUID().get().equals(target.getUUID());
 
         if (!senderIsMarried || !targetIsSpouse) {
@@ -221,7 +221,7 @@ public class PlayerInteractionHandler {
 
         // 执行离婚
         ServerInteractionManager.getInstance().endMarriage(sender);
-        
+
         // 消耗离婚协议书
         for (int i = 0; i < sender.getInventory().getContainerSize(); i++) {
             var stack = sender.getInventory().getItem(i);
@@ -230,25 +230,29 @@ public class PlayerInteractionHandler {
                 break;
             }
         }
-        
+
         sender.sendSystemMessage(Component.literal("§c你与 " + target.getName().getString() + " 的婚姻已结束。").withStyle(ChatFormatting.RED));
         target.sendSystemMessage(Component.literal("§c" + sender.getName().getString() + " 已递交离婚协议书，你们的婚姻已结束。").withStyle(ChatFormatting.RED));
     }
 
     private static void sendProposalRequest(ServerPlayer sender, ServerPlayer receiver) {
         OpenProposalGUIPacket packet = new OpenProposalGUIPacket(sender.getUUID(), sender.getName().getString());
+        MCARomanticExpansion.LOGGER.info("Sending OpenProposalGUIPacket to {} from {}",
+                receiver.getName().getString(), sender.getName().getString());
         receiver.connection.send(packet);
     }
 
     private static void sendBouquetRequest(ServerPlayer sender, ServerPlayer receiver) {
-        OpenBouquetGUIPacket packet = new OpenBouquetGUIPacket(sender.getUUID());
-        MCARomanticExpansion.LOGGER.info("Sending OpenBouquetGUIPacket to {}", receiver.getName().getString());
+        OpenBouquetGUIPacket packet = new OpenBouquetGUIPacket(sender.getUUID(), sender.getName().getString());
+        MCARomanticExpansion.LOGGER.info("Sending OpenBouquetGUIPacket to {} from {}",
+                receiver.getName().getString(), sender.getName().getString());
         receiver.connection.send(packet);
     }
 
     private static void sendMarriageRequest(ServerPlayer sender, ServerPlayer receiver) {
-        OpenMarriageGUIPacket packet = new OpenMarriageGUIPacket(sender.getUUID());
-        MCARomanticExpansion.LOGGER.info("Sending OpenMarriageGUIPacket to {}", receiver.getName().getString());
+        OpenMarriageGUIPacket packet = new OpenMarriageGUIPacket(sender.getUUID(), sender.getName().getString());
+        MCARomanticExpansion.LOGGER.info("Sending OpenMarriageGUIPacket to {} from {}",
+                receiver.getName().getString(), sender.getName().getString());
         receiver.connection.send(packet);
     }
 
@@ -261,7 +265,7 @@ public class PlayerInteractionHandler {
         PlayerSaveData targetData = PlayerSaveData.get(target);
 
         boolean playerIsMarried = playerData.getRelationshipState() == RelationshipState.MARRIED_TO_PLAYER;
-        boolean targetIsSpouse = playerData.getPartnerUUID().isPresent() && 
+        boolean targetIsSpouse = playerData.getPartnerUUID().isPresent() &&
                 playerData.getPartnerUUID().get().equals(target.getUUID());
 
         if (!playerIsMarried || !targetIsSpouse) {
@@ -270,7 +274,7 @@ public class PlayerInteractionHandler {
 
         try {
             Class<?> curiosApiClass = Class.forName("top.theillusivec4.curios.api.CuriosApi");
-            
+
             Object optionalCuriosInventory = curiosApiClass.getDeclaredMethod("getCuriosInventory", net.minecraft.world.entity.LivingEntity.class)
                     .invoke(null, target);
 
@@ -279,7 +283,7 @@ public class PlayerInteractionHandler {
                 Class<?> inventoryClass = curiosInventory.getClass();
 
                 Object optionalSlotResult = inventoryClass.getDeclaredMethod("findFirstCurio", java.util.function.Predicate.class)
-                        .invoke(curiosInventory, (java.util.function.Predicate<ItemStack>) stack -> 
+                        .invoke(curiosInventory, (java.util.function.Predicate<ItemStack>) stack ->
                             !stack.isEmpty() && stack.getItem() instanceof RedVeilItem);
 
                 if (optionalSlotResult instanceof java.util.Optional<?> slotOpt && slotOpt.isPresent()) {
@@ -288,13 +292,13 @@ public class PlayerInteractionHandler {
 
                     ItemStack stack = (ItemStack) slotResultClass.getDeclaredMethod("stack").invoke(slotResult);
                     ItemStack veilStack = stack.copy();
-                    
+
                     Object slotContext = slotResultClass.getDeclaredMethod("slotContext").invoke(slotResult);
                     Class<?> slotContextClass = slotContext.getClass();
-                    
+
                     String identifier = (String) slotContextClass.getDeclaredMethod("identifier").invoke(slotContext);
                     int index = (int) slotContextClass.getDeclaredMethod("index").invoke(slotContext);
-                    
+
                     inventoryClass.getDeclaredMethod("setEquippedCurio", String.class, int.class, ItemStack.class)
                             .invoke(curiosInventory, identifier, index, ItemStack.EMPTY);
 
@@ -304,7 +308,7 @@ public class PlayerInteractionHandler {
                     } else {
                         player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
                         target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
-                        
+
                         // 触发成就：红妆揭面
                         try {
                             MCARomanticExpansion.LOGGER.info("Attempting to trigger unveil_veil advancement for player: {}", player.getName().getString());

@@ -11,13 +11,16 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
-public record OpenBouquetGUIPacket(UUID giverUUID) implements CustomPacketPayload {
+public record OpenBouquetGUIPacket(UUID giverUUID, String giverName) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenBouquetGUIPacket> TYPE =
             new CustomPacketPayload.Type<>(MCARomanticExpansion.locate("open_bouquet_gui"));
 
     public static final StreamCodec<FriendlyByteBuf, OpenBouquetGUIPacket> STREAM_CODEC = StreamCodec.of(
-            (buf, packet) -> buf.writeUUID(packet.giverUUID()),
-            buf -> new OpenBouquetGUIPacket(buf.readUUID())
+            (buf, packet) -> {
+                buf.writeUUID(packet.giverUUID());
+                buf.writeUtf(packet.giverName(), 64);
+            },
+            buf -> new OpenBouquetGUIPacket(buf.readUUID(), buf.readUtf(64))
     );
 
     @Override
@@ -25,10 +28,15 @@ public record OpenBouquetGUIPacket(UUID giverUUID) implements CustomPacketPayloa
         return TYPE;
     }
 
+    // 客户端处理方法
     @OnlyIn(Dist.CLIENT)
-    public void handle() {
+    public void handleClient() {
+        MCARomanticExpansion.LOGGER.info("CLIENT: OpenBouquetGUIPacket received! giverUUID={}, giverName={}",
+                giverUUID, giverName);
         Minecraft.getInstance().execute(() -> {
-            Minecraft.getInstance().setScreen(new BouquetScreen(giverUUID()));
+            MCARomanticExpansion.LOGGER.info("CLIENT: Opening BouquetScreen for UUID: {}", giverUUID);
+            Minecraft.getInstance().setScreen(new BouquetScreen(giverUUID, giverName));
+            MCARomanticExpansion.LOGGER.info("CLIENT: BouquetScreen opened successfully!");
         });
     }
 }
