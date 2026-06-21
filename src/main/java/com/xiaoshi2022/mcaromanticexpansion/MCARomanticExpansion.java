@@ -7,6 +7,7 @@ import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
 import com.xiaoshi2022.mcaromanticexpansion.event.PlayerInteractionHandler;
 import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
+import com.xiaoshi2022.mcaromanticexpansion.event.RomanticTickHandler;
 import com.xiaoshi2022.mcaromanticexpansion.event.UmbrellaProtectionHandler;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
@@ -38,6 +39,7 @@ public class MCARomanticExpansion {
         NeoForge.EVENT_BUS.register(PlayerInteractionHandler.class);
         NeoForge.EVENT_BUS.register(PregnancyAttemptHandler.class);
         NeoForge.EVENT_BUS.register(UmbrellaProtectionHandler.class);
+        NeoForge.EVENT_BUS.register(RomanticTickHandler.class);
         NeoForge.EVENT_BUS.register(this);
     }
 

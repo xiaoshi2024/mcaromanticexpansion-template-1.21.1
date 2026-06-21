@@ -50,6 +50,12 @@
   "mcaromanticexpansion.gui.marriage.confirm": "Exchange Rings",
   "mcaromanticexpansion.gui.marriage.cancel": "Cancel",
 
+  "mcaromanticexpansion.gui.shared_umbrella.title": "Shared Umbrella Invitation",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s invites you to share an umbrella!",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "Accept",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "Reject",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "Time remaining: %ds",
+
   "mcaromanticexpansion.proposal.accepted": "§a%s accepted your proposal!",
   "mcaromanticexpansion.proposal.rejected": "§cProposal rejected.",
   "mcaromanticexpansion.proposal.rejected_by": "§c%s rejected your proposal.",

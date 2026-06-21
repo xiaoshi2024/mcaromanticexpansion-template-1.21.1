@@ -1,5 +1,6 @@
 {
     "type": "minecraft:crafting_shaped",
+    "category": "misc",
     "pattern": [
         "S S",
         "WWW",
@@ -14,7 +15,7 @@
         }
     },
     "result": {
-        "item": "mcaromanticexpansion:umbrella",
+        "id": "mcaromanticexpansion:umbrella",
         "count": 1
     }
 }

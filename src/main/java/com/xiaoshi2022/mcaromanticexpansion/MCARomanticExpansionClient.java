@@ -1,5 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
+import com.xiaoshi2022.mcaromanticexpansion.client.AffectionHUD;
+import com.xiaoshi2022.mcaromanticexpansion.client.ClientEventHandler;
 import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
 import com.xiaoshi2022.mcaromanticexpansion.client.renderer.UmbrellaStandRenderer;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
@@ -28,6 +30,9 @@ public class MCARomanticExpansionClient {
             ItemProperties.register(ModItems.UMBRELLA.get(),
                     ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "umbrella_state"),
                     (stack, level, entity, seed) -> UmbrellaItem.getUmbrellaState(stack));
+            
+            AffectionHUD.init();
+            ClientEventHandler.init();
         });
 
     }

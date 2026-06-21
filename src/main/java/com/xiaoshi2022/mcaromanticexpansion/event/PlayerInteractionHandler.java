@@ -4,11 +4,14 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenMarriageGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.util.CooldownManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
+import com.xiaoshi2022.mcaromanticexpansion.util.SharedUmbrellaManager;
 import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.entity.ai.relationship.RelationshipState;
 import net.conczin.mca.item.BouquetItem;
@@ -67,10 +70,17 @@ public class PlayerInteractionHandler {
         } else if (item == ItemsMCA.DIVORCE_PAPERS) {
             handleDivorcePapers(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
+        } else if (stack.is(ModItems.UMBRELLA.get())) {
+            handleSharedUmbrella(serverPlayer, targetServerPlayer);
+            event.setCanceled(true);
         } else if (stack.isEmpty()) {
             handleUnveilVeil(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
         }
+    }
+
+    private static void handleSharedUmbrella(ServerPlayer player, ServerPlayer target) {
+        SharedUmbrellaManager.sendRequest(player, target);
     }
 
     @SubscribeEvent

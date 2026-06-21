@@ -50,6 +50,12 @@
   "mcaromanticexpansion.gui.marriage.confirm": "交换戒指",
   "mcaromanticexpansion.gui.marriage.cancel": "取消",
 
+  "mcaromanticexpansion.gui.shared_umbrella.title": "共伞邀请",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s 邀请你共撑一把伞！",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "接受",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "拒绝",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "剩余时间: %d秒",
+
   "mcaromanticexpansion.proposal.accepted": "§a%s 接受了你的求婚！",
   "mcaromanticexpansion.proposal.rejected": "§c求婚被拒绝了。",
   "mcaromanticexpansion.proposal.rejected_by": "§c%s 拒绝了你的求婚。",
