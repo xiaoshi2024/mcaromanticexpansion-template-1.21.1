@@ -13,6 +13,13 @@ public class RomanceNetwork {
     public static void registerNetworkPackets(RegisterPayloadHandlersEvent event) {
         PayloadRegistrar registrar = event.registrar(MCARomanticExpansion.MODID).versioned("1.0.0");
 
+        // 伞架同步包
+        registrar.playToClient(
+                UmbrellaStandSyncPacket.TYPE,
+                UmbrellaStandSyncPacket.STREAM_CODEC,
+                UmbrellaStandSyncHandler::handleClient
+        );
+
         // 服务端 -> 客户端：打开花束GUI
         registrar.playToClient(
                 OpenBouquetGUIPacket.TYPE,

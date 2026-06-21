@@ -2,7 +2,9 @@
   "required": true,
   "package": "com.xiaoshi2022.mcaromanticexpansion.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "LevelMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

@@ -1,8 +1,11 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
 import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
+import com.xiaoshi2022.mcaromanticexpansion.client.renderer.UmbrellaStandRenderer;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -32,5 +35,11 @@ public class MCARomanticExpansionClient {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WeddingClothesModel.LAYER_LOCATION, WeddingClothesModel::createBodyLayer);
+    }
+
+    // 注册方块实体渲染器
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.UMBRELLA_STAND_BLOCK_ENTITY.get(), UmbrellaStandRenderer::new);
     }
 }

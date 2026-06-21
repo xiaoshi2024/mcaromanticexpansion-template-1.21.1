@@ -7,6 +7,8 @@ import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
 import com.xiaoshi2022.mcaromanticexpansion.event.PlayerInteractionHandler;
 import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +28,8 @@ public class MCARomanticExpansion {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public MCARomanticExpansion(IEventBus modEventBus) {
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModItems.CREATIVE_TABS.register(modEventBus);
         RomanceNetwork.registerPackets(modEventBus);

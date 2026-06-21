@@ -102,5 +102,7 @@
   "mcaromanticexpansion.command.pregnancy.cancel.success": "§a备孕期已取消",
   "mcaromanticexpansion.command.pregnancy.cancel.failure": "§c你当前不在备孕期！",
   "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a已取消 %s 的备孕期",
-  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 当前不在备孕期！"
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 当前不在备孕期！",
+
+  "block.mcaromanticexpansion.umbrella_stand": "伞架"
 }

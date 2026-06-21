@@ -1,0 +1,38 @@
+{
+	"variants": {
+		"facing=north,waterlogged=false": {
+			"model": "mcaromanticexpansion:block/umbrella_stand"
+		},
+		"facing=north,waterlogged=true": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"x": 180
+		},
+		"facing=south,waterlogged=false": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"y": 180
+		},
+		"facing=south,waterlogged=true": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"x": 180,
+			"y": 180
+		},
+		"facing=west,waterlogged=false": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"y": 270
+		},
+		"facing=west,waterlogged=true": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"x": 180,
+			"y": 270
+		},
+		"facing=east,waterlogged=false": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"y": 90
+		},
+		"facing=east,waterlogged=true": {
+			"model": "mcaromanticexpansion:block/umbrella_stand",
+			"x": 180,
+			"y": 90
+		}
+	}
+}

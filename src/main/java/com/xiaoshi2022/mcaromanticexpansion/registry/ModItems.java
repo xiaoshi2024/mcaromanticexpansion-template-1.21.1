@@ -4,16 +4,18 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import static com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks.UMBRELLA_STAND;
+
 public class ModItems {
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MCARomanticExpansion.MODID);
-    public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MCARomanticExpansion.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, MCARomanticExpansion.MODID);
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MCARomanticExpansion.MODID);
 
     // 注册默认礼盒（default 变种）
     public static final DeferredHolder<Item, GiftBoxItem> GIFT_BOX = ITEMS.register("gift_box",
@@ -79,6 +81,7 @@ public class ModItems {
                         output.accept(RED_VEIL.get());
                         output.accept(GOLDEN_HAIRPIN.get());
                         output.accept(UMBRELLA.get());
+                        output.accept(UMBRELLA_STAND.get());
                     })
                     .build()
     );

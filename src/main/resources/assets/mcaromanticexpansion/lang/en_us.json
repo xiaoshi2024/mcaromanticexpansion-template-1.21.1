@@ -102,5 +102,8 @@
   "mcaromanticexpansion.command.pregnancy.cancel.success": "§aConception period cancelled",
   "mcaromanticexpansion.command.pregnancy.cancel.failure": "§cYou are not in a conception period!",
   "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aCancelled %s's conception period",
-  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s is not in a conception period!"
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s is not in a conception period!",
+
+  "block.mcaromanticexpansion.umbrella_stand": "Umbrella Stand"
+
 }
