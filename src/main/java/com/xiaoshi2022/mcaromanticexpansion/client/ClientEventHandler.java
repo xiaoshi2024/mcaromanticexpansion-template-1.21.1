@@ -75,13 +75,52 @@ public class ClientEventHandler {
 
         if (!hasFamilyTreeInInventory(player)) {
             AffectionHUD.clearTargetPlayer();
+            return;
         }
+
+        Player lookedPlayer = findPlayerLookingAt(player);
 
         if (SharedUmbrellaManager.isInSharedUmbrella(player)) {
             Player partner = SharedUmbrellaManager.getSharedPartner(player);
-            if (partner != null) {
+            if (partner != null && lookedPlayer == partner) {
                 AffectionHUD.setTargetPlayer(partner);
+            } else {
+                AffectionHUD.clearTargetPlayer();
+            }
+        } else if (lookedPlayer != null) {
+            AffectionHUD.setTargetPlayer(lookedPlayer);
+        } else {
+            AffectionHUD.clearTargetPlayer();
+        }
+    }
+
+    private static Player findPlayerLookingAt(Player viewer) {
+        double maxDistance = 10.0;
+        net.minecraft.world.phys.Vec3 start = viewer.getEyePosition(1.0F);
+        net.minecraft.world.phys.Vec3 look = viewer.getLookAngle();
+        net.minecraft.world.phys.Vec3 end = start.add(look.x * maxDistance, look.y * maxDistance, look.z * maxDistance);
+
+        net.minecraft.world.phys.AABB aabb = new net.minecraft.world.phys.AABB(start, end).inflate(1.0);
+        java.util.List<net.minecraft.world.entity.Entity> entities = viewer.level().getEntities(viewer, aabb);
+
+        double closestDistance = maxDistance;
+        Player foundPlayer = null;
+
+        for (net.minecraft.world.entity.Entity entity : entities) {
+            if (entity instanceof Player otherPlayer && otherPlayer != viewer && otherPlayer.isAlive()) {
+                net.minecraft.world.phys.Vec3 entityPos = otherPlayer.getEyePosition(1.0F);
+                double distance = entityPos.distanceToSqr(start);
+                
+                net.minecraft.world.phys.Vec3 toEntity = entityPos.subtract(start).normalize();
+                double dot = toEntity.dot(look);
+                
+                if (dot > 0.9 && distance < closestDistance) {
+                    closestDistance = distance;
+                    foundPlayer = otherPlayer;
+                }
             }
         }
+
+        return foundPlayer;
     }
 }

@@ -71,11 +71,46 @@ public class UmbrellaItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+
+        // 【修复】客户端和服务端都检查是否正在看向其他玩家
+        if (isLookingAtPlayer(player)) {
+            // 确保伞是打开状态（只在服务端修改，避免客户端重复修改）
+            if (!level.isClientSide()) {
+                setUmbrellaState(stack, State.FULL_OPEN);
+            }
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        }
+
+        // 只有在不看向其他玩家时才切换伞状态（只在服务端修改）
         if (!level.isClientSide()) {
             State currentState = getState(stack);
             State nextState = currentState.next();
             setUmbrellaState(stack, nextState);
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    /**
+     * 检查玩家是否正在看向其他玩家（距离足够近，用于共伞检测）
+     */
+    private boolean isLookingAtPlayer(Player player) {
+        double maxDistance = 8.0;
+        var start = player.getEyePosition(1.0F);
+        var look = player.getLookAngle();
+
+        var aabb = player.getBoundingBox().inflate(maxDistance);
+        var entities = player.level().getEntities(player, aabb);
+
+        for (var entity : entities) {
+            if (entity instanceof Player otherPlayer && otherPlayer != player && otherPlayer.isAlive()) {
+                var toEntity = otherPlayer.getEyePosition(1.0F).subtract(start).normalize();
+                double dot = toEntity.dot(look);
+                double distance = player.distanceTo(otherPlayer);
+                if (dot > 0.85 && distance <= maxDistance) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

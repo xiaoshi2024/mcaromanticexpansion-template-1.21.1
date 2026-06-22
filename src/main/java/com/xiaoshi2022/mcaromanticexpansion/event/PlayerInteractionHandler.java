@@ -80,6 +80,20 @@ public class PlayerInteractionHandler {
     }
 
     private static void handleSharedUmbrella(ServerPlayer player, ServerPlayer target) {
+        // 检查伞是否被意外关闭（因为 RightClickItem 先于 EntityInteract 触发）
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+
+        if (mainHand.is(ModItems.UMBRELLA.get())) {
+            if (UmbrellaItem.getState(mainHand) != UmbrellaItem.State.FULL_OPEN) {
+                UmbrellaItem.setUmbrellaState(mainHand, UmbrellaItem.State.FULL_OPEN);
+            }
+        } else if (offHand.is(ModItems.UMBRELLA.get())) {
+            if (UmbrellaItem.getState(offHand) != UmbrellaItem.State.FULL_OPEN) {
+                UmbrellaItem.setUmbrellaState(offHand, UmbrellaItem.State.FULL_OPEN);
+            }
+        }
+
         SharedUmbrellaManager.sendRequest(player, target);
     }
 

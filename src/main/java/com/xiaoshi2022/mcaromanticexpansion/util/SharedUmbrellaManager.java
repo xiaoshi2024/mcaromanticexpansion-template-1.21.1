@@ -1,5 +1,8 @@
+// SharedUmbrellaManager.java - 修复后的完整版本
+
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
+import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaRequestPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaResponsePacket;
@@ -51,20 +54,17 @@ public class SharedUmbrellaManager {
             return false;
         }
 
-        ItemStack mainHand = initiator.getMainHandItem();
-        ItemStack offHand = initiator.getOffhandItem();
-        
-        boolean hasOpenUmbrella = false;
-        if (mainHand.is(ModItems.UMBRELLA.get())) {
-            hasOpenUmbrella = UmbrellaItem.getState(mainHand) == UmbrellaItem.State.FULL_OPEN;
-        } else if (offHand.is(ModItems.UMBRELLA.get())) {
-            hasOpenUmbrella = UmbrellaItem.getState(offHand) == UmbrellaItem.State.FULL_OPEN;
-        }
-
-        if (!hasOpenUmbrella) {
+        // 检查发起者是否有打开的伞
+        if (!hasOpenUmbrella(initiator)) {
             initiator.sendSystemMessage(Component.literal("§c请先将伞完全撑开！").withStyle(ChatFormatting.RED));
             return false;
         }
+        
+        ItemStack mainHand = initiator.getMainHandItem();
+        ItemStack offHand = initiator.getOffhandItem();
+        MCARomanticExpansion.LOGGER.info("Sending shared umbrella request: {} has umbrella in {}",
+                initiator.getName().getString(),
+                mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
 
         if (initiator.distanceTo(target) > MAX_DISTANCE) {
             initiator.sendSystemMessage(Component.literal("§c请靠近对方再使用！").withStyle(ChatFormatting.RED));
@@ -75,7 +75,7 @@ public class SharedUmbrellaManager {
         pendingRequests.put(target.getUUID(), initiator.getUUID());
 
         SharedUmbrellaRequestPacket packet = new SharedUmbrellaRequestPacket(
-                initiator.getUUID(), 
+                initiator.getUUID(),
                 initiator.getName().getString()
         );
         PacketDistributor.sendToPlayer(target, packet);
@@ -86,14 +86,14 @@ public class SharedUmbrellaManager {
 
     public static void handleResponse(ServerPlayer responder, SharedUmbrellaResponsePacket response) {
         UUID requesterUUID = response.targetUUID();
-        
-        if (!pendingRequests.containsKey(responder.getUUID()) || 
-            !pendingRequests.get(responder.getUUID()).equals(requesterUUID)) {
+
+        if (!pendingRequests.containsKey(responder.getUUID()) ||
+                !pendingRequests.get(responder.getUUID()).equals(requesterUUID)) {
             return;
         }
 
         ServerPlayer requester = responder.getServer().getPlayerList().getPlayer(requesterUUID);
-        
+
         if (requester == null || !requester.isAlive()) {
             pendingRequests.remove(responder.getUUID());
             if (requesterUUID != null) {
@@ -107,20 +107,31 @@ public class SharedUmbrellaManager {
         pendingRequests.remove(requesterUUID);
 
         if (response.accepted()) {
+            // 重新检查发起者是否还有打开的伞
             ItemStack mainHand = requester.getMainHandItem();
             ItemStack offHand = requester.getOffhandItem();
             
-            boolean hasOpenUmbrella = false;
-            if (mainHand.is(ModItems.UMBRELLA.get())) {
-                hasOpenUmbrella = UmbrellaItem.getState(mainHand) == UmbrellaItem.State.FULL_OPEN;
-            } else if (offHand.is(ModItems.UMBRELLA.get())) {
-                hasOpenUmbrella = UmbrellaItem.getState(offHand) == UmbrellaItem.State.FULL_OPEN;
+            // 首先检查是否持有伞
+            if (!mainHand.is(ModItems.UMBRELLA.get()) && !offHand.is(ModItems.UMBRELLA.get())) {
+                requester.sendSystemMessage(Component.literal("§c你手里的伞不见了！").withStyle(ChatFormatting.RED));
+                responder.sendSystemMessage(Component.literal("§c对方手里的伞不见了！").withStyle(ChatFormatting.RED));
+                return;
             }
 
-            if (!hasOpenUmbrella) {
-                requester.sendSystemMessage(Component.literal("§c你的伞已经合上了！").withStyle(ChatFormatting.RED));
-                responder.sendSystemMessage(Component.literal("§c对方的伞已经合上了！").withStyle(ChatFormatting.RED));
-                return;
+            // 然后检查伞是否打开
+            if (!hasOpenUmbrella(requester)) {
+                // 尝试强制打开
+                if (mainHand.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(mainHand, UmbrellaItem.State.FULL_OPEN);
+                } else if (offHand.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(offHand, UmbrellaItem.State.FULL_OPEN);
+                }
+
+                if (!hasOpenUmbrella(requester)) {
+                    requester.sendSystemMessage(Component.literal("§c你的伞已经合上了！").withStyle(ChatFormatting.RED));
+                    responder.sendSystemMessage(Component.literal("§c对方的伞已经合上了！").withStyle(ChatFormatting.RED));
+                    return;
+                }
             }
 
             if (requester.distanceTo(responder) > MAX_DISTANCE) {
@@ -135,6 +146,15 @@ public class SharedUmbrellaManager {
             sharedUmbrellaStates.put(requester.getUUID(), state1);
             sharedUmbrellaStates.put(responder.getUUID(), state2);
 
+            // 【关键修复】重置双方的 tick 计数器，避免立即触发检查
+            tickCounters.put(requester.getUUID(), 1);
+            tickCounters.put(responder.getUUID(), 1);
+
+            MCARomanticExpansion.LOGGER.warn("Shared umbrella established: {} holding {} in {}",
+                    requester.getName().getString(),
+                    mainHand.is(ModItems.UMBRELLA.get()) ? "umbrella (main)" : (offHand.is(ModItems.UMBRELLA.get()) ? "umbrella (off)" : "no umbrella"),
+                    mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
+
             requester.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
             responder.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
         } else {
@@ -144,17 +164,51 @@ public class SharedUmbrellaManager {
     }
 
     public static void endSharedUmbrella(Player player) {
+        endSharedUmbrella(player, "对方离开了，共伞结束");
+    }
+
+    public static void endSharedUmbrella(Player player, String message) {
         SharedUmbrellaState state = sharedUmbrellaStates.remove(player.getUUID());
         if (state != null && state.partner != null) {
             sharedUmbrellaStates.remove(state.partner.getUUID());
-            state.partner.sendSystemMessage(Component.literal("§c对方离开了，共伞结束").withStyle(ChatFormatting.RED));
+            state.partner.sendSystemMessage(Component.literal("§c" + message).withStyle(ChatFormatting.RED));
         }
     }
+
+    /**
+     * 检查玩家是否有打开的伞（主手或副手）
+     */
+    private static boolean hasOpenUmbrella(Player player) {
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+
+        if (mainHand.is(ModItems.UMBRELLA.get()) && isUmbrellaFullyOpen(mainHand)) {
+            return true;
+        }
+        if (offHand.is(ModItems.UMBRELLA.get()) && isUmbrellaFullyOpen(offHand)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 检查伞是否完全打开
+     */
+    private static boolean isUmbrellaFullyOpen(ItemStack stack) {
+        return UmbrellaItem.getState(stack) == UmbrellaItem.State.FULL_OPEN;
+    }
+
+    // SharedUmbrellaManager.java - 修复 onPlayerTick 方法
 
     public static void onPlayerTick(Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
-        Integer counter = tickCounters.compute(player.getUUID(), (uuid, val) -> val == null ? 0 : val + 1);
+        // 计数器从 1 开始，避免共伞建立后立即触发检查
+        Integer counter = tickCounters.compute(player.getUUID(), (uuid, val) -> {
+            if (val == null) return 1; // 从 1 开始，而不是 0
+            return val + 1;
+        });
+
         if (counter % SHARE_CHECK_INTERVAL != 0) return;
 
         SharedUmbrellaState state = sharedUmbrellaStates.get(player.getUUID());
@@ -167,31 +221,59 @@ public class SharedUmbrellaManager {
 
         double distance = player.distanceTo(state.partner);
         if (distance > MAX_DISTANCE) {
-            endSharedUmbrella(player);
+            endSharedUmbrella(player, "距离太远，共伞结束");
             return;
         }
 
-        boolean initiatorHasUmbrella = false;
-        ItemStack mainHand = state.initiator.getMainHandItem();
-        ItemStack offHand = state.initiator.getOffhandItem();
+        // 检查伞是否仍然打开 - 检查任意一方是否持有打开的伞
+        boolean hasOpen = hasOpenUmbrella(player) || hasOpenUmbrella(state.partner);
         
-        if (mainHand.is(ModItems.UMBRELLA.get())) {
-            initiatorHasUmbrella = UmbrellaItem.getState(mainHand) == UmbrellaItem.State.FULL_OPEN;
-        } else if (offHand.is(ModItems.UMBRELLA.get())) {
-            initiatorHasUmbrella = UmbrellaItem.getState(offHand) == UmbrellaItem.State.FULL_OPEN;
-        }
-
-        if (!initiatorHasUmbrella) {
-            endSharedUmbrella(player);
-            return;
+        if (!hasOpen) {
+            // 检查谁丢失了伞
+            boolean playerHasUmbrella = player.getMainHandItem().is(ModItems.UMBRELLA.get()) || 
+                                       player.getOffhandItem().is(ModItems.UMBRELLA.get());
+            boolean partnerHasUmbrella = state.partner.getMainHandItem().is(ModItems.UMBRELLA.get()) || 
+                                         state.partner.getOffhandItem().is(ModItems.UMBRELLA.get());
+            
+            if (!playerHasUmbrella && !partnerHasUmbrella) {
+                MCARomanticExpansion.LOGGER.warn("Both players {} and {} no longer holding umbrella",
+                        player.getName().getString(), state.partner.getName().getString());
+                endSharedUmbrella(player, "伞已丢失，共伞结束");
+            } else {
+                // 尝试强制打开双方的伞
+                ItemStack playerMain = player.getMainHandItem();
+                ItemStack playerOff = player.getOffhandItem();
+                ItemStack partnerMain = state.partner.getMainHandItem();
+                ItemStack partnerOff = state.partner.getOffhandItem();
+                
+                if (playerMain.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(playerMain, UmbrellaItem.State.FULL_OPEN);
+                } else if (playerOff.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(playerOff, UmbrellaItem.State.FULL_OPEN);
+                }
+                
+                if (partnerMain.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(partnerMain, UmbrellaItem.State.FULL_OPEN);
+                } else if (partnerOff.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(partnerOff, UmbrellaItem.State.FULL_OPEN);
+                }
+                
+                // 重新检查
+                hasOpen = hasOpenUmbrella(player) || hasOpenUmbrella(state.partner);
+                if (!hasOpen) {
+                    MCARomanticExpansion.LOGGER.warn("Umbrella still closed after forcing for {} and {}",
+                            player.getName().getString(), state.partner.getName().getString());
+                    endSharedUmbrella(player, "伞已合上，共伞结束");
+                }
+            }
         }
 
         state.ticksUnderUmbrella++;
 
         if (state.ticksUnderUmbrella % 200 == 0) {
-            AffectionManager.handleInteraction(AffectionManager.InteractionType.SHARED_UMBRELLA, 
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.SHARED_UMBRELLA,
                     state.initiator, state.partner);
-            AffectionManager.handleInteraction(AffectionManager.InteractionType.SHARED_UMBRELLA, 
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.SHARED_UMBRELLA,
                     state.partner, state.initiator);
         }
     }
