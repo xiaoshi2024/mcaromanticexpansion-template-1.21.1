@@ -91,6 +91,27 @@
   "advancements.mcaromanticexpansion.unveil_veil.title": "红妆揭面",
   "advancements.mcaromanticexpansion.unveil_veil.description": "在婚礼仪式上，新郎亲手揭下新娘的红盖头",
 
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "为你撑伞",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "首次送伞给玩家",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "雨中曲",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "雨天送伞给玩家累计10次",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "我们的伞",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "与同一玩家互赠伞累计20次",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "心意相通",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "在共伞时触发了心意相通事件",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "彩虹之约",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "在共伞时触发了彩虹之约事件",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "时光留念",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "在共伞时触发了时光留念事件",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "默契考验",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "在共伞时触发了默契考验事件",
+
   "message.mcaromanticexpansion.pregnancy_start": "§d你与 %s 进入了备孕期！",
   "message.mcaromanticexpansion.pregnancy_start_partner": "§d你与 %s 进入了备孕期！",
   "message.mcaromanticexpansion.pregnancy_success": "§a恭喜！你成功怀孕了！",

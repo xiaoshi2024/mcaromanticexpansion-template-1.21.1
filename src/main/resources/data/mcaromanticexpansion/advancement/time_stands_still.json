@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:clock"
+    },
+    "title": {
+      "translate": "advancements.mcaromanticexpansion.time_stands_still.title"
+    },
+    "description": {
+      "translate": "advancements.mcaromanticexpansion.time_stands_still.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "mcaromanticexpansion:root",
+  "criteria": {
+    "event_triggered": {
+      "trigger": "mcaromanticexpansion:romantic_event",
+      "conditions": {
+        "event_id": "time_stands_still"
+      }
+    }
+  }
+}

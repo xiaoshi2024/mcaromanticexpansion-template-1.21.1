@@ -18,10 +18,7 @@ public class AffectionManager {
     private static final String LAST_INTERACTION_TAG = "LastInteractionTime";
 
     public static int getAffection(Player player, Player target) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
-            return 0;
-        }
-        CompoundTag persistentData = serverPlayer.getPersistentData();
+        CompoundTag persistentData = player.getPersistentData();
         return getAffectionFromNBT(persistentData, target.getUUID());
     }
 

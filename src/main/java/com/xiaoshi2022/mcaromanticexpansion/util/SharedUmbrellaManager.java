@@ -62,7 +62,7 @@ public class SharedUmbrellaManager {
         
         ItemStack mainHand = initiator.getMainHandItem();
         ItemStack offHand = initiator.getOffhandItem();
-        MCARomanticExpansion.LOGGER.info("Sending shared umbrella request: {} has umbrella in {}",
+        MCARomanticExpansion.LOGGER.debug("Sending shared umbrella request: {} has umbrella in {}",
                 initiator.getName().getString(),
                 mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
 
@@ -150,13 +150,16 @@ public class SharedUmbrellaManager {
             tickCounters.put(requester.getUUID(), 1);
             tickCounters.put(responder.getUUID(), 1);
 
-            MCARomanticExpansion.LOGGER.warn("Shared umbrella established: {} holding {} in {}",
+            MCARomanticExpansion.LOGGER.debug("Shared umbrella established: {} holding {} in {}",
                     requester.getName().getString(),
                     mainHand.is(ModItems.UMBRELLA.get()) ? "umbrella (main)" : (offHand.is(ModItems.UMBRELLA.get()) ? "umbrella (off)" : "no umbrella"),
                     mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
 
             requester.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
             responder.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
+
+            // 触发共伞浪漫事件
+            RomanticEventManager.onSharedUmbrellaEstablished(requester, responder);
         } else {
             requester.sendSystemMessage(Component.literal("§c对方拒绝了你的共伞邀请").withStyle(ChatFormatting.RED));
             responder.sendSystemMessage(Component.literal("§a已拒绝共伞邀请").withStyle(ChatFormatting.GREEN));
@@ -203,6 +206,9 @@ public class SharedUmbrellaManager {
     public static void onPlayerTick(Player player) {
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
+        SharedUmbrellaState state = sharedUmbrellaStates.get(player.getUUID());
+        if (state == null) return;
+
         // 计数器从 1 开始，避免共伞建立后立即触发检查
         Integer counter = tickCounters.compute(player.getUUID(), (uuid, val) -> {
             if (val == null) return 1; // 从 1 开始，而不是 0
@@ -210,9 +216,6 @@ public class SharedUmbrellaManager {
         });
 
         if (counter % SHARE_CHECK_INTERVAL != 0) return;
-
-        SharedUmbrellaState state = sharedUmbrellaStates.get(player.getUUID());
-        if (state == null) return;
 
         if (!isPartnerValid(state.partner)) {
             endSharedUmbrella(player);
@@ -236,7 +239,7 @@ public class SharedUmbrellaManager {
                                          state.partner.getOffhandItem().is(ModItems.UMBRELLA.get());
             
             if (!playerHasUmbrella && !partnerHasUmbrella) {
-                MCARomanticExpansion.LOGGER.warn("Both players {} and {} no longer holding umbrella",
+                MCARomanticExpansion.LOGGER.debug("Both players {} and {} no longer holding umbrella",
                         player.getName().getString(), state.partner.getName().getString());
                 endSharedUmbrella(player, "伞已丢失，共伞结束");
             } else {
@@ -261,20 +264,11 @@ public class SharedUmbrellaManager {
                 // 重新检查
                 hasOpen = hasOpenUmbrella(player) || hasOpenUmbrella(state.partner);
                 if (!hasOpen) {
-                    MCARomanticExpansion.LOGGER.warn("Umbrella still closed after forcing for {} and {}",
+                    MCARomanticExpansion.LOGGER.debug("Umbrella still closed after forcing for {} and {}",
                             player.getName().getString(), state.partner.getName().getString());
                     endSharedUmbrella(player, "伞已合上，共伞结束");
                 }
             }
-        }
-
-        state.ticksUnderUmbrella++;
-
-        if (state.ticksUnderUmbrella % 200 == 0) {
-            AffectionManager.handleInteraction(AffectionManager.InteractionType.SHARED_UMBRELLA,
-                    state.initiator, state.partner);
-            AffectionManager.handleInteraction(AffectionManager.InteractionType.SHARED_UMBRELLA,
-                    state.partner, state.initiator);
         }
     }
 

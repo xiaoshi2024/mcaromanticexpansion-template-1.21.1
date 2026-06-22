@@ -91,6 +91,27 @@
   "advancements.mcaromanticexpansion.unveil_veil.title": "Unveil Red Veil",
   "advancements.mcaromanticexpansion.unveil_veil.description": "In the wedding ceremony, the groom manually removes the bride's red veil",
 
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "Holding an Umbrella for You",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "First time sharing your umbrella with another player",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "Rainy Melody",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "Shared your umbrella in the rain 10 times",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "Our Umbrella",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "Shared umbrellas with the same player 20 times",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "Heart to Heart",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "Triggered the Heart to Heart romantic event while sharing an umbrella",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "Rainbow Pact",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "Triggered the Rainbow Pact romantic event while sharing an umbrella",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "Time Stands Still",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "Triggered the Time Stands Still romantic event while sharing an umbrella",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "Synchrony Test",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "Triggered the Synchrony Test romantic event while sharing an umbrella",
+
   "message.mcaromanticexpansion.pregnancy_start": "§dYou and %s have entered the conception period!",
   "message.mcaromanticexpansion.pregnancy_start_partner": "§dYou and %s have entered the conception period!",
   "message.mcaromanticexpansion.pregnancy_success": "§aCongratulations! You're pregnant!",

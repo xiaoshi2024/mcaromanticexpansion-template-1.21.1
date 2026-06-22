@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import net.conczin.mca.item.BouquetItem;
 import net.conczin.mca.registry.ItemsMCA;
 import net.minecraft.network.FriendlyByteBuf;
@@ -48,6 +49,20 @@ public record BouquetResponsePacket(UUID giverUUID, boolean accepted) implements
         // 如果找到并移除了花束，给受礼者添加一个花束
         if (found) {
             receiver.getInventory().add(new ItemStack(ItemsMCA.BOUQUET));
+            
+            // 【关键修复】增加双方好感度
+            MCARomanticExpansion.LOGGER.info("Bouquet accepted! Adding affection for {} and {}",
+                    giver.getName().getString(), receiver.getName().getString());
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.BOUQUET, giver, receiver);
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.BOUQUET, receiver, giver);
+            
+            // 发送成功消息
+            giver.sendSystemMessage(net.minecraft.network.chat.Component.literal(
+                    "§a" + receiver.getName().getString() + " 接受了你的花束！")
+                    .withStyle(net.minecraft.ChatFormatting.GREEN));
+            receiver.sendSystemMessage(net.minecraft.network.chat.Component.literal(
+                    "§a你接受了 " + giver.getName().getString() + " 的花束！")
+                    .withStyle(net.minecraft.ChatFormatting.GREEN));
         }
     }
 }

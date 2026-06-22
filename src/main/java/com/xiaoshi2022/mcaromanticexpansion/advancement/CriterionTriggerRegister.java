@@ -28,6 +28,16 @@ public class CriterionTriggerRegister {
     
     public static final DeferredHolder<net.minecraft.advancements.CriterionTrigger<?>, RomanticEventTrigger> ROMANTIC_EVENT =
             TRIGGER_TYPES.register("romantic_event", RomanticEventTrigger::new);
+    
+    // 新成就触发器
+    public static final DeferredHolder<net.minecraft.advancements.CriterionTrigger<?>, FirstUmbrellaGiftTrigger> FIRST_UMBRELLA_GIFT =
+            TRIGGER_TYPES.register("first_umbrella_gift", FirstUmbrellaGiftTrigger::new);
+    
+    public static final DeferredHolder<net.minecraft.advancements.CriterionTrigger<?>, RainyUmbrellaGiftTrigger> RAINY_UMBRELLA_GIFT =
+            TRIGGER_TYPES.register("rainy_umbrella_gift", RainyUmbrellaGiftTrigger::new);
+    
+    public static final DeferredHolder<net.minecraft.advancements.CriterionTrigger<?>, MutualUmbrellaGiftTrigger> MUTUAL_UMBRELLA_GIFT =
+            TRIGGER_TYPES.register("mutual_umbrella_gift", MutualUmbrellaGiftTrigger::new);
 
     public static class UnveilVeilTrigger extends SimpleCriterionTrigger<UnveilVeilTrigger.Instance> {
         @Override
@@ -103,6 +113,68 @@ public class CriterionTriggerRegister {
                     instance.group(
                             ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(Instance::player),
                             Codec.STRING.fieldOf("event_id").forGetter(Instance::eventId)
+                    ).apply(instance, Instance::new)
+            );
+        }
+    }
+
+    // 首次送伞给玩家
+    public static class FirstUmbrellaGiftTrigger extends SimpleCriterionTrigger<FirstUmbrellaGiftTrigger.Instance> {
+        @Override
+        public Codec<Instance> codec() {
+            return Instance.CODEC;
+        }
+
+        public void trigger(ServerPlayer player) {
+            this.trigger(player, instance -> true);
+        }
+
+        public record Instance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
+            public static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance ->
+                    instance.group(
+                            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(Instance::player)
+                    ).apply(instance, Instance::new)
+            );
+        }
+    }
+
+    // 雨天送伞累计次数
+    public static class RainyUmbrellaGiftTrigger extends SimpleCriterionTrigger<RainyUmbrellaGiftTrigger.Instance> {
+        @Override
+        public Codec<Instance> codec() {
+            return Instance.CODEC;
+        }
+
+        public void trigger(ServerPlayer player, int count) {
+            this.trigger(player, instance -> count >= instance.minCount());
+        }
+
+        public record Instance(Optional<ContextAwarePredicate> player, int minCount) implements SimpleCriterionTrigger.SimpleInstance {
+            public static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance ->
+                    instance.group(
+                            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                            Codec.INT.fieldOf("min_count").forGetter(Instance::minCount)
+                    ).apply(instance, Instance::new)
+            );
+        }
+    }
+
+    // 互赠伞累计次数
+    public static class MutualUmbrellaGiftTrigger extends SimpleCriterionTrigger<MutualUmbrellaGiftTrigger.Instance> {
+        @Override
+        public Codec<Instance> codec() {
+            return Instance.CODEC;
+        }
+
+        public void trigger(ServerPlayer player, int count) {
+            this.trigger(player, instance -> count >= instance.minCount());
+        }
+
+        public record Instance(Optional<ContextAwarePredicate> player, int minCount) implements SimpleCriterionTrigger.SimpleInstance {
+            public static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance ->
+                    instance.group(
+                            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                            Codec.INT.fieldOf("min_count").forGetter(Instance::minCount)
                     ).apply(instance, Instance::new)
             );
         }
