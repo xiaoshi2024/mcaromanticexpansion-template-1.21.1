@@ -3,6 +3,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaRequestPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaResponsePacket;
@@ -158,6 +159,26 @@ public class SharedUmbrellaManager {
             requester.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
             responder.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
 
+            // 【成就触发】首次送伞给玩家
+            CriterionTriggerRegister.FIRST_UMBRELLA_GIFT.get().trigger(requester);
+            
+            // 【成就触发】检查是否是雨天送伞
+            boolean isRaining = requester.level().isRaining();
+            if (isRaining) {
+                // 获取雨天送伞次数并触发成就
+                int rainyCount = getRainyUmbrellaCount(requester);
+                rainyCount++;
+                setRainyUmbrellaCount(requester, rainyCount);
+                CriterionTriggerRegister.RAINY_UMBRELLA_GIFT.get().trigger(requester, rainyCount);
+            }
+            
+            // 【成就触发】互赠伞累计次数
+            int mutualCount = getMutualUmbrellaCount(requester, responder);
+            mutualCount++;
+            setMutualUmbrellaCount(requester, responder, mutualCount);
+            CriterionTriggerRegister.MUTUAL_UMBRELLA_GIFT.get().trigger(requester, mutualCount);
+            CriterionTriggerRegister.MUTUAL_UMBRELLA_GIFT.get().trigger(responder, mutualCount);
+
             // 触发共伞浪漫事件
             RomanticEventManager.onSharedUmbrellaEstablished(requester, responder);
         } else {
@@ -287,5 +308,31 @@ public class SharedUmbrellaManager {
             this.partner = partner;
             this.ticksUnderUmbrella = 0;
         }
+    }
+    
+    // 雨天送伞次数存储
+    private static final String RAINY_UMBRELLA_COUNT_KEY = "mcaromanticexpansion.rainy_umbrella_count";
+    
+    private static int getRainyUmbrellaCount(ServerPlayer player) {
+        return player.getPersistentData().getInt(RAINY_UMBRELLA_COUNT_KEY);
+    }
+    
+    private static void setRainyUmbrellaCount(ServerPlayer player, int count) {
+        player.getPersistentData().putInt(RAINY_UMBRELLA_COUNT_KEY, count);
+    }
+    
+    // 互赠伞次数存储（key格式: mcaromanticexpansion.mutual_umbrella_count_<partner_uuid>）
+    private static String getMutualUmbrellaKey(UUID playerId) {
+        return "mcaromanticexpansion.mutual_umbrella_count_" + playerId.toString();
+    }
+    
+    private static int getMutualUmbrellaCount(ServerPlayer player, ServerPlayer partner) {
+        String key = getMutualUmbrellaKey(partner.getUUID());
+        return player.getPersistentData().getInt(key);
+    }
+    
+    private static void setMutualUmbrellaCount(ServerPlayer player, ServerPlayer partner, int count) {
+        String key = getMutualUmbrellaKey(partner.getUUID());
+        player.getPersistentData().putInt(key, count);
     }
 }

@@ -9,6 +9,7 @@ import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenMarriageGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenProposalGUIPacket;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
+import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.CooldownManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
 import com.xiaoshi2022.mcaromanticexpansion.util.SharedUmbrellaManager;
@@ -61,6 +62,9 @@ public class PlayerInteractionHandler {
         if (item instanceof BouquetItem) {
             handleBouquet(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
+        } else if (item instanceof GiftBoxItem) {
+            handleGiftBox(serverPlayer, targetServerPlayer, stack);
+            event.setCanceled(true);
         } else if (item instanceof EngagementRingItem) {
             handleProposal(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
@@ -95,6 +99,35 @@ public class PlayerInteractionHandler {
         }
 
         SharedUmbrellaManager.sendRequest(player, target);
+    }
+
+    private static void handleGiftBox(ServerPlayer giver, ServerPlayer receiver, ItemStack giftBoxStack) {
+        // 检查礼盒是否有礼物
+        if (!GiftBoxItem.hasGift(giftBoxStack)) {
+            giver.sendSystemMessage(Component.literal("§c礼盒是空的！请先放入物品。").withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        // 获取礼物物品
+        ItemStack giftItem = GiftBoxItem.loadGiftItem(giftBoxStack);
+        
+        // 尝试将礼物放入接收者背包
+        boolean added = receiver.getInventory().add(giftItem);
+        if (!added) {
+            receiver.drop(giftItem, false);
+            receiver.sendSystemMessage(Component.literal("§c背包已满，礼物掉落在了地上！").withStyle(ChatFormatting.RED));
+        } else {
+            receiver.sendSystemMessage(Component.literal("§a你收到了 " + giver.getName().getString() + " 的礼物！").withStyle(ChatFormatting.GREEN));
+            giver.sendSystemMessage(Component.literal("§a你成功赠送了礼物给 " + receiver.getName().getString() + "！").withStyle(ChatFormatting.GREEN));
+            
+            // 清空礼盒
+            GiftBoxItem.clearGift(giftBoxStack);
+            
+            // ========== 添加好感度：赠送礼物 ==========
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.GIFT, giver, receiver);
+            MCARomanticExpansion.LOGGER.info("Added GIFT affection for {} -> {}",
+                    giver.getName().getString(), receiver.getName().getString());
+        }
     }
 
     @SubscribeEvent

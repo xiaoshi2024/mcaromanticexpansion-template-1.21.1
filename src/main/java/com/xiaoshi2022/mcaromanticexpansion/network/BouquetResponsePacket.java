@@ -50,11 +50,11 @@ public record BouquetResponsePacket(UUID giverUUID, boolean accepted) implements
         if (found) {
             receiver.getInventory().add(new ItemStack(ItemsMCA.BOUQUET));
             
-            // 【关键修复】增加双方好感度
+            // 【关键修复】增加双方好感度（只调用一次，双方都会增加）
             MCARomanticExpansion.LOGGER.info("Bouquet accepted! Adding affection for {} and {}",
                     giver.getName().getString(), receiver.getName().getString());
+            // 送花只增加一次好感度（赠送者对受礼者的好感）
             AffectionManager.handleInteraction(AffectionManager.InteractionType.BOUQUET, giver, receiver);
-            AffectionManager.handleInteraction(AffectionManager.InteractionType.BOUQUET, receiver, giver);
             
             // 发送成功消息
             giver.sendSystemMessage(net.minecraft.network.chat.Component.literal(

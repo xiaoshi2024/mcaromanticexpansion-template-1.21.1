@@ -19,28 +19,37 @@ public class RomanticEventManager {
     private static final int EVENT_CHECK_INTERVAL = 100;
     private static final Random random = new Random();
     private static final double EVENT_TRIGGER_CHANCE = 0.3; // 30%概率触发事件
+    
+    // 记录玩家对之间的共伞事件触发状态
+    private static final Map<String, UmbrellaEventState> umbrellaEventStates = new HashMap<>();
 
     public static void onPlayerTick(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) return;
-
-        if (!SharedUmbrellaManager.isInSharedUmbrella(player)) {
-            eventStates.remove(player.getUUID());
-            return;
-        }
-
-        RomanticEventState state = eventStates.computeIfAbsent(player.getUUID(), 
-                uuid -> new RomanticEventState());
-
-        state.ticksInSharedUmbrella++;
-
-        if (state.ticksInSharedUmbrella % EVENT_CHECK_INTERVAL == 0) {
-            MCARomanticExpansion.LOGGER.debug("Checking romantic event for {} at tick {}",
-                    player.getName().getString(), state.ticksInSharedUmbrella);
-            checkAndTriggerEvent(serverPlayer);
-        }
+        // 移除共伞期间的定时事件检查，只保留共伞建立时的单次触发
+        // 好感度只在触发成就时增加一次，不再持续增加
     }
 
     public static void onSharedUmbrellaEstablished(ServerPlayer player, ServerPlayer partner) {
+        // 生成唯一的玩家对标识符
+        String pairKey = getPlayerPairKey(player, partner);
+        
+        // 检查是否已经触发过事件，或者是否在下雨（允许重新触发）
+        UmbrellaEventState umbrellaState = umbrellaEventStates.computeIfAbsent(pairKey, 
+                k -> new UmbrellaEventState());
+        
+        boolean isRaining = player.level().isRaining();
+        
+        // 如果之前已经触发过事件且现在不在下雨，则不触发
+        if (umbrellaState.eventTriggered && !isRaining) {
+            MCARomanticExpansion.LOGGER.debug("Event already triggered for pair {} and {}, not raining, skipping",
+                    player.getName().getString(), partner.getName().getString());
+            return;
+        }
+        
+        // 如果下雨，重置触发状态（允许重新触发）
+        if (isRaining) {
+            umbrellaState.eventTriggered = false;
+        }
+        
         // 共伞建立时有30%概率触发即时事件
         if (random.nextDouble() < EVENT_TRIGGER_CHANCE) {
             MCARomanticExpansion.LOGGER.debug("Triggering instant event for shared umbrella between {} and {}",
@@ -61,9 +70,34 @@ public class RomanticEventManager {
                 accumulated += event.weight();
                 if (randomValue <= accumulated) {
                     triggerEvent(event, player, partner);
+                    // 标记已经触发过事件
+                    umbrellaState.eventTriggered = true;
+                    umbrellaEventStates.put(pairKey, umbrellaState);
+                    
+                    // 设置冷却时间，防止立即触发下一个事件
+                    RomanticEventState playerState = new RomanticEventState();
+                    playerState.lastEventTime = EVENT_CHECK_INTERVAL;
+                    eventStates.put(player.getUUID(), playerState);
+                    
+                    RomanticEventState partnerState = new RomanticEventState();
+                    partnerState.lastEventTime = EVENT_CHECK_INTERVAL;
+                    eventStates.put(partner.getUUID(), partnerState);
                     break;
                 }
             }
+        }
+    }
+    
+    /**
+     * 生成玩家对的唯一标识符（排序保证一致性）
+     */
+    private static String getPlayerPairKey(Player p1, Player p2) {
+        UUID uuid1 = p1.getUUID();
+        UUID uuid2 = p2.getUUID();
+        if (uuid1.compareTo(uuid2) < 0) {
+            return uuid1.toString() + ":" + uuid2.toString();
+        } else {
+            return uuid2.toString() + ":" + uuid1.toString();
         }
     }
 
@@ -71,6 +105,11 @@ public class RomanticEventManager {
         Player partner = SharedUmbrellaManager.getSharedPartner(player);
         if (!(partner instanceof ServerPlayer serverPartner)) {
             MCARomanticExpansion.LOGGER.debug("Partner not found for {}", player.getName().getString());
+            return;
+        }
+
+        // 确保同一时刻只有一方能触发事件（按UUID排序，只有UUID较小的玩家才能触发）
+        if (player.getUUID().compareTo(serverPartner.getUUID()) > 0) {
             return;
         }
 
@@ -99,23 +138,24 @@ public class RomanticEventManager {
 
         // 【关键修改】30%概率触发事件，70%概率什么都不发生
         double triggerChance = 0.3; // 30%概率
-        if (random.nextDouble() > triggerChance) {
+        double randomValue = random.nextDouble(); // 只调用一次！
+        if (randomValue > triggerChance) {
             MCARomanticExpansion.LOGGER.debug("Event check failed for {} (chance: {} > {})",
-                    player.getName().getString(), random.nextDouble(), triggerChance);
+                    player.getName().getString(), randomValue, triggerChance);
             return;
         }
 
         double totalWeight = availableEvents.stream().mapToDouble(RomanticEvent::weight).sum();
-        double randomValue = random.nextDouble() * totalWeight;
+        double eventRandomValue = random.nextDouble() * totalWeight; // 修改变量名避免冲突
         double accumulated = 0;
 
-        MCARomanticExpansion.LOGGER.debug("Total weight: {}, random: {}", totalWeight, randomValue);
+        MCARomanticExpansion.LOGGER.debug("Total weight: {}, random: {}", totalWeight, eventRandomValue);
 
         for (RomanticEvent event : availableEvents) {
             accumulated += event.weight();
             MCARomanticExpansion.LOGGER.debug("Checking event {}: accumulated={}, random={}",
-                    event.id(), accumulated, randomValue);
-            if (randomValue <= accumulated) {
+                    event.id(), accumulated, eventRandomValue);
+            if (eventRandomValue <= accumulated) {
                 triggerEvent(event, player, serverPartner);
                 state.lastTriggeredEvent = event.id();
                 state.lastEventTime = state.ticksInSharedUmbrella;
@@ -127,21 +167,32 @@ public class RomanticEventManager {
 
     private static List<RomanticEvent> getAvailableEvents(int affection, RomanticEventState state) {
         List<RomanticEvent> events = new ArrayList<>();
+        int timeSinceLastEvent = state.ticksInSharedUmbrella - state.lastEventTime;
 
-        if (affection >= 10 && state.ticksInSharedUmbrella - state.lastEventTime > 200) {
+        // 根据好感度等级开放不同事件
+        if (affection >= 10 && timeSinceLastEvent >= 150) {
             events.add(RomanticEvent.SHARE_A_STORY);
         }
-        if (affection >= 25 && state.ticksInSharedUmbrella - state.lastEventTime > 300) {
+        if (affection >= 25 && timeSinceLastEvent >= 250) {
             events.add(RomanticEvent.HOLD_HANDS);
         }
-        if (affection >= 40 && state.ticksInSharedUmbrella - state.lastEventTime > 400) {
+        if (affection >= 40 && timeSinceLastEvent >= 350) {
             events.add(RomanticEvent.WHISPER_LOVE);
         }
-        if (affection >= 60 && state.ticksInSharedUmbrella - state.lastEventTime > 500) {
+        if (affection >= 60 && timeSinceLastEvent >= 450) {
             events.add(RomanticEvent.GENTLE_KISS);
         }
-        if (affection >= 80 && state.ticksInSharedUmbrella - state.lastEventTime > 600) {
+        if (affection >= 80 && timeSinceLastEvent >= 550) {
             events.add(RomanticEvent.CONFESSION);
+        }
+        
+        // 满好感度时（100），所有事件都可用
+        if (affection >= 100) {
+            events.add(RomanticEvent.CONFESSION);
+            if (!events.contains(RomanticEvent.GENTLE_KISS)) events.add(RomanticEvent.GENTLE_KISS);
+            if (!events.contains(RomanticEvent.WHISPER_LOVE)) events.add(RomanticEvent.WHISPER_LOVE);
+            if (!events.contains(RomanticEvent.HOLD_HANDS)) events.add(RomanticEvent.HOLD_HANDS);
+            if (!events.contains(RomanticEvent.SHARE_A_STORY)) events.add(RomanticEvent.SHARE_A_STORY);
         }
 
         return events;
@@ -312,5 +363,12 @@ public class RomanticEventManager {
         int lastEventTime = 0;
         boolean synchronyTestActive = false;
         long synchronyTestStartTime = 0;
+    }
+    
+    /**
+     * 共伞事件状态类，记录玩家对之间的事件触发状态
+     */
+    private static class UmbrellaEventState {
+        boolean eventTriggered = false;
     }
 }

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.item.WeddingRingItem;
 import net.conczin.mca.registry.ItemsMCA;
@@ -76,6 +77,11 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
 
             receiver.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success", partner.getName()));
             partner.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success", receiver.getName()));
+
+            // ========== 添加好感度：结婚 ==========
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.MARRIAGE, receiver, partner);
+            MCARomanticExpansion.LOGGER.info("Added MARRIAGE affection for {} and {}",
+                    receiver.getName().getString(), partner.getName().getString());
 
         } catch (Exception e) {
             MCARomanticExpansion.LOGGER.error("Failed to marry players", e);

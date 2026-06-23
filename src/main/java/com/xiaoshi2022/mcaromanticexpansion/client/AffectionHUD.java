@@ -98,6 +98,7 @@ public class AffectionHUD {
             return;
         }
 
+        // 恢复家族树检查
         if (!hasFamilyTreeInInventory(player)) {
             return;
         }
@@ -128,7 +129,8 @@ public class AffectionHUD {
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
         int centerX = screenWidth / 2;
-        int bottomY = screenHeight - 100;
+        // 调整位置：距离底部 120 像素，避免与物品栏和其他 HUD 重叠
+        int bottomY = screenHeight - 120;
 
         // 标题
         String targetName = targetPlayer.getName().getString();

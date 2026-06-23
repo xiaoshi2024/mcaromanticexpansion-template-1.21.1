@@ -98,6 +98,13 @@ public class RomanceNetwork {
                 SharedUmbrellaRequestHandler::handleClient
         );
 
+        // 好感度同步包
+        registrar.playToClient(
+                AffectionSyncPacket.TYPE,
+                AffectionSyncPacket.STREAM_CODEC,
+                AffectionSyncPacket::handleClient
+        );
+
         registrar.playToServer(
                 SharedUmbrellaResponsePacket.TYPE,
                 SharedUmbrellaResponsePacket.STREAM_CODEC,

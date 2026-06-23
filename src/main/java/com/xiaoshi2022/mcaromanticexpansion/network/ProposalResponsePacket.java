@@ -2,6 +2,7 @@ package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
+import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
 import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.entity.ai.relationship.Gender;
@@ -103,6 +104,11 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
             // 发送成功消息 - 使用不同的格式避免与 MCA 冲突
             responder.sendSystemMessage(Component.literal("§d§o" + proposer.getName().getString() + " 向你求婚了！你接受了！"));
             proposer.sendSystemMessage(Component.literal("§a§o" + responder.getName().getString() + " 接受了你的求婚！"));
+
+            // ========== 添加好感度：接受求婚 ==========
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.PROPOSAL_ACCEPT, proposer, responder);
+            MCARomanticExpansion.LOGGER.info("Added PROPOSAL_ACCEPT affection for {} and {}",
+                    proposer.getName().getString(), responder.getName().getString());
         } else {
             ServerInteractionManager.getInstance().rejectProposal(proposer, responder);
             responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.proposal.rejected"));

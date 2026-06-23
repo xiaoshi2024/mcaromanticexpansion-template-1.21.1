@@ -10,6 +10,7 @@ import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
 import com.xiaoshi2022.mcaromanticexpansion.event.RomanticTickHandler;
 import com.xiaoshi2022.mcaromanticexpansion.event.UmbrellaProtectionHandler;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
+import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
@@ -65,6 +66,8 @@ public class MCARomanticExpansion {
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PregnancyManager.loadFromPersistentData(serverPlayer);
+            // 确保好感度数据已初始化（避免初始值为100的问题）
+            AffectionManager.initializeAffectionData(serverPlayer);
         }
     }
 
