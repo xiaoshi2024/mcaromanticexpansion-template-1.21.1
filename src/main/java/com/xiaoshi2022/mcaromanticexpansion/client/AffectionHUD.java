@@ -22,10 +22,55 @@ public class AffectionHUD {
     private static long lastUpdateTime = 0;
     private static long lastChangeTime = 0;
     private static final double MAX_LOOK_DISTANCE = 10.0;
-    private static final long CHANGE_DISPLAY_DURATION = 2000; // 变化显示持续时间
+    private static final long CHANGE_DISPLAY_DURATION = 2000;
+
+    // HUD位置配置
+    public enum HUDPosition {
+        TOP_LEFT,
+        TOP_CENTER,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_CENTER,
+        BOTTOM_RIGHT,
+        CUSTOM
+    }
+
+    private static HUDPosition position = HUDPosition.BOTTOM_CENTER;
+    private static int customOffsetX = 0;
+    private static int customOffsetY = 0;
+    private static int customX = -1;
+    private static int customY = -1;
+
+    // 预设位置的偏移量（相对于屏幕边缘）
+    private static final int DEFAULT_PADDING = 20;
+    private static final int HUD_WIDTH = 200;
+    private static final int HUD_HEIGHT = 80;
+
+    // 是否显示调试信息
+    private static boolean showDebugInfo = false;
 
     public static void init() {
         NeoForge.EVENT_BUS.addListener(AffectionHUD::onRenderHUD);
+    }
+
+    // 位置设置方法
+    public static void setPosition(HUDPosition pos) {
+        position = pos;
+    }
+
+    public static void setCustomOffset(int offsetX, int offsetY) {
+        customOffsetX = offsetX;
+        customOffsetY = offsetY;
+    }
+
+    public static void setCustomPosition(int x, int y) {
+        customX = x;
+        customY = y;
+        position = HUDPosition.CUSTOM;
+    }
+
+    public static void setShowDebugInfo(boolean show) {
+        showDebugInfo = show;
     }
 
     public static void setTargetPlayer(Player player) {
@@ -69,17 +114,17 @@ public class AffectionHUD {
         AABB aabb = new AABB(start, end).inflate(1.0);
         List<Entity> entities = viewer.level().getEntities(viewer, aabb);
 
-        double closestDistance = MAX_LOOK_DISTANCE;
+        double closestDistance = MAX_LOOK_DISTANCE * MAX_LOOK_DISTANCE;
         Player foundPlayer = null;
 
         for (Entity entity : entities) {
             if (entity instanceof Player otherPlayer && otherPlayer != viewer && otherPlayer.isAlive()) {
                 Vec3 entityPos = otherPlayer.getEyePosition(1.0F);
                 double distance = entityPos.distanceToSqr(start);
-                
+
                 Vec3 toEntity = entityPos.subtract(start).normalize();
                 double dot = toEntity.dot(look);
-                
+
                 if (dot > 0.9 && distance < closestDistance) {
                     closestDistance = distance;
                     foundPlayer = otherPlayer;
@@ -90,6 +135,48 @@ public class AffectionHUD {
         return foundPlayer;
     }
 
+    private static int[] calculateHUDPosition(int screenWidth, int screenHeight) {
+        int x, y;
+        int hudWidth = HUD_WIDTH;
+        int hudHeight = HUD_HEIGHT;
+
+        switch (position) {
+            case TOP_LEFT:
+                x = DEFAULT_PADDING + customOffsetX;
+                y = DEFAULT_PADDING + customOffsetY;
+                break;
+            case TOP_CENTER:
+                x = (screenWidth - hudWidth) / 2 + customOffsetX;
+                y = DEFAULT_PADDING + customOffsetY;
+                break;
+            case TOP_RIGHT:
+                x = screenWidth - hudWidth - DEFAULT_PADDING + customOffsetX;
+                y = DEFAULT_PADDING + customOffsetY;
+                break;
+            case BOTTOM_LEFT:
+                x = DEFAULT_PADDING + customOffsetX;
+                y = screenHeight - hudHeight - DEFAULT_PADDING + customOffsetY;
+                break;
+            case BOTTOM_CENTER:
+                x = (screenWidth - hudWidth) / 2 + customOffsetX;
+                y = screenHeight - hudHeight - DEFAULT_PADDING + customOffsetY;
+                break;
+            case BOTTOM_RIGHT:
+                x = screenWidth - hudWidth - DEFAULT_PADDING + customOffsetX;
+                y = screenHeight - hudHeight - DEFAULT_PADDING + customOffsetY;
+                break;
+            case CUSTOM:
+                x = customX >= 0 ? customX : (screenWidth - hudWidth) / 2;
+                y = customY >= 0 ? customY : (screenHeight - hudHeight) / 2;
+                break;
+            default:
+                x = (screenWidth - hudWidth) / 2;
+                y = screenHeight - hudHeight - DEFAULT_PADDING;
+        }
+
+        return new int[]{x, y};
+    }
+
     private static void onRenderHUD(RenderGuiLayerEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
@@ -98,13 +185,12 @@ public class AffectionHUD {
             return;
         }
 
-        // 恢复家族树检查
         if (!hasFamilyTreeInInventory(player)) {
             return;
         }
 
         Player lookedPlayer = findPlayerLookingAt(player);
-        
+
         if (lookedPlayer != null && (targetPlayer == null || lookedPlayer != targetPlayer)) {
             targetPlayer = lookedPlayer;
             updateAffection();
@@ -128,67 +214,77 @@ public class AffectionHUD {
         int screenWidth = minecraft.getWindow().getGuiScaledWidth();
         int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
-        int centerX = screenWidth / 2;
-        // 调整位置：距离底部 120 像素，避免与物品栏和其他 HUD 重叠
-        int bottomY = screenHeight - 120;
+        int[] pos = calculateHUDPosition(screenWidth, screenHeight);
+        int baseX = pos[0];
+        int baseY = pos[1];
 
         // 标题
         String targetName = targetPlayer.getName().getString();
         Component title = Component.literal("♥ 与 " + targetName + " 的心动值").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE);
-        guiGraphics.drawString(minecraft.font, title, centerX - minecraft.font.width(title) / 2, bottomY - 35, 0xFFFFFF);
+        int titleWidth = minecraft.font.width(title);
+        guiGraphics.drawString(minecraft.font, title, baseX + (HUD_WIDTH - titleWidth) / 2, baseY, 0xFFFFFF);
 
         // 分隔线
-        guiGraphics.hLine(centerX - 80, centerX + 80, bottomY - 25, 0xAAFFFFFF);
+        int lineY = baseY + 12;
+        guiGraphics.hLine(baseX + 10, baseX + HUD_WIDTH - 10, lineY, 0xAAFFFFFF);
 
         // 进度条背景
-        int barWidth = 200;
+        int barWidth = HUD_WIDTH - 40;
         int barHeight = 8;
-        int barX = centerX - barWidth / 2;
-        int barY = bottomY - 15;
+        int barX = baseX + 20;
+        int barY = lineY + 5;
 
         guiGraphics.fill(barX - 1, barY - 1, barX + barWidth + 1, barY + barHeight + 1, 0xFF000000);
 
         // 进度条填充
-        int filledWidth = (int) ((affection / 100.0) * barWidth);
+        int filledWidth = (int) ((Math.min(affection, 100) / 100.0) * barWidth);
         int color = getAffectionColor(affection);
-        guiGraphics.fill(barX, barY, barX + filledWidth, barY + barHeight, color);
+        if (filledWidth > 0) {
+            guiGraphics.fill(barX, barY, barX + filledWidth, barY + barHeight, color);
+        }
 
         // 心形图标
-        drawHeartIcon(guiGraphics, centerX - 95, bottomY - 18, color);
-        drawHeartIcon(guiGraphics, centerX + 80, bottomY - 18, color);
+        drawHeartIcon(guiGraphics, baseX + 8, barY - 1, color);
+        drawHeartIcon(guiGraphics, baseX + HUD_WIDTH - 16, barY - 1, color);
 
         // 数值显示
-        Component valueText = Component.literal(affection + "/100").withStyle(net.minecraft.ChatFormatting.GOLD);
-        guiGraphics.drawString(minecraft.font, valueText, centerX - minecraft.font.width(valueText) / 2, bottomY, 0xFFFFFF);
+        Component valueText = Component.literal(Math.min(affection, 100) + "/100").withStyle(net.minecraft.ChatFormatting.GOLD);
+        int valueWidth = minecraft.font.width(valueText);
+        guiGraphics.drawString(minecraft.font, valueText, baseX + (HUD_WIDTH - valueWidth) / 2, barY + barHeight + 4, 0xFFFFFF);
 
         // 好感度等级标签
         String levelText = getAffectionLevelText(affection);
         if (!levelText.isEmpty()) {
             Component levelComponent = Component.literal(levelText).withStyle(net.minecraft.ChatFormatting.WHITE);
-            guiGraphics.drawString(minecraft.font, levelComponent, centerX - minecraft.font.width(levelComponent) / 2, bottomY + 15, 0x888888);
+            int levelWidth = minecraft.font.width(levelComponent);
+            guiGraphics.drawString(minecraft.font, levelComponent, baseX + (HUD_WIDTH - levelWidth) / 2, barY + barHeight + 18, 0x888888);
         }
 
         // 显示变化动画
         long timeSinceChange = System.currentTimeMillis() - lastChangeTime;
         if (timeSinceChange < CHANGE_DISPLAY_DURATION && lastAffection != affection) {
             int change = affection - lastAffection;
-            String changeText = (change > 0 ? "↑ +" : "↓ ") + change;
+            String changeText = (change > 0 ? "↑ +" : "↓ ") + Math.abs(change);
             int changeColor = change > 0 ? 0xFF00FF00 : 0xFFFF0000;
             Component changeComponent = Component.literal(changeText);
-            guiGraphics.drawString(minecraft.font, changeComponent, centerX + minecraft.font.width(valueText) / 2 + 20, bottomY, changeColor);
+            guiGraphics.drawString(minecraft.font, changeComponent, baseX + HUD_WIDTH / 2 + 30, barY + barHeight + 4, changeColor);
+        }
+
+        // 调试信息
+        if (showDebugInfo) {
+            String debugText = String.format("Pos: %s (%d,%d)", position.name(), baseX, baseY);
+            Component debugComponent = Component.literal(debugText).withStyle(net.minecraft.ChatFormatting.GRAY);
+            guiGraphics.drawString(minecraft.font, debugComponent, 10, 10, 0x888888);
         }
     }
 
     private static void drawHeartIcon(GuiGraphics guiGraphics, int x, int y, int color) {
-        // 简单的心形图标
         int size = 6;
         int halfSize = size / 2;
-        
-        // 左上半圆
+
         guiGraphics.fill(x, y + halfSize, x + halfSize, y + size, color);
-        // 右上半圆
         guiGraphics.fill(x + halfSize, y + halfSize, x + size, y + size, color);
-        // 下半三角形
+
         for (int i = 0; i <= halfSize; i++) {
             guiGraphics.fill(x + i, y + size - i, x + size - i, y + size - i + 1, color);
         }
@@ -196,15 +292,15 @@ public class AffectionHUD {
 
     private static int getAffectionColor(int affection) {
         if (affection >= 80) {
-            return 0xFFFF69B4; // 粉红色 - 热恋
+            return 0xFFFF69B4;
         } else if (affection >= 60) {
-            return 0xFFFF1493; // 深粉色 - 心动
+            return 0xFFFF1493;
         } else if (affection >= 40) {
-            return 0xFFFF4500; // 橙色 - 好感
+            return 0xFFFF4500;
         } else if (affection >= 20) {
-            return 0xFFFFD700; // 金色 - 初识
+            return 0xFFFFD700;
         } else {
-            return 0xFFC0C0C0; // 灰色 - 陌生
+            return 0xFFC0C0C0;
         }
     }
 
