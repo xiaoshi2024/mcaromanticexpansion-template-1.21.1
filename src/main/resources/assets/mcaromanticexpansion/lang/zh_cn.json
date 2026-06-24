@@ -131,5 +131,36 @@
   "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a已取消 %s 的备孕期",
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 当前不在备孕期！",
 
-  "block.mcaromanticexpansion.umbrella_stand": "伞架"
+  "block.mcaromanticexpansion.umbrella_stand": "伞架",
+
+  "event.mcaromanticexpansion.share_story.player": "§d你与对方分享了一个有趣的故事...",
+  "event.mcaromanticexpansion.share_story.partner": "§d对方与你分享了一个有趣的故事...",
+  
+  "event.mcaromanticexpansion.hold_hands.player": "§d你们的手不经意间触碰到了一起，心跳加速...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§d你们的手不经意间触碰到了一起，心跳加速...",
+  
+  "event.mcaromanticexpansion.whisper_love.player": "§d你轻声说出了藏在心底的话...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§d对方轻声说出了藏在心底的话...",
+  
+  "event.mcaromanticexpansion.gentle_kiss.player": "§d在伞下，你们交换了一个温柔的吻...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§d在伞下，你们交换了一个温柔的吻...",
+  
+  "event.mcaromanticexpansion.confession.player": "§d你鼓起勇气表白了！",
+  "event.mcaromanticexpansion.confession.partner": "§d对方鼓起勇气向你表白了！",
+  
+  "event.mcaromanticexpansion.heart_to_heart.player": "§d心意相通：你们获得了幸运和速度的祝福！",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§d心意相通：你们获得了幸运和速度的祝福！",
+  
+  "event.mcaromanticexpansion.rainbow_pact.player": "§d彩虹之约：一道绚丽的彩虹出现在你们身边！",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§d彩虹之约：一道绚丽的彩虹出现在你们身边！",
+  
+  "event.mcaromanticexpansion.time_stands_still.player": "§d时光留念：雨伞下，时间仿佛变慢了...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§d时光留念：雨伞下，时间仿佛变慢了...",
+  
+  "event.mcaromanticexpansion.synchrony_test.player": "§d默契考验：在接下来的1分钟内，同时跳起！",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§d默契考验：在接下来的1分钟内，同时跳起！",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§c你伤害了 %s，好感度减少了 %d 点！",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s 伤害了你，好感度减少了 %d 点！"
+
 }

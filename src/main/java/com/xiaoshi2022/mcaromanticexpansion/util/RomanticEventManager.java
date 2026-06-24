@@ -209,6 +209,10 @@ public class RomanticEventManager {
         // 触发特殊效果
         event.triggerEffect(player, partner);
         
+        // 发送翻译后的消息给玩家
+        player.sendSystemMessage(event.getPlayerMessage());
+        partner.sendSystemMessage(event.getPartnerMessage());
+        
         // 增加好感度
         AffectionManager.addAffection(player, partner, event.affectionBonus());
         AffectionManager.addAffection(partner, player, event.affectionBonus());
@@ -221,48 +225,34 @@ public class RomanticEventManager {
     }
 
     public enum RomanticEvent {
-        SHARE_A_STORY("share_story", 1.0, 5, 
-                "§d你与对方分享了一个有趣的故事...",
-                "§d对方与你分享了一个有趣的故事...") {
+        SHARE_A_STORY("share_story", 1.0, 5) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
         },
         
-        HOLD_HANDS("hold_hands", 0.8, 8,
-                "§d你们的手不经意间触碰到了一起，心跳加速...",
-                "§d你们的手不经意间触碰到了一起，心跳加速...") {
+        HOLD_HANDS("hold_hands", 0.8, 8) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
         },
         
-        WHISPER_LOVE("whisper_love", 0.6, 12,
-                "§d你轻声说出了藏在心底的话...",
-                "§d对方轻声说出了藏在心底的话...") {
+        WHISPER_LOVE("whisper_love", 0.6, 12) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
         },
         
-        GENTLE_KISS("gentle_kiss", 0.4, 18,
-                "§d在伞下，你们交换了一个温柔的吻...",
-                "§d在伞下，你们交换了一个温柔的吻...") {
+        GENTLE_KISS("gentle_kiss", 0.4, 18) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
         },
         
-        CONFESSION("confession", 0.2, 25,
-                "§d你鼓起勇气表白了！",
-                "§d对方鼓起勇气向你表白了！") {
+        CONFESSION("confession", 0.2, 25) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
         },
         
-        // 共伞专属事件
-        HEART_TO_HEART("heart_to_heart", 1.0, 10,
-                "§d心意相通：你们获得了幸运和速度的祝福！",
-                "§d心意相通：你们获得了幸运和速度的祝福！") {
+        HEART_TO_HEART("heart_to_heart", 1.0, 10) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
-                // 双方获得5分钟的幸运和速度增益
                 player.addEffect(new MobEffectInstance(MobEffects.LUCK, 6000, 1));
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 6000, 1));
                 partner.addEffect(new MobEffectInstance(MobEffects.LUCK, 6000, 1));
@@ -270,18 +260,14 @@ public class RomanticEventManager {
             }
         },
         
-        RAINBOW_PACT("rainbow_pact", 0.8, 15,
-                "§d彩虹之约：一道绚丽的彩虹出现在你们身边！",
-                "§d彩虹之约：一道绚丽的彩虹出现在你们身边！") {
+        RAINBOW_PACT("rainbow_pact", 0.8, 15) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
-                // 在玩家附近生成彩虹粒子效果
                 ServerLevel level = player.serverLevel();
                 double centerX = (player.getX() + partner.getX()) / 2;
                 double centerY = Math.max(player.getY(), partner.getY()) + 5;
                 double centerZ = (player.getZ() + partner.getZ()) / 2;
                 
-                // 生成彩色粒子
                 for (int i = 0; i < 50; i++) {
                     double angle = random.nextDouble() * Math.PI * 2;
                     double radius = 2 + random.nextDouble() * 3;
@@ -289,13 +275,11 @@ public class RomanticEventManager {
                     double z = centerZ + Math.sin(angle) * radius;
                     double y = centerY - random.nextDouble() * 8;
                     
-                    // 使用彩色火焰粒子
                     level.sendParticles(ParticleTypes.FLAME, x, y, z, 1, 
                             random.nextGaussian() * 0.1, 
                             random.nextGaussian() * 0.1, 
                             random.nextGaussian() * 0.1, 0.05);
                     
-                    // 添加心形粒子
                     if (i % 5 == 0) {
                         level.sendParticles(ParticleTypes.HEART, x, y + 1, z, 1, 
                                 random.nextGaussian() * 0.2, 
@@ -304,24 +288,18 @@ public class RomanticEventManager {
                     }
                 }
                 
-                // 播放音效
                 player.playSound(SoundEvents.FIREWORK_ROCKET_LAUNCH, 1.0f, 1.0f);
             }
         },
         
-        TIME_STANDS_STILL("time_stands_still", 0.6, 12,
-                "§d时光留念：雨伞下，时间仿佛变慢了...",
-                "§d时光留念：雨伞下，时间仿佛变慢了...") {
+        TIME_STANDS_STILL("time_stands_still", 0.6, 12) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
         },
         
-        SYNCHRONY_TEST("synchrony_test", 0.4, 20,
-                "§d默契考验：在接下来的1分钟内，同时跳起！",
-                "§d默契考验：在接下来的1分钟内，同时跳起！") {
+        SYNCHRONY_TEST("synchrony_test", 0.4, 20) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
-                // 记录默契考验开始时间
                 RomanticEventState state = eventStates.computeIfAbsent(player.getUUID(), 
                         uuid -> new RomanticEventState());
                 state.synchronyTestActive = true;
@@ -337,22 +315,24 @@ public class RomanticEventManager {
         private final String id;
         private final double weight;
         private final int affectionBonus;
-        private final String playerMessage;
-        private final String partnerMessage;
 
-        RomanticEvent(String id, double weight, int affectionBonus, String playerMessage, String partnerMessage) {
+        RomanticEvent(String id, double weight, int affectionBonus) {
             this.id = id;
             this.weight = weight;
             this.affectionBonus = affectionBonus;
-            this.playerMessage = playerMessage;
-            this.partnerMessage = partnerMessage;
         }
 
         public String id() { return id; }
         public double weight() { return weight; }
         public int affectionBonus() { return affectionBonus; }
-        public String playerMessage() { return playerMessage; }
-        public String partnerMessage() { return partnerMessage; }
+        
+        public Component getPlayerMessage() {
+            return Component.translatable("event.mcaromanticexpansion." + id + ".player");
+        }
+        
+        public Component getPartnerMessage() {
+            return Component.translatable("event.mcaromanticexpansion." + id + ".partner");
+        }
         
         public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
     }

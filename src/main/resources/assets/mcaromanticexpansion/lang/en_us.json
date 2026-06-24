@@ -131,6 +131,36 @@
   "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aCancelled %s's conception period",
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s is not in a conception period!",
 
-  "block.mcaromanticexpansion.umbrella_stand": "Umbrella Stand"
+  "block.mcaromanticexpansion.umbrella_stand": "Umbrella Stand",
+
+  "event.mcaromanticexpansion.share_story.player": "§dYou shared an interesting story with each other...",
+  "event.mcaromanticexpansion.share_story.partner": "§dThey shared an interesting story with you...",
+  
+  "event.mcaromanticexpansion.hold_hands.player": "§dYour hands accidentally touched, heart racing...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§dYour hands accidentally touched, heart racing...",
+  
+  "event.mcaromanticexpansion.whisper_love.player": "§dYou whispered the words hidden in your heart...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§dThey whispered the words hidden in their heart...",
+  
+  "event.mcaromanticexpansion.gentle_kiss.player": "§dUnder the umbrella, you exchanged a gentle kiss...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§dUnder the umbrella, you exchanged a gentle kiss...",
+  
+  "event.mcaromanticexpansion.confession.player": "§dYou mustered up the courage to confess your love!",
+  "event.mcaromanticexpansion.confession.partner": "§dThey mustered up the courage to confess their love!",
+  
+  "event.mcaromanticexpansion.heart_to_heart.player": "§dHeart to Heart: You both received blessings of luck and speed!",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§dHeart to Heart: You both received blessings of luck and speed!",
+  
+  "event.mcaromanticexpansion.rainbow_pact.player": "§dRainbow Pact: A beautiful rainbow appeared around you!",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§dRainbow Pact: A beautiful rainbow appeared around you!",
+  
+  "event.mcaromanticexpansion.time_stands_still.player": "§dTime Stands Still: Under the umbrella, time seemed to slow down...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§dTime Stands Still: Under the umbrella, time seemed to slow down...",
+  
+  "event.mcaromanticexpansion.synchrony_test.player": "§dSynchrony Test: Jump at the same time within the next minute!",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§dSynchrony Test: Jump at the same time within the next minute!",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§cYou hurt %s, affection decreased by %d points!",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s hurt you, affection decreased by %d points!"
 
 }
