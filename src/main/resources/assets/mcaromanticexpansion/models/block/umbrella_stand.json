@@ -2,7 +2,8 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "mcaromanticexpansion:block/umbrella_stand"
+		"1": "mcaromanticexpansion:block/umbrella_stand",
+		"particle": "mcaromanticexpansion:block/umbrella_stand"
 	},
 	"elements": [
 		{

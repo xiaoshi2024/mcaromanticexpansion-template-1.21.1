@@ -38,8 +38,9 @@ public class UmbrellaStandBlockEntity extends BlockEntity implements ContainerSi
             this.umbrellaStack = ItemStack.parse(provider, compoundTag.getCompound("UmbrellaItem"))
                     .orElse(ItemStack.EMPTY);
         }
-        System.out.println("loadAdditional: umbrellaStack = " + (this.umbrellaStack.isEmpty() ? "EMPTY" : "HAS ITEM"));
+//        System.out.println("loadAdditional: umbrellaStack = " + (this.umbrellaStack.isEmpty() ? "EMPTY" : "HAS ITEM"));
     }
+//        System.out.println("handleUpdateTag called on client");
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
@@ -47,7 +48,7 @@ public class UmbrellaStandBlockEntity extends BlockEntity implements ContainerSi
         if (!this.umbrellaStack.isEmpty()) {
             compoundTag.put("UmbrellaItem", this.umbrellaStack.save(provider));
         }
-        System.out.println("saveAdditional: umbrellaStack = " + (this.umbrellaStack.isEmpty() ? "EMPTY" : "HAS ITEM"));
+//        System.out.println("saveAdditional: umbrellaStack = " + (this.umbrellaStack.isEmpty() ? "EMPTY" : "HAS ITEM"));
     }
 
     @Override
@@ -97,7 +98,7 @@ public class UmbrellaStandBlockEntity extends BlockEntity implements ContainerSi
                         chunkPos,
                         new UmbrellaStandSyncPacket(getBlockPos(), this.umbrellaStack)
                 );
-                System.out.println("syncToClient: sent custom packet to tracking players, hasStack = " + hasStack());
+//                System.out.println("syncToClient: sent custom packet to tracking players, hasStack = " + hasStack());
             }
 
             // 同时使用标准方块更新作为备份
@@ -143,13 +144,12 @@ public class UmbrellaStandBlockEntity extends BlockEntity implements ContainerSi
     public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         this.saveAdditional(tag, provider);
-        System.out.println("getUpdateTag: " + (tag.contains("UmbrellaItem") ? "HAS ITEM" : "EMPTY"));
+//        System.out.println("getUpdateTag: " + (tag.contains("UmbrellaItem") ? "HAS ITEM" : "EMPTY"));
         return tag;
     }
 
     @Override
     public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider provider) {
-        System.out.println("handleUpdateTag called on client");
         this.loadAdditional(tag, provider);
         Level level = this.getLevel();
         if (level != null && level.isClientSide()) {
