@@ -6,14 +6,11 @@ import com.xiaoshi2022.mcaromanticexpansion.command.BirthdayCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
 import com.xiaoshi2022.mcaromanticexpansion.config.HUDConfig;
-import com.xiaoshi2022.mcaromanticexpansion.event.AffectionDecayHandler;
-import com.xiaoshi2022.mcaromanticexpansion.event.PlayerInteractionHandler;
-import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
-import com.xiaoshi2022.mcaromanticexpansion.event.RomanticTickHandler;
-import com.xiaoshi2022.mcaromanticexpansion.event.UmbrellaProtectionHandler;
+import com.xiaoshi2022.mcaromanticexpansion.event.*;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModParticles;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +40,7 @@ public class MCARomanticExpansion {
         ModBlockEntities.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModItems.CREATIVE_TABS.register(modEventBus);
+        ModParticles.PARTICLES.register(modEventBus);  // ← 确保这行存在！
         RomanceNetwork.registerPackets(modEventBus);
         CriterionTriggerRegister.TRIGGER_TYPES.register(modEventBus);
         NeoForge.EVENT_BUS.register(PlayerInteractionHandler.class);
@@ -50,6 +48,7 @@ public class MCARomanticExpansion {
         NeoForge.EVENT_BUS.register(UmbrellaProtectionHandler.class);
         NeoForge.EVENT_BUS.register(RomanticTickHandler.class);
         NeoForge.EVENT_BUS.register(AffectionDecayHandler.class);
+        NeoForge.EVENT_BUS.register(RomanticAdvancementListener.class);
         NeoForge.EVENT_BUS.register(this);
     }
 

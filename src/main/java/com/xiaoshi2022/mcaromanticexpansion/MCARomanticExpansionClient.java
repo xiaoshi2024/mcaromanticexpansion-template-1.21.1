@@ -4,6 +4,7 @@ import com.xiaoshi2022.mcaromanticexpansion.client.AffectionHUD;
 import com.xiaoshi2022.mcaromanticexpansion.client.ClientEventHandler;
 import com.xiaoshi2022.mcaromanticexpansion.client.gui.HUDConfigScreen;
 import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
+import com.xiaoshi2022.mcaromanticexpansion.client.particle.RainbowParticle;
 import com.xiaoshi2022.mcaromanticexpansion.client.renderer.UmbrellaStandRenderer;
 import com.xiaoshi2022.mcaromanticexpansion.config.HUDConfig;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
@@ -11,6 +12,7 @@ import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModParticles;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -20,6 +22,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @EventBusSubscriber(modid = MCARomanticExpansion.MODID, value = Dist.CLIENT)
@@ -50,6 +53,16 @@ public class MCARomanticExpansionClient {
             HUDConfig.applyConfig();  // ★★★ 只在这里应用配置 ★★★
             ClientEventHandler.init();
         });
+    }
+
+    @SubscribeEvent
+    public static void registerParticles(RegisterParticleProvidersEvent event) {
+        // 使用 Provider 类注册
+        event.registerSpriteSet(
+                ModParticles.RAINBOW_PARTICLE.get(),
+                RainbowParticle.Provider::new
+        );
+        MCARomanticExpansion.LOGGER.info("✅ Registered rainbow particle provider");
     }
 
     @SubscribeEvent
