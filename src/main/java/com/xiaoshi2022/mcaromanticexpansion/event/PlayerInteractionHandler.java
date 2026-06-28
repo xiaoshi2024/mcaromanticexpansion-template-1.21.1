@@ -102,7 +102,8 @@ public class PlayerInteractionHandler {
         }
 
         SharedUmbrellaRequestEvent requestEvent = new SharedUmbrellaRequestEvent(player, target);
-        if (NeoForge.EVENT_BUS.post(requestEvent).isCanceled()) {
+        NeoForge.EVENT_BUS.post(requestEvent);
+        if (requestEvent.isCanceled()) {
             MCARomanticExpansion.LOGGER.debug("Shared umbrella request canceled by event listener for {} -> {}",
                     player.getName().getString(), target.getName().getString());
             return;
@@ -293,7 +294,8 @@ public class PlayerInteractionHandler {
         }
 
         ProposalSentEvent sentEvent = new ProposalSentEvent(proposer, target);
-        if (NeoForge.EVENT_BUS.post(sentEvent).isCanceled()) {
+        NeoForge.EVENT_BUS.post(sentEvent);
+        if (sentEvent.isCanceled()) {
             MCARomanticExpansion.LOGGER.debug("Proposal canceled by event listener for {} -> {}",
                     proposer.getName().getString(), target.getName().getString());
             return;
@@ -380,7 +382,8 @@ public class PlayerInteractionHandler {
         MarriageChangedEvent forgeEvent = new MarriageChangedEvent(
                 sender, target, MarriageChangedEvent.ChangeType.DIVORCED
         );
-        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+        NeoForge.EVENT_BUS.post(forgeEvent);
+        if (forgeEvent.isCanceled()) {
             MCARomanticExpansion.LOGGER.debug("Divorce canceled by event listener for {} -> {}",
                     sender.getName().getString(), target.getName().getString());
             return;

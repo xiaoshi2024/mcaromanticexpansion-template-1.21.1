@@ -51,7 +51,8 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
                 proposer.getName().getString(), responder.getName().getString(), accepted);
 
         ProposalRespondedEvent forgeEvent = new ProposalRespondedEvent(responder, proposer, accepted);
-        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+        NeoForge.EVENT_BUS.post(forgeEvent);
+        if (forgeEvent.isCanceled()) {
             MCARomanticExpansion.LOGGER.debug("Proposal response canceled by event listener");
             return;
         }

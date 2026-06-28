@@ -63,7 +63,8 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
             MarriageChangedEvent forgeEvent = new MarriageChangedEvent(
                     receiver, partner, MarriageChangedEvent.ChangeType.MARRIED
             );
-            if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+            NeoForge.EVENT_BUS.post(forgeEvent);
+            if (forgeEvent.isCanceled()) {
                 receiver.getInventory().add(receiverRing);
                 partner.getInventory().add(partnerRing);
                 MCARomanticExpansion.LOGGER.debug("Marriage canceled by event listener");

@@ -146,7 +146,8 @@ public class SharedUmbrellaManager {
             }
 
             SharedUmbrellaEstablishedEvent establishedEvent = new SharedUmbrellaEstablishedEvent(requester, responder);
-            if (NeoForge.EVENT_BUS.post(establishedEvent).isCanceled()) {
+            NeoForge.EVENT_BUS.post(establishedEvent);
+            if (establishedEvent.isCanceled()) {
                 MCARomanticExpansion.LOGGER.debug("Shared umbrella establishment canceled by event listener for {} and {}",
                         requester.getName().getString(), responder.getName().getString());
                 return;

@@ -59,7 +59,8 @@ public class AffectionManager {
         AffectionChangedEvent event = new AffectionChangedEvent(
                 serverPlayer, serverTarget, current, newValue, AffectionChangedEvent.ChangeReason.ADD
         );
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
             MCARomanticExpansion.LOGGER.debug("Affection change canceled by event for {} -> {}",
                     player.getName().getString(), target.getName().getString());
             return;
@@ -85,7 +86,8 @@ public class AffectionManager {
         AffectionChangedEvent event = new AffectionChangedEvent(
                 serverPlayer, serverTarget, current, clampedValue, AffectionChangedEvent.ChangeReason.SET
         );
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
             return;
         }
         clampedValue = event.getNewValue();
@@ -167,7 +169,8 @@ public class AffectionManager {
         AffectionChangedEvent event = new AffectionChangedEvent(
                 serverPlayer, serverTarget, current, newValue, AffectionChangedEvent.ChangeReason.INTERACTION
         );
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
             return;
         }
         int finalValue = event.getNewValue();

@@ -106,7 +106,9 @@ public final class RomanticExpansionAPI {
                 public boolean isEngaged(Player player) {
                     if (player instanceof ServerPlayer sp) {
                         var data = net.conczin.mca.server.world.data.PlayerSaveData.get(sp);
-                        return data.getRelationshipState() == net.conczin.mca.entity.ai.relationship.RelationshipState.ENGAGED_TO_PLAYER;
+                        boolean hasPartner = data.getPartnerUUID().isPresent();
+                        boolean isMarried = data.getRelationshipState() == net.conczin.mca.entity.ai.relationship.RelationshipState.MARRIED_TO_PLAYER;
+                        return hasPartner && !isMarried;
                     }
                     return false;
                 }
@@ -184,7 +186,7 @@ public final class RomanticExpansionAPI {
         return Collections.unmodifiableSet(customEvents.keySet());
     }
 
-    static Collection<IRomanticEvent> getCustomEvents() {
+    public static Collection<IRomanticEvent> getCustomEvents() {
         return customEvents.values();
     }
 
@@ -278,7 +280,8 @@ public final class RomanticExpansionAPI {
         }
 
         ProposalSentEvent event = new ProposalSentEvent(proposer, target);
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
             return false;
         }
 
@@ -296,7 +299,8 @@ public final class RomanticExpansionAPI {
      */
     public static boolean sendSharedUmbrellaRequest(ServerPlayer initiator, ServerPlayer target) {
         SharedUmbrellaRequestEvent event = new SharedUmbrellaRequestEvent(initiator, target);
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
             return false;
         }
         return SharedUmbrellaManager.sendRequest(initiator, target);
@@ -334,7 +338,8 @@ public final class RomanticExpansionAPI {
         RomanticEventTriggeredEvent forgeEvent = new RomanticEventTriggeredEvent(
                 player, partner, event.id(), true, event.affectionBonus()
         );
-        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+        NeoForge.EVENT_BUS.post(forgeEvent);
+        if (forgeEvent.isCanceled()) {
             return;
         }
         event.triggerEffect(player, partner);

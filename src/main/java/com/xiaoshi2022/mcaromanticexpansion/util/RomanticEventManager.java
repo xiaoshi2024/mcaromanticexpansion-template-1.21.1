@@ -8,6 +8,9 @@ import com.xiaoshi2022.mcaromanticexpansion.api.event.AffectionChangedEvent;
 import com.xiaoshi2022.mcaromanticexpansion.api.event.RomanticEventTriggeredEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -164,7 +167,8 @@ public class RomanticEventManager {
         RomanticEventTriggeredEvent forgeEvent = new RomanticEventTriggeredEvent(
                 player, partner, event.id(), false, event.affectionBonus()
         );
-        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+        NeoForge.EVENT_BUS.post(forgeEvent);
+        if (forgeEvent.isCanceled()) {
             MCARomanticExpansion.LOGGER.debug("Romantic event {} canceled by event listener", event.id());
             return;
         }
@@ -195,7 +199,8 @@ public class RomanticEventManager {
         AffectionChangedEvent event = new AffectionChangedEvent(
                 player, target, current, newValue, AffectionChangedEvent.ChangeReason.ROMANTIC_EVENT
         );
-        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
             return;
         }
         int finalValue = event.getNewValue();

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.api.event;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
@@ -9,21 +10,24 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
  * 当两位玩家之间触发了一个浪漫事件（内置或自定义）时，本事件会被发布到 NeoForge 事件总线。
  * 此事件在<b>服务端</b>触发。
  * <p>
- * 此事件是<b>可取消</b>的。如果取消，则不会应用好感度加成、不会发送消息、不会触发效果。
+ * 此事件是<b>可取消</b>的。如果取消：
+ * <ul>
+ *   <li>不会触发事件的效果（粒子、药水等）</li>
+ *   <li>不会发送事件消息</li>
+ *   <li>不会应用好感度加成</li>
+ * </ul>
  * <p>
  * <b>示例：</b>
  * <pre>{@code
- * @SubscribeEvent
- * public void onRomanticEvent(RomanticEventTriggeredEvent event) {
- *     if ("rainbow_pact".equals(event.getEventId())) {
- *         // 彩虹契约触发时给双方额外奖励
- *         event.getPlayer().giveExperienceLevels(5);
- *         event.getPartner().giveExperienceLevels(5);
+ * NeoForge.EVENT_BUS.addListener((RomanticEventTriggeredEvent e) -> {
+ *     if ("rainbow_pact".equals(e.getEventId())) {
+ *         e.getPlayer().giveExperienceLevels(5);
+ *         e.getPartner().giveExperienceLevels(5);
  *     }
- * }
+ * });
  * }</pre>
  */
-public class RomanticEventTriggeredEvent extends PlayerEvent {
+public class RomanticEventTriggeredEvent extends PlayerEvent implements ICancellableEvent {
 
     private final ServerPlayer partner;
     private final String eventId;
@@ -69,10 +73,5 @@ public class RomanticEventTriggeredEvent extends PlayerEvent {
 
     public int getAffectionBonus() {
         return affectionBonus;
-    }
-
-    @Override
-    public boolean isCancelable() {
-        return true;
     }
 }

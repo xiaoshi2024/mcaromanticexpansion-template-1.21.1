@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.api.event;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
@@ -10,12 +11,17 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
  * 此事件在<b>服务端</b>触发。
  * <p>
  * 此事件是<b>可取消</b>的。如果取消，好感度数值不会被写入。
+ * <pre>{@code
+ * NeoForge.EVENT_BUS.addListener((AffectionChangedEvent e) -> {
+ *     if (e.getReason() == ChangeReason.DECAY) e.setCanceled(true);
+ * });
+ * }</pre>
  */
-public class AffectionChangedEvent extends PlayerEvent {
+public class AffectionChangedEvent extends PlayerEvent implements ICancellableEvent {
 
     private final ServerPlayer target;
     private final int oldValue;
-    private final int newValue;
+    private int newValue;
     private final ChangeReason reason;
 
     /**
@@ -57,13 +63,13 @@ public class AffectionChangedEvent extends PlayerEvent {
         return newValue;
     }
 
-    public ChangeReason getReason() {
-        return reason;
+    /** 允许监听器修改最终写入的好感度值 */
+    public void setNewValue(int value) {
+        this.newValue = value;
     }
 
-    @Override
-    public boolean isCancelable() {
-        return true;
+    public ChangeReason getReason() {
+        return reason;
     }
 
     /** 好感度变化的原因 */
