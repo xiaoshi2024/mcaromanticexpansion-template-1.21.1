@@ -55,5 +55,23 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Comprometido con %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Casado con %s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "Bendiciones para ambos"
+  "mcaromanticexpansion.ring.tooltip.blessing": "Bendiciones para ambos",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Héroe Rescatador",
+  "advancements.mcaromanticexpansion.hero_resque.description": "¡Activa el evento 'Héroe Rescatador' y protege a tu amor!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Serenata a la Luz de la Luna",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "¡Disfruta de una noche romántica bajo la luz de la luna!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Lluvia de Estrellas",
+  "advancements.mcaromanticexpansion.starfall.description": "¡Pide un deseo bajo la lluvia de estrellas!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ ¡Peligro! ¡Los zombis se acercan! ¡Protege a tu amor!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ ¡Peligro! ¡Los zombis se acercan! ¡Tu amor te protegerá!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 La luz de la luna ilumina la noche...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 La luz de la luna ilumina la noche...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 Una estrella fugaz cruza el cielo, ¡pide un deseo!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Una estrella fugaz cruza el cielo, pidiendo un deseo contigo!"
 }

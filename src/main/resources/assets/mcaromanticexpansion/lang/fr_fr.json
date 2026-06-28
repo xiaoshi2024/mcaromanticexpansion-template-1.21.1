@@ -55,5 +55,23 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Fiancé(e) de %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Marié(e) à %s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "Bénédictions à vous deux"
+  "mcaromanticexpansion.ring.tooltip.blessing": "Bénédictions à vous deux",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Héros Sauveteur",
+  "advancements.mcaromanticexpansion.hero_resque.description": "Déclenchez l'événement 'Héros Sauveteur' et protégez votre amour !",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Sérénade au Clair de Lune",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Profitez d'une nuit romantique au clair de lune !",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Pluie d'Étoiles",
+  "advancements.mcaromanticexpansion.starfall.description": "Faites un vœu sous la pluie d'étoiles !",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Danger ! Des zombies approchent ! Protégez votre amour !",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Danger ! Des zombies approchent ! Votre amour vous protégera !",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 La lumière de la lune illumine la nuit...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 La lumière de la lune illumine la nuit...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 Une étoile filante traverse le ciel, faites un vœu !",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Une étoile filante traverse le ciel, faisant un vœu avec vous !"
 }

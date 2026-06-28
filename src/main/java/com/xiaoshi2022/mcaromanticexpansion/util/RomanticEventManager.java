@@ -1,12 +1,23 @@
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
 
@@ -18,7 +29,26 @@ public class RomanticEventManager {
 
     private static final Map<String, UmbrellaEventState> umbrellaEventStates = new HashMap<>();
 
+    // 存储被英雄救美事件影响的僵尸
+    private static final Map<UUID, List<Zombie>> heroZombies = new HashMap<>();
+
     public static void onPlayerTick(Player player) {
+        // 每 tick 检查英雄救美事件是否应该清除僵尸
+        if (player instanceof ServerPlayer serverPlayer) {
+            UUID playerId = serverPlayer.getUUID();
+            if (heroZombies.containsKey(playerId)) {
+                List<Zombie> zombies = heroZombies.get(playerId);
+                // 检查是否所有僵尸都死了
+                boolean allDead = zombies.stream().allMatch(zombie -> !zombie.isAlive());
+                if (allDead) {
+                    heroZombies.remove(playerId);
+                    // 英雄救美成功！给予奖励
+                    if (!zombies.isEmpty()) {
+                        applyHeroReward(serverPlayer);
+                    }
+                }
+            }
+        }
     }
 
     public static void onSharedUmbrellaEstablished(ServerPlayer player, ServerPlayer partner) {
@@ -43,11 +73,15 @@ public class RomanticEventManager {
             MCARomanticExpansion.LOGGER.debug("Triggering instant event for shared umbrella between {} and {}",
                     player.getName().getString(), partner.getName().getString());
 
+            // ========== 扩展事件列表 ==========
             List<RomanticEvent> instantEvents = Arrays.asList(
                     RomanticEvent.HEART_TO_HEART,
-                    RomanticEvent.RAINBOW_PACTRAINBOW_PACT,
+                    RomanticEvent.RAINBOW_PACT,
                     RomanticEvent.TIME_STANDS_STILL,
-                    RomanticEvent.SYNCHRONY_TEST
+                    RomanticEvent.SYNCHRONY_TEST,
+                    RomanticEvent.HERO_RESQUE,        // 新增：英雄救美
+                    RomanticEvent.MOONLIGHT_SERENADE,  // 新增：月光小夜曲
+                    RomanticEvent.STARFALL            // 新增：流星雨
             );
 
             double totalWeight = instantEvents.stream().mapToDouble(RomanticEvent::weight).sum();
@@ -100,6 +134,7 @@ public class RomanticEventManager {
         MCARomanticExpansion.LOGGER.debug("=== ROMANTIC EVENT TRIGGERED: {} between {} and {} ===",
                 event.id(), player.getName().getString(), partner.getName().getString());
 
+        // ========== 调用成就触发方法 ==========
         triggerEventAchievement(player, event.id());
         triggerEventAchievement(partner, event.id());
 
@@ -113,35 +148,128 @@ public class RomanticEventManager {
         MCARomanticExpansion.LOGGER.debug("=== Added {} affection bonus for both players ===", event.affectionBonus());
     }
 
+    // ========== 添加这个私有方法 ==========
     private static void triggerEventAchievement(ServerPlayer player, String eventId) {
-        com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister.ROMANTIC_EVENT.get()
-                .trigger(player, eventId);
+        CriterionTriggerRegister.ROMANTIC_EVENT.get().trigger(player, eventId);
+    }
+
+    // ========== 英雄救美奖励 ==========
+    private static void applyHeroReward(ServerPlayer player) {
+        // 给予生命恢复和饱和效果
+        player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 2)); // 30秒生命恢复II
+        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 1)); // 30秒抗性提升
+        player.addEffect(new MobEffectInstance(MobEffects.SATURATION, 600, 1)); // 30秒饱和
+
+        // 播放胜利音效
+        player.serverLevel().playSound(null, player.blockPosition(),
+                SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0f, 1.0f);
+
+        MCARomanticExpansion.LOGGER.info("🎉 Hero reward applied to {}", player.getName().getString());
     }
 
     public enum RomanticEvent {
+        // ===== 原有事件 =====
         SHARE_A_STORY("share_story", 1.0, 5) {
             @Override
-            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                // 书本粒子效果
+                ServerLevel level = player.serverLevel();
+                double centerX = (player.getX() + partner.getX()) / 2;
+                double centerZ = (player.getZ() + partner.getZ()) / 2;
+                double centerY = Math.max(player.getY(), partner.getY()) + 1;
+
+                for (int i = 0; i < 30; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 1.0 + random.nextDouble() * 2;
+                    level.sendParticles(ParticleTypes.ENCHANT,
+                            centerX + Math.cos(angle) * radius,
+                            centerY + random.nextDouble() * 2,
+                            centerZ + Math.sin(angle) * radius,
+                            1, 0, 0.1, 0, 0.1);
+                }
+            }
         },
 
         HOLD_HANDS("hold_hands", 0.8, 8) {
             @Override
-            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                // 爱心粒子连线
+                ServerLevel level = player.serverLevel();
+                for (int i = 0; i < 20; i++) {
+                    double t = (double) i / 20;
+                    double x = player.getX() + (partner.getX() - player.getX()) * t;
+                    double y = player.getY() + 1.5 + (partner.getY() - player.getY()) * t;
+                    double z = player.getZ() + (partner.getZ() - player.getZ()) * t;
+                    level.sendParticles(ParticleTypes.HEART, x, y + random.nextDouble() * 0.5, z, 1, 0, 0.05, 0, 0);
+                }
+            }
         },
 
         WHISPER_LOVE("whisper_love", 0.6, 12) {
             @Override
-            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                // 音符粒子
+                ServerLevel level = player.serverLevel();
+                for (int i = 0; i < 15; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 0.5 + random.nextDouble() * 1.5;
+                    double x = player.getX() + Math.cos(angle) * radius;
+                    double z = player.getZ() + Math.sin(angle) * radius;
+                    level.sendParticles(ParticleTypes.NOTE,
+                            x, player.getY() + 1.5 + random.nextDouble() * 0.5, z,
+                            1, random.nextDouble() * 2, 0, 0, 1.0);
+                }
+            }
         },
 
         GENTLE_KISS("gentle_kiss", 0.4, 18) {
             @Override
-            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                // 爱心爆发
+                ServerLevel level = player.serverLevel();
+                double centerX = (player.getX() + partner.getX()) / 2;
+                double centerZ = (player.getZ() + partner.getZ()) / 2;
+                double centerY = Math.max(player.getY(), partner.getY()) + 1.5;
+
+                for (int i = 0; i < 40; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 0.5 + random.nextDouble() * 3;
+                    level.sendParticles(ParticleTypes.HEART,
+                            centerX + Math.cos(angle) * radius,
+                            centerY + random.nextDouble() * 2 - 1,
+                            centerZ + Math.sin(angle) * radius,
+                            1, 0, 0.1, 0, 0.1);
+                }
+                level.playSound(null, centerX, centerY, centerZ,
+                        SoundEvents.CHICKEN_EGG, SoundSource.PLAYERS, 0.5f, 1.5f);
+            }
         },
 
         CONFESSION("confession", 0.2, 25) {
             @Override
-            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                // 大量爱心 + 药水效果
+                ServerLevel level = player.serverLevel();
+                double centerX = (player.getX() + partner.getX()) / 2;
+                double centerZ = (player.getZ() + partner.getZ()) / 2;
+                double centerY = Math.max(player.getY(), partner.getY()) + 1;
+
+                for (int i = 0; i < 80; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 0.5 + random.nextDouble() * 4;
+                    level.sendParticles(ParticleTypes.HEART,
+                            centerX + Math.cos(angle) * radius,
+                            centerY + random.nextDouble() * 3 - 1.5,
+                            centerZ + Math.sin(angle) * radius,
+                            1, 0, 0.2, 0, 0.1);
+                }
+
+                player.addEffect(new MobEffectInstance(MobEffects.LUCK, 6000, 1));
+                partner.addEffect(new MobEffectInstance(MobEffects.LUCK, 6000, 1));
+
+                level.playSound(null, centerX, centerY, centerZ,
+                        SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1.0f, 1.0f);
+            }
         },
 
         HEART_TO_HEART("heart_to_heart", 1.0, 10) {
@@ -154,7 +282,7 @@ public class RomanticEventManager {
             }
         },
 
-        RAINBOW_PACTRAINBOW_PACT("rainbow_pact", 0.8, 15) {
+        RAINBOW_PACT("rainbow_pact", 0.8, 15) {
             @Override
             public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
                 ServerLevel level = player.serverLevel();
@@ -164,17 +292,13 @@ public class RomanticEventManager {
                 double distance = 3.0;
 
                 if (isSinglePlayer) {
-                    // 单机模式
                     centerX = player.getX();
                     centerZ = player.getZ();
                     baseY = player.getY();
                     double randomAngle = random.nextDouble() * Math.PI * 2;
-
                     ParticleEffectHelper.spawnRainbowArch(level, centerX, centerZ, baseY, distance, randomAngle);
                     ParticleEffectHelper.spawnHeartCircles(level, centerX, centerZ, baseY, 50, 1.5, 3.5);
-
                 } else {
-                    // 多人模式
                     centerX = (player.getX() + partner.getX()) / 2;
                     centerZ = (player.getZ() + partner.getZ()) / 2;
                     baseY = Math.max(player.getY(), partner.getY());
@@ -185,6 +309,7 @@ public class RomanticEventManager {
                     );
 
                     ParticleEffectHelper.spawnRainbowArch(level, centerX, centerZ, baseY, distance, directionAngle);
+                    ParticleEffectHelper.spawnHeartCircles(level, centerX, centerZ, baseY, 50, 1.5, 3.5);
 
                     // 两端心形
                     double radius = Math.min(distance * 0.5 + 1.5, 5.0);
@@ -201,16 +326,38 @@ public class RomanticEventManager {
                     }
                 }
 
-                // 播放音效
-                ParticleEffectHelper.playRomanticSounds(level, centerX, baseY + 2, centerZ);
+                // ★★★ 彩虹拱桥给予生命恢复和饱和 ★★★
+                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 400, 1));    // 20秒生命恢复
+                player.addEffect(new MobEffectInstance(MobEffects.SATURATION, 400, 1));      // 20秒饱和
+                partner.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 400, 1));
+                partner.addEffect(new MobEffectInstance(MobEffects.SATURATION, 400, 1));
 
-                MCARomanticExpansion.LOGGER.debug("✅ Semicircle rainbow arch generated! (Single player mode: {})", isSinglePlayer);
+                ParticleEffectHelper.playRomanticSounds(level, centerX, baseY + 2, centerZ);
+                MCARomanticExpansion.LOGGER.debug("✅ Rainbow arch + Regen/Saturation buffs applied!");
             }
         },
 
         TIME_STANDS_STILL("time_stands_still", 0.6, 12) {
             @Override
-            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {}
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                // 时钟粒子效果
+                ServerLevel level = player.serverLevel();
+                double centerX = (player.getX() + partner.getX()) / 2;
+                double centerZ = (player.getZ() + partner.getZ()) / 2;
+                double centerY = Math.max(player.getY(), partner.getY()) + 2;
+
+                for (int i = 0; i < 60; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 1.0 + random.nextDouble() * 3;
+                    double x = centerX + Math.cos(angle) * radius;
+                    double z = centerZ + Math.sin(angle) * radius;
+                    level.sendParticles(ParticleTypes.ENCHANTED_HIT,
+                            x, centerY + random.nextDouble() * 2 - 1, z,
+                            1, 0, 0.1, 0, 0.1);
+                }
+                level.playSound(null, centerX, centerY, centerZ,
+                        SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 1.0f, 1.0f);
+            }
         },
 
         SYNCHRONY_TEST("synchrony_test", 0.4, 20) {
@@ -225,6 +372,187 @@ public class RomanticEventManager {
                         uuid -> new RomanticEventState());
                 partnerState.synchronyTestActive = true;
                 partnerState.synchronyTestStartTime = partner.serverLevel().getGameTime();
+
+                // 同步光效
+                ServerLevel level = player.serverLevel();
+                for (int i = 0; i < 30; i++) {
+                    double t = (double) i / 30;
+                    double x = player.getX() + (partner.getX() - player.getX()) * t;
+                    double y = player.getY() + 1.5 + (partner.getY() - player.getY()) * t;
+                    double z = player.getZ() + (partner.getZ() - player.getZ()) * t;
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
+                            x, y + random.nextDouble() * 0.5, z,
+                            1, 0, 0.1, 0, 0.1);
+                }
+            }
+        },
+
+        // ===== ★★★ 新增强化事件 ★★★ =====
+
+        // 英雄救美：生成5只僵尸缓慢包围玩家
+        HERO_RESQUE("hero_resque", 0.3, 30) {
+            @Override
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                ServerLevel level = player.serverLevel();
+                UUID playerId = player.getUUID();
+
+                // 清理之前残留的僵尸
+                if (heroZombies.containsKey(playerId)) {
+                    heroZombies.get(playerId).forEach(zombie -> zombie.remove(Entity.RemovalReason.DISCARDED));
+                    heroZombies.remove(playerId);
+                }
+
+                List<Zombie> spawnedZombies = new ArrayList<>();
+                int zombieCount = 5 + random.nextInt(3); // 5-7只
+                double radius = 8 + random.nextDouble() * 4; // 8-12格距离
+
+                // 显示警告
+                player.sendSystemMessage(Component.literal("§c⚠️ 危险！僵尸正在靠近！"));
+                partner.sendSystemMessage(Component.literal("§c⚠️ 危险！僵尸正在靠近！"));
+
+                // 播放警告音效
+                level.playSound(null, player.blockPosition(),
+                        SoundEvents.ZOMBIE_AMBIENT, SoundSource.HOSTILE, 0.5f, 0.5f);
+
+                for (int i = 0; i < zombieCount; i++) {
+                    double angle = (i / (double) zombieCount) * Math.PI * 2 + random.nextDouble() * 0.5;
+                    double x = player.getX() + Math.cos(angle) * radius;
+                    double z = player.getZ() + Math.sin(angle) * radius;
+
+                    // 找到地面高度
+                    double y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, (int)x, (int)z);
+
+                    Zombie zombie = new Zombie(EntityType.ZOMBIE, level);
+                    zombie.setPos(x, y, z);
+                    zombie.setTarget(player);
+                    zombie.setAggressive(true);
+                    zombie.setBaby(false);
+
+                    // 给僵尸缓慢效果，制造压迫感
+                    zombie.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0));
+
+                    level.addFreshEntity(zombie);
+                    spawnedZombies.add(zombie);
+
+                    // 生成时的粒子效果
+                    level.sendParticles(ParticleTypes.POOF, x, y + 1, z, 10, 0.5, 0.5, 0.5, 0.1);
+                }
+
+                heroZombies.put(playerId, spawnedZombies);
+
+                // 5秒后检查并移除未死亡的僵尸（防止卡住）
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (heroZombies.containsKey(playerId)) {
+                            List<Zombie> remaining = heroZombies.get(playerId);
+                            if (!remaining.isEmpty()) {
+                                remaining.forEach(zombie -> {
+                                    if (zombie.isAlive()) {
+                                        zombie.remove(Entity.RemovalReason.DISCARDED);
+                                    }
+                                });
+                                heroZombies.remove(playerId);
+                            }
+                        }
+                    }
+                }, 30000); // 30秒后清理
+
+                MCARomanticExpansion.LOGGER.info("⚔️ Hero Resque triggered! {} zombies spawned around {}", zombieCount, player.getName().getString());
+            }
+        },
+
+        // 月光小夜曲：夜晚氛围 + 萤火虫粒子
+        MOONLIGHT_SERENADE("moonlight_serenade", 0.3, 20) {
+            @Override
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                ServerLevel level = player.serverLevel();
+                double centerX = (player.getX() + partner.getX()) / 2;
+                double centerZ = (player.getZ() + partner.getZ()) / 2;
+                double centerY = Math.max(player.getY(), partner.getY());
+
+                // 设置夜晚时间（如果是白天）
+                if (level.isDay()) {
+                    level.setDayTime(14000); // 夜晚开始时间
+                }
+
+                // 萤火虫粒子（使用原版粒子模拟）
+                for (int i = 0; i < 100; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 2 + random.nextDouble() * 5;
+                    double x = centerX + Math.cos(angle) * radius;
+                    double z = centerZ + Math.sin(angle) * radius;
+                    double y = centerY + random.nextDouble() * 4;
+                    level.sendParticles(ParticleTypes.END_ROD,
+                            x, y, z, 1, 0, 0.01, 0, 0.05);
+                }
+
+                // 缓慢漂浮的萤火虫轨迹
+                for (int i = 0; i < 20; i++) {
+                    double angle = random.nextDouble() * Math.PI * 2;
+                    double radius = 1.0 + random.nextDouble() * 3;
+                    double x = centerX + Math.cos(angle) * radius;
+                    double z = centerZ + Math.sin(angle) * radius;
+                    double y = centerY + 0.5 + random.nextDouble() * 3;
+                    level.sendParticles(ParticleTypes.ENCHANTED_HIT,
+                            x, y, z, 1, 0, 0.02, 0, 0.02);
+                }
+
+//                // 播放音乐
+//                level.playSound(null, centerX, centerY, centerZ,
+//                        SoundEvents.MUSIC_DISC_OTHERSIDE, SoundSource.RECORDS, 1.0f, 1.0f);
+
+                // 给予月光效果：夜视
+                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 0)); // 60秒
+                partner.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 1200, 0));
+
+                MCARomanticExpansion.LOGGER.info("🌙 Moonlight Serenade triggered!");
+            }
+        },
+
+        // 流星雨：浪漫流星划过天际
+        STARFALL("starfall", 0.25, 25) {
+            @Override
+            public void triggerEffect(ServerPlayer player, ServerPlayer partner) {
+                ServerLevel level = player.serverLevel();
+                double centerX = (player.getX() + partner.getX()) / 2;
+                double centerZ = (player.getZ() + partner.getZ()) / 2;
+                double centerY = Math.max(player.getY(), partner.getY()) + 10;
+
+                // 生成20颗流星
+                for (int i = 0; i < 20; i++) {
+                    double startX = centerX + (random.nextDouble() - 0.5) * 20;
+                    double startZ = centerZ + (random.nextDouble() - 0.5) * 20;
+                    double endX = startX + (random.nextDouble() - 0.5) * 6;
+                    double endZ = startZ + (random.nextDouble() - 0.5) * 6;
+
+                    // 流星轨迹
+                    for (int step = 0; step < 30; step++) {
+                        double t = (double) step / 30;
+                        double x = startX + (endX - startX) * t;
+                        double z = startZ + (endZ - startZ) * t;
+                        double y = centerY - t * 8;
+
+                        level.sendParticles(ParticleTypes.FIREWORK,
+                                x, y, z, 0, 0, 0, 0, 0);
+                        level.sendParticles(ParticleTypes.GLOW,
+                                x, y, z, 1, 0, 0, 0, 0.1);
+                    }
+
+                    // 流星落地时的光效
+                    level.sendParticles(ParticleTypes.END_ROD,
+                            endX, centerY - 8, endZ, 5, 0.5, 0.5, 0.5, 0.1);
+                }
+
+                // 播放音乐
+//                level.playSound(null, centerX, centerY, centerZ,
+//                        SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 2.0f, 0.8f);
+
+                // 给予幸运效果
+                player.addEffect(new MobEffectInstance(MobEffects.LUCK, 1200, 1));
+                partner.addEffect(new MobEffectInstance(MobEffects.LUCK, 1200, 1));
+
+                MCARomanticExpansion.LOGGER.info("🌟 Starfall triggered!");
             }
         };
 

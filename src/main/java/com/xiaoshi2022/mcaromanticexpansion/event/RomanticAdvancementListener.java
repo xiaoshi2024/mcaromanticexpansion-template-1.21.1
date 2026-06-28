@@ -54,6 +54,20 @@ public class RomanticAdvancementListener {
                 ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "confession"),
                 "confession"
         );
+
+        // ========== 新增强化事件 ==========
+        ADVANCEMENT_EVENT_MAP.put(
+                ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "hero_resque"),
+                "hero_resque"
+        );
+        ADVANCEMENT_EVENT_MAP.put(
+                ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "moonlight_serenade"),
+                "moonlight_serenade"
+        );
+        ADVANCEMENT_EVENT_MAP.put(
+                ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "starfall"),
+                "starfall"
+        );
     }
 
     @SubscribeEvent

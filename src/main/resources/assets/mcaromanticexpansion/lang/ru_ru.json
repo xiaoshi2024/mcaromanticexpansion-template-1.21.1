@@ -55,5 +55,24 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Обручен с %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Женат/Замужем за %s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "Благословение вам обоим"
+  "mcaromanticexpansion.ring.tooltip.blessing": "Благословение вам обоим",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Спаситель",
+  "advancements.mcaromanticexpansion.hero_resque.description": "Активируйте событие 'Спаситель' и защитите свою любовь!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Лунная Серенада",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Наслаждайтесь романтической ночью при лунном свете!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Звездопад",
+  "advancements.mcaromanticexpansion.starfall.description": "Загадайте желание под падающими звёздами!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Опасность! Зомби приближаются! Защити свою любовь!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Опасность! Зомби приближаются! Твоя любовь защитит тебя!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 Лунный свет озаряет ночь...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 Лунный свет озаряет ночь...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 Звезда падает с неба, загадай желание!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Звезда падает с неба, загадай желание вместе со мной!"
+
 }

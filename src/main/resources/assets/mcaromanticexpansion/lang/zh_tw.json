@@ -43,7 +43,7 @@
   "mcaromanticexpansion.gui.proposal.title": "求婚",
   "mcaromanticexpansion.gui.proposal.question": "%s 想要和你結婚！",
   "mcaromanticexpansion.gui.proposal.accept": "我願意！",
-  "mcaromanticexpansion.gui.proposal.reject": "抱歉，不行",
+  "mcaromanticexpansion.gui.proposal.reject": "抱歉，不能",
 
   "mcaromanticexpansion.gui.marriage.title": "婚禮儀式",
   "mcaromanticexpansion.gui.marriage.question": "%s 請求與你交換戒指結婚！雙方都需要擁有結婚戒指",
@@ -66,9 +66,9 @@
   "mcaromanticexpansion.marriage.failed": "§c婚禮失敗，請確保雙方都有戒指。",
 
   "mcaromanticexpansion.message.cannot_propose": "無法求婚：你們不合適",
-  "mcaromanticexpansion.message.proposal_sent": "求婚請求已傳送！",
+  "mcaromanticexpansion.message.proposal_sent": "求婚請求已發送！",
   "mcaromanticexpansion.message.cannot_marry": "無法結婚：雙方都需要擁有結婚戒指",
-  "mcaromanticexpansion.message.marriage_sent": "婚禮請求已傳送！",
+  "mcaromanticexpansion.message.marriage_sent": "婚禮請求已發送！",
   "mcaromanticexpansion.message.married": "恭喜你們結婚了！",
   "mcaromanticexpansion.message.divorce_success": "離婚成功",
   "mcaromanticexpansion.message.gift_placed": "已將物品放入禮盒",
@@ -111,6 +111,15 @@
 
   "advancements.mcaromanticexpansion.synchrony_test.title": "默契考驗",
   "advancements.mcaromanticexpansion.synchrony_test.description": "在共傘時觸發了默契考驗事件",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "英雄救美",
+  "advancements.mcaromanticexpansion.hero_resque.description": "觸發英雄救美事件，保護你的愛人！",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "月光小夜曲",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "在月光下享受浪漫的夜晚！",
+
+  "advancements.mcaromanticexpansion.starfall.title": "流星雨",
+  "advancements.mcaromanticexpansion.starfall.description": "在流星雨下許願！",
 
   "message.mcaromanticexpansion.pregnancy_start": "§d你與 %s 進入了備孕期！",
   "message.mcaromanticexpansion.pregnancy_start_partner": "§d你與 %s 進入了備孕期！",
@@ -159,6 +168,15 @@
 
   "event.mcaromanticexpansion.synchrony_test.player": "§d默契考驗：在接下來的1分鐘內，同時跳起！",
   "event.mcaromanticexpansion.synchrony_test.partner": "§d默契考驗：在接下來的1分鐘內，同時跳起！",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 危險！殭屍正在靠近！保護好你的愛人！",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 危險！殭屍正在靠近！你的愛人會保護你的！",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 月光灑落，夜晚如此美好...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 月光灑落，與你共度良宵...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 流星劃過天際，許個願吧！",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星劃過天際，與你一起許願！",
 
   "message.mcaromanticexpansion.affection.decay.attacker": "§c你傷害了 %s，好感度減少了 %d 點！",
   "message.mcaromanticexpansion.affection.decay.target": "§c%s 傷害了你，好感度減少了 %d 點！"

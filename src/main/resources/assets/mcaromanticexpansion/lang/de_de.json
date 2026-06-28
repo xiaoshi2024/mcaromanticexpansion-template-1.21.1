@@ -55,5 +55,23 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Verlobt mit %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Verheiratet mit %s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "Segen euch beiden"
+  "mcaromanticexpansion.ring.tooltip.blessing": "Segen euch beiden",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Heldenretter",
+  "advancements.mcaromanticexpansion.hero_resque.description": "Aktiviere das 'Heldenretter'-Event und beschütze deine Liebe!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Mondscheinserenade",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Genieße eine romantische Nacht im Mondlicht!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Sternschnuppenregen",
+  "advancements.mcaromanticexpansion.starfall.description": "Wünsche dir etwas unter dem Sternschnuppenregen!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Gefahr! Zombies nähern sich! Beschütze deine Liebe!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Gefahr! Zombies nähern sich! Deine Liebe wird dich beschützen!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 Mondlicht erhellt die Nacht...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 Mondlicht erhellt die Nacht...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 Eine Sternschnuppe durchquert den Himmel, wünsch dir was!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Eine Sternschnuppe durchquert den Himmel, gemeinsam mit dir!"
 }

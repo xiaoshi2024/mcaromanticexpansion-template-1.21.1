@@ -55,5 +55,23 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "%s 와 약혼 중",
   "mcaromanticexpansion.ring.tooltip.married_to": "%s 와 결혼 중",
-  "mcaromanticexpansion.ring.tooltip.blessing": "둘의 행복을 기원합니다"
+  "mcaromanticexpansion.ring.tooltip.blessing": "둘의 행복을 기원합니다",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "영웅 구출",
+  "advancements.mcaromanticexpansion.hero_resque.description": "영웅 구출 이벤트를 발동시키고 사랑하는 사람을 보호하세요!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "달빛 세레나데",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "달빛 아래 로맨틱한 밤을 즐겨보세요!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "유성우",
+  "advancements.mcaromanticexpansion.starfall.description": "유성우 아래에서 소원을 빌어보세요!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 위험! 좀비가 접근 중입니다! 사랑하는 사람을 지키세요!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 위험! 좀비가 접근 중입니다! 당신의 사랑이 당신을 지킬 거예요!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 달빛이 내리고, 밤이 아름답습니다...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 달빛이 내리고, 당신과 함께하는 밤...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 유성이 하늘을 가르며 떨어집니다, 소원을 빌어보세요!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 유성이 하늘을 가르며 떨어집니다, 당신과 함께 소원을 빕니다!"
 }

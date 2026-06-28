@@ -161,6 +161,24 @@
   "event.mcaromanticexpansion.synchrony_test.partner": "§dSynchrony Test: Jump at the same time within the next minute!",
 
   "message.mcaromanticexpansion.affection.decay.attacker": "§cYou hurt %s, affection decreased by %d points!",
-  "message.mcaromanticexpansion.affection.decay.target": "§c%s hurt you, affection decreased by %d points!"
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s hurt you, affection decreased by %d points!",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Hero Rescue",
+  "advancements.mcaromanticexpansion.hero_resque.description": "Trigger the Hero Rescue event and protect your love!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Moonlight Serenade",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Enjoy a romantic night under the moonlight!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Starfall",
+  "advancements.mcaromanticexpansion.starfall.description": "Make a wish under the shooting stars!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Danger! Zombies are approaching! Protect your love!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Danger! Zombies are approaching! Your love will protect you!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 Moonlight falls, the night is beautiful...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 Moonlight falls, spending the night with you...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 A shooting star streaks across the sky, make a wish!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 A shooting star streaks across the sky, wishing with you!"
 
 }

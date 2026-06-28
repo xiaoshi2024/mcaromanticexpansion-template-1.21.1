@@ -55,5 +55,24 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Noivado com %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Casado com %s",
-  "mcaromanticexpansion.ring.tooltip.blessing": "Bênçãos para vocês dois"
+  "mcaromanticexpansion.ring.tooltip.blessing": "Bênçãos para vocês dois",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Herói Resgatador",
+  "advancements.mcaromanticexpansion.hero_resque.description": "Ative o evento 'Herói Resgatador' e proteja seu amor!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Serenata ao Luar",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Aproveite uma noite romântica sob o luar!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Chuva de Estrelas",
+  "advancements.mcaromanticexpansion.starfall.description": "Faça um pedido sob a chuva de estrelas!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Perigo! Zumbis estão se aproximando! Proteja seu amor!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Perigo! Zumbis estão se aproximando! Seu amor vai te proteger!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 A luz da lua ilumina a noite...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 A luz da lua ilumina a noite...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 Uma estrela cadente cruzou o céu, faça um pedido!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Uma estrela cadente cruzou o céu, fazendo um pedido com você!"
+
 }

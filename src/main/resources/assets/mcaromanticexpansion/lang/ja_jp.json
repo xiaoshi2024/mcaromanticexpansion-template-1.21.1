@@ -55,5 +55,24 @@
 
   "mcaromanticexpansion.ring.tooltip.engaged_to": "%s と婚約中",
   "mcaromanticexpansion.ring.tooltip.married_to": "%s と結婚中",
-  "mcaromanticexpansion.ring.tooltip.blessing": "二人の幸せを祈ります"
+  "mcaromanticexpansion.ring.tooltip.blessing": "二人の幸せを祈ります",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "英雄救美",
+  "advancements.mcaromanticexpansion.hero_resque.description": "英雄救美イベントを発動して、愛する人を守ろう！",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "月光のセレナーデ",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "月光の下でロマンチックな夜を楽しもう！",
+
+  "advancements.mcaromanticexpansion.starfall.title": "流星群",
+  "advancements.mcaromanticexpansion.starfall.description": "流星群の下で願いをかこう！",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 危険！ゾンビが接近中！愛する人を守れ！",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 危険！ゾンビが接近中！あなたの愛する人が守ってくれる！",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 月明かりが降り注ぐ、素敵な夜...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 月明かりが降り注ぐ、あなたとの夜...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 流星が空を駆け抜ける、願いをかけよう！",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星が空を駆け抜ける、あなたと一緒に願いをかける！"
+
 }

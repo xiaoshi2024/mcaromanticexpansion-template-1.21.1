@@ -161,6 +161,24 @@
   "event.mcaromanticexpansion.synchrony_test.partner": "§d默契考验：在接下来的1分钟内，同时跳起！",
 
   "message.mcaromanticexpansion.affection.decay.attacker": "§c你伤害了 %s，好感度减少了 %d 点！",
-  "message.mcaromanticexpansion.affection.decay.target": "§c%s 伤害了你，好感度减少了 %d 点！"
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s 伤害了你，好感度减少了 %d 点！",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "英雄救美",
+  "advancements.mcaromanticexpansion.hero_resque.description": "触发英雄救美事件，保护你的爱人！",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "月光小夜曲",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "在月光下享受浪漫的夜晚！",
+
+  "advancements.mcaromanticexpansion.starfall.title": "流星雨",
+  "advancements.mcaromanticexpansion.starfall.description": "在流星雨下许愿！",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 危险！僵尸正在靠近！保护好你的爱人！",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 危险！僵尸正在靠近！你的爱人会保护你的！",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 月光洒落，夜晚如此美好...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 月光洒落，与你共度良宵...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 流星划过天际，许个愿吧！",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星划过天际，与你一起许愿！"
 
 }
