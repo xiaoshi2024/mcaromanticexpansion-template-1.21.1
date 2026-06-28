@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.MarriageChangedEvent;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.item.WeddingRingItem;
@@ -13,6 +14,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.UUID;
 
@@ -57,6 +59,16 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
         try {
             PlayerSaveData receiverData = PlayerSaveData.get(receiver);
             PlayerSaveData partnerData = PlayerSaveData.get(partner);
+
+            MarriageChangedEvent forgeEvent = new MarriageChangedEvent(
+                    receiver, partner, MarriageChangedEvent.ChangeType.MARRIED
+            );
+            if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+                receiver.getInventory().add(receiverRing);
+                partner.getInventory().add(partnerRing);
+                MCARomanticExpansion.LOGGER.debug("Marriage canceled by event listener");
+                return;
+            }
 
             receiverData.marry(partner);
             partnerData.marry(receiver);

@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.ProposalRespondedEvent;
 import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
@@ -15,6 +16,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.UUID;
 
@@ -47,6 +49,12 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
 
         MCARomanticExpansion.LOGGER.debug("Processing proposal response: proposer={}, responder={}, accepted={}",
                 proposer.getName().getString(), responder.getName().getString(), accepted);
+
+        ProposalRespondedEvent forgeEvent = new ProposalRespondedEvent(responder, proposer, accepted);
+        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+            MCARomanticExpansion.LOGGER.debug("Proposal response canceled by event listener");
+            return;
+        }
 
         if (accepted) {
 

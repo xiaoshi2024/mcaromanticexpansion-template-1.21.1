@@ -2,6 +2,10 @@ package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
+import com.xiaoshi2022.mcaromanticexpansion.api.IRomanticEvent;
+import com.xiaoshi2022.mcaromanticexpansion.api.RomanticExpansionAPI;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.AffectionChangedEvent;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.RomanticEventTriggeredEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -18,6 +22,7 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.*;
 
@@ -73,37 +78,59 @@ public class RomanticEventManager {
             MCARomanticExpansion.LOGGER.debug("Triggering instant event for shared umbrella between {} and {}",
                     player.getName().getString(), partner.getName().getString());
 
-            // ========== 扩展事件列表 ==========
-            List<RomanticEvent> instantEvents = Arrays.asList(
+            List<RomanticEvent> builtinEvents = Arrays.asList(
                     RomanticEvent.HEART_TO_HEART,
                     RomanticEvent.RAINBOW_PACT,
                     RomanticEvent.TIME_STANDS_STILL,
                     RomanticEvent.SYNCHRONY_TEST,
-                    RomanticEvent.HERO_RESQUE,        // 新增：英雄救美
-                    RomanticEvent.MOONLIGHT_SERENADE,  // 新增：月光小夜曲
-                    RomanticEvent.STARFALL            // 新增：流星雨
+                    RomanticEvent.HERO_RESQUE,
+                    RomanticEvent.MOONLIGHT_SERENADE,
+                    RomanticEvent.STARFALL
             );
 
-            double totalWeight = instantEvents.stream().mapToDouble(RomanticEvent::weight).sum();
+            Collection<IRomanticEvent> customEvents = RomanticExpansionAPI.getCustomEvents();
+            double builtinWeight = builtinEvents.stream().mapToDouble(RomanticEvent::weight).sum();
+            double customWeight = customEvents.stream().mapToDouble(IRomanticEvent::weight).sum();
+
+            double totalWeight = builtinWeight + customWeight;
             double randomValue = random.nextDouble() * totalWeight;
             double accumulated = 0;
 
-            for (RomanticEvent event : instantEvents) {
+            boolean triggered = false;
+
+            for (RomanticEvent event : builtinEvents) {
                 accumulated += event.weight();
                 if (randomValue <= accumulated) {
                     triggerEvent(event, player, partner);
-                    umbrellaState.eventTriggered = true;
-                    umbrellaEventStates.put(pairKey, umbrellaState);
-
-                    RomanticEventState playerState = new RomanticEventState();
-                    playerState.lastEventTime = EVENT_CHECK_INTERVAL;
-                    eventStates.put(player.getUUID(), playerState);
-
-                    RomanticEventState partnerState = new RomanticEventState();
-                    partnerState.lastEventTime = EVENT_CHECK_INTERVAL;
-                    eventStates.put(partner.getUUID(), partnerState);
+                    triggered = true;
                     break;
                 }
+            }
+
+            if (!triggered && !customEvents.isEmpty()) {
+                double remaining = randomValue - builtinWeight;
+                double acc = 0;
+                for (IRomanticEvent ev : customEvents) {
+                    acc += ev.weight();
+                    if (remaining <= acc) {
+                        RomanticExpansionAPI.triggerRomanticEvent(player, partner, ev.id());
+                        triggered = true;
+                        break;
+                    }
+                }
+            }
+
+            if (triggered) {
+                umbrellaState.eventTriggered = true;
+                umbrellaEventStates.put(pairKey, umbrellaState);
+
+                RomanticEventState playerState = new RomanticEventState();
+                playerState.lastEventTime = EVENT_CHECK_INTERVAL;
+                eventStates.put(player.getUUID(), playerState);
+
+                RomanticEventState partnerState = new RomanticEventState();
+                partnerState.lastEventTime = EVENT_CHECK_INTERVAL;
+                eventStates.put(partner.getUUID(), partnerState);
             }
         }
     }
@@ -134,18 +161,95 @@ public class RomanticEventManager {
         MCARomanticExpansion.LOGGER.debug("=== ROMANTIC EVENT TRIGGERED: {} between {} and {} ===",
                 event.id(), player.getName().getString(), partner.getName().getString());
 
-        // ========== 调用成就触发方法 ==========
+        RomanticEventTriggeredEvent forgeEvent = new RomanticEventTriggeredEvent(
+                player, partner, event.id(), false, event.affectionBonus()
+        );
+        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+            MCARomanticExpansion.LOGGER.debug("Romantic event {} canceled by event listener", event.id());
+            return;
+        }
+
         triggerEventAchievement(player, event.id());
         triggerEventAchievement(partner, event.id());
 
         event.triggerEffect(player, partner);
 
-        player.sendSystemMessage(event.getPlayerMessage());
-        partner.sendSystemMessage(event.getPartnerMessage());
+        if (event.getPlayerMessage() != null) {
+            player.sendSystemMessage(event.getPlayerMessage());
+        }
+        if (event.getPartnerMessage() != null) {
+            partner.sendSystemMessage(event.getPartnerMessage());
+        }
 
-        AffectionManager.addAffection(player, partner, event.affectionBonus());
-        AffectionManager.addAffection(partner, player, event.affectionBonus());
+        addRomanticEventAffection(player, partner, event.affectionBonus());
+        addRomanticEventAffection(partner, player, event.affectionBonus());
         MCARomanticExpansion.LOGGER.debug("=== Added {} affection bonus for both players ===", event.affectionBonus());
+    }
+
+    private static void addRomanticEventAffection(ServerPlayer player, ServerPlayer target, int amount) {
+        CompoundTag persistentData = player.getPersistentData();
+        int current = getAffectionFromNBTStatic(persistentData, target.getUUID());
+        int newValue = current + amount;
+        if (newValue < -100) newValue = -100;
+
+        AffectionChangedEvent event = new AffectionChangedEvent(
+                player, target, current, newValue, AffectionChangedEvent.ChangeReason.ROMANTIC_EVENT
+        );
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return;
+        }
+        int finalValue = event.getNewValue();
+        setAffectionToNBTStatic(persistentData, target.getUUID(), finalValue);
+        sendAffectionSyncStatic(player, target.getUUID(), finalValue);
+    }
+
+    private static int getAffectionFromNBTStatic(CompoundTag tag, UUID targetUUID) {
+        String AFFECTION_TAG = "RomanticAffection";
+        String TARGET_UUID_TAG = "TargetUUID";
+        String AFFECTION_VALUE_TAG = "AffectionValue";
+        ListTag affectionList = tag.getList(AFFECTION_TAG, Tag.TAG_COMPOUND);
+        for (int i = 0; i < affectionList.size(); i++) {
+            CompoundTag entry = affectionList.getCompound(i);
+            if (entry.getString(TARGET_UUID_TAG).equals(targetUUID.toString())) {
+                return entry.getInt(AFFECTION_VALUE_TAG);
+            }
+        }
+        return 0;
+    }
+
+    private static void setAffectionToNBTStatic(CompoundTag tag, UUID targetUUID, int value) {
+        String AFFECTION_TAG = "RomanticAffection";
+        String TARGET_UUID_TAG = "TargetUUID";
+        String AFFECTION_VALUE_TAG = "AffectionValue";
+        String LAST_INTERACTION_TAG = "LastInteractionTime";
+        ListTag affectionList = tag.getList(AFFECTION_TAG, Tag.TAG_COMPOUND);
+        boolean found = false;
+        for (int i = 0; i < affectionList.size(); i++) {
+            CompoundTag entry = affectionList.getCompound(i);
+            if (entry.getString(TARGET_UUID_TAG).equals(targetUUID.toString())) {
+                entry.putInt(AFFECTION_VALUE_TAG, value);
+                entry.putLong(LAST_INTERACTION_TAG, System.currentTimeMillis());
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            CompoundTag newEntry = new CompoundTag();
+            newEntry.putString(TARGET_UUID_TAG, targetUUID.toString());
+            newEntry.putInt(AFFECTION_VALUE_TAG, value);
+            newEntry.putLong(LAST_INTERACTION_TAG, System.currentTimeMillis());
+            affectionList.add(newEntry);
+        }
+        tag.put(AFFECTION_TAG, affectionList);
+    }
+
+    private static void sendAffectionSyncStatic(ServerPlayer player, UUID targetUUID, int affection) {
+        try {
+            Class<?> packetClass = Class.forName("com.xiaoshi2022.mcaromanticexpansion.network.AffectionSyncPacket");
+            java.lang.reflect.Method sendMethod = packetClass.getMethod("sendToClient", ServerPlayer.class, UUID.class, int.class);
+            sendMethod.invoke(null, player, targetUUID, affection);
+        } catch (Exception ignored) {
+        }
     }
 
     // ========== 添加这个私有方法 ==========

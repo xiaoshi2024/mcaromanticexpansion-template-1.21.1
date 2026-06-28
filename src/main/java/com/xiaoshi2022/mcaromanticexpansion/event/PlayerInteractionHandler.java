@@ -2,6 +2,9 @@ package com.xiaoshi2022.mcaromanticexpansion.event;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.MarriageChangedEvent;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.ProposalSentEvent;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.SharedUmbrellaRequestEvent;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
@@ -27,6 +30,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @SuppressWarnings("unused")
@@ -84,7 +88,6 @@ public class PlayerInteractionHandler {
     }
 
     private static void handleSharedUmbrella(ServerPlayer player, ServerPlayer target) {
-        // 检查伞是否被意外关闭（因为 RightClickItem 先于 EntityInteract 触发）
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
 
@@ -96,6 +99,13 @@ public class PlayerInteractionHandler {
             if (UmbrellaItem.getState(offHand) != UmbrellaItem.State.FULL_OPEN) {
                 UmbrellaItem.setUmbrellaState(offHand, UmbrellaItem.State.FULL_OPEN);
             }
+        }
+
+        SharedUmbrellaRequestEvent requestEvent = new SharedUmbrellaRequestEvent(player, target);
+        if (NeoForge.EVENT_BUS.post(requestEvent).isCanceled()) {
+            MCARomanticExpansion.LOGGER.debug("Shared umbrella request canceled by event listener for {} -> {}",
+                    player.getName().getString(), target.getName().getString());
+            return;
         }
 
         SharedUmbrellaManager.sendRequest(player, target);
@@ -282,6 +292,13 @@ public class PlayerInteractionHandler {
             return;
         }
 
+        ProposalSentEvent sentEvent = new ProposalSentEvent(proposer, target);
+        if (NeoForge.EVENT_BUS.post(sentEvent).isCanceled()) {
+            MCARomanticExpansion.LOGGER.debug("Proposal canceled by event listener for {} -> {}",
+                    proposer.getName().getString(), target.getName().getString());
+            return;
+        }
+
         sendProposalRequest(proposer, target);
         CooldownManager.setCooldown(proposer.getUUID(), "proposal");
         proposer.sendSystemMessage(Component.literal("§a已向 " + target.getName().getString() + " 发送求婚请求！").withStyle(ChatFormatting.GREEN));
@@ -357,6 +374,15 @@ public class PlayerInteractionHandler {
 
         if (!senderIsMarried || !targetIsSpouse) {
             sender.sendSystemMessage(Component.literal("§c只有已婚玩家才能向配偶递交离婚协议书！").withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        MarriageChangedEvent forgeEvent = new MarriageChangedEvent(
+                sender, target, MarriageChangedEvent.ChangeType.DIVORCED
+        );
+        if (NeoForge.EVENT_BUS.post(forgeEvent).isCanceled()) {
+            MCARomanticExpansion.LOGGER.debug("Divorce canceled by event listener for {} -> {}",
+                    sender.getName().getString(), target.getName().getString());
             return;
         }
 

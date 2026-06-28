@@ -4,6 +4,7 @@ package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.SharedUmbrellaEstablishedEvent;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaRequestPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaResponsePacket;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.HashMap;
@@ -140,6 +142,13 @@ public class SharedUmbrellaManager {
             if (requester.distanceTo(responder) > MAX_DISTANCE) {
                 requester.sendSystemMessage(Component.literal("§c距离太远，无法共伞！").withStyle(ChatFormatting.RED));
                 responder.sendSystemMessage(Component.literal("§c距离太远，无法共伞！").withStyle(ChatFormatting.RED));
+                return;
+            }
+
+            SharedUmbrellaEstablishedEvent establishedEvent = new SharedUmbrellaEstablishedEvent(requester, responder);
+            if (NeoForge.EVENT_BUS.post(establishedEvent).isCanceled()) {
+                MCARomanticExpansion.LOGGER.debug("Shared umbrella establishment canceled by event listener for {} and {}",
+                        requester.getName().getString(), responder.getName().getString());
                 return;
             }
 

@@ -1,11 +1,13 @@
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.api.event.AffectionChangedEvent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,32 +48,50 @@ public class AffectionManager {
     }
 
     public static void addAffection(Player player, Player target, int amount) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
+        if (!(player instanceof ServerPlayer serverPlayer) || !(target instanceof ServerPlayer serverTarget)) {
             return;
         }
         CompoundTag persistentData = serverPlayer.getPersistentData();
         int current = getAffectionFromNBT(persistentData, target.getUUID());
-        int newValue = current + amount;  // 移除 Math.min(current + amount, 100) 限制
-        // 可以加一个最低限制，防止无限负值
+        int newValue = current + amount;
         if (newValue < -100) newValue = -100;
 
+        AffectionChangedEvent event = new AffectionChangedEvent(
+                serverPlayer, serverTarget, current, newValue, AffectionChangedEvent.ChangeReason.ADD
+        );
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            MCARomanticExpansion.LOGGER.debug("Affection change canceled by event for {} -> {}",
+                    player.getName().getString(), target.getName().getString());
+            return;
+        }
+        int finalValue = event.getNewValue();
+
         MCARomanticExpansion.LOGGER.debug("Affection change for {} -> {}: {} + {} = {}",
-                player.getName().getString(), target.getName().getString(), current, amount, newValue);
+                player.getName().getString(), target.getName().getString(), current, amount, finalValue);
 
-        setAffectionToNBT(persistentData, target.getUUID(), newValue);
+        setAffectionToNBT(persistentData, target.getUUID(), finalValue);
 
-        sendAffectionSync(serverPlayer, target.getUUID(), newValue);
+        sendAffectionSync(serverPlayer, target.getUUID(), finalValue);
     }
 
     public static void setAffection(Player player, Player target, int value) {
-        if (!(player instanceof ServerPlayer serverPlayer)) {
+        if (!(player instanceof ServerPlayer serverPlayer) || !(target instanceof ServerPlayer serverTarget)) {
             return;
         }
         CompoundTag persistentData = serverPlayer.getPersistentData();
+        int current = getAffectionFromNBT(persistentData, target.getUUID());
         int clampedValue = Math.min(value, 100);
+
+        AffectionChangedEvent event = new AffectionChangedEvent(
+                serverPlayer, serverTarget, current, clampedValue, AffectionChangedEvent.ChangeReason.SET
+        );
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return;
+        }
+        clampedValue = event.getNewValue();
+
         setAffectionToNBT(persistentData, target.getUUID(), clampedValue);
         
-        // 发送同步包给客户端
         sendAffectionSync(serverPlayer, target.getUUID(), clampedValue);
     }
 
@@ -125,18 +145,34 @@ public class AffectionManager {
     }
 
     public static void handleInteraction(InteractionType type, Player player, Player target) {
+        if (!(player instanceof ServerPlayer serverPlayer) || !(target instanceof ServerPlayer serverTarget)) {
+            return;
+        }
         int amount = switch (type) {
-            case GIFT -> 5;        // 礼物：5点
-            case BOUQUET -> 8;     // 花束：8点（之前是15点，太高了）
-            case SHARED_UMBRELLA -> 1;  // 共伞：每段时间1点（之前是2点）
-            case KISS -> 15;       // 亲吻：15点
-            case DANCE -> 10;      // 跳舞：10点
-            case PROPOSAL_ACCEPT -> 20;  // 接受求婚：20点
-            case MARRIAGE -> 30;   // 结婚：30点
-            case HUG -> 6;         // 拥抱：6点
-            case WHISPER -> 3;     // 悄悄话：3点
+            case GIFT -> 5;
+            case BOUQUET -> 8;
+            case SHARED_UMBRELLA -> 1;
+            case KISS -> 15;
+            case DANCE -> 10;
+            case PROPOSAL_ACCEPT -> 20;
+            case MARRIAGE -> 30;
+            case HUG -> 6;
+            case WHISPER -> 3;
         };
-        addAffection(player, target, amount);
+        CompoundTag persistentData = serverPlayer.getPersistentData();
+        int current = getAffectionFromNBT(persistentData, target.getUUID());
+        int newValue = current + amount;
+        if (newValue < -100) newValue = -100;
+
+        AffectionChangedEvent event = new AffectionChangedEvent(
+                serverPlayer, serverTarget, current, newValue, AffectionChangedEvent.ChangeReason.INTERACTION
+        );
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return;
+        }
+        int finalValue = event.getNewValue();
+        setAffectionToNBT(persistentData, target.getUUID(), finalValue);
+        sendAffectionSync(serverPlayer, target.getUUID(), finalValue);
     }
 
     public enum InteractionType {
