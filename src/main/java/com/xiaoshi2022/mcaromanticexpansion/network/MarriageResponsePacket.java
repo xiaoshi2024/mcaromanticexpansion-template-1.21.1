@@ -61,7 +61,7 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
             receiverData.marry(partner);
             partnerData.marry(receiver);
 
-            MCARomanticExpansion.LOGGER.info("Successfully married {} and {}",
+            MCARomanticExpansion.LOGGER.debug("Successfully married {} and {}",
                     receiver.getName().getString(), partner.getName().getString());
 
             // ========== 关键修复：使用 createWeddingRingWithPartner 方法 ==========
@@ -73,14 +73,14 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
             receiver.getInventory().add(customReceiverRing);
             partner.getInventory().add(customPartnerRing);
 
-            MCARomanticExpansion.LOGGER.info("Added custom wedding rings to both players");
+            MCARomanticExpansion.LOGGER.debug("Added custom wedding rings to both players");
 
             receiver.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success", partner.getName()));
             partner.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success", receiver.getName()));
 
             // ========== 添加好感度：结婚 ==========
             AffectionManager.handleInteraction(AffectionManager.InteractionType.MARRIAGE, receiver, partner);
-            MCARomanticExpansion.LOGGER.info("Added MARRIAGE affection for {} and {}",
+            MCARomanticExpansion.LOGGER.debug("Added MARRIAGE affection for {} and {}",
                     receiver.getName().getString(), partner.getName().getString());
 
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public record MarriageResponsePacket(UUID partnerUUID, boolean confirmed) implem
 
         // 设置伴侣信息
         ItemStack result = RingNBTUtil.setWeddingRingPartner(originalRing, partner, isReceiver);
-        MCARomanticExpansion.LOGGER.info("Created wedding ring for: {} (isReceiver={})", partner.getName().getString(), isReceiver);
+        MCARomanticExpansion.LOGGER.debug("Created wedding ring for: {} (isReceiver={})", partner.getName().getString(), isReceiver);
         return result;
     }
 }

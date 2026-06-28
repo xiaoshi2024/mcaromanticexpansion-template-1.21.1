@@ -17,6 +17,7 @@ public class AffectionDecayHandler {
 
     private static final int DAMAGE_THRESHOLD = 3;
     private static final int AFFECTION_PENALTY = 10;
+    private static final int MIN_AFFECTION = -100;  // 最低好感度限制
 
     private static boolean hasFamilyTreeInInventory(Player player) {
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
@@ -46,20 +47,16 @@ public class AffectionDecayHandler {
         float damage = event.getNewDamage();
         if (damage <= DAMAGE_THRESHOLD) return;
 
-        // ✅ 修复：检查攻击者对目标的好感度
-        int currentAffection = AffectionManager.getAffection(serverAttacker, serverTarget);
-        if (currentAffection <= 0) {
-            // 没有好感度，不需要惩罚（或者惩罚为0）
-            MCARomanticExpansion.LOGGER.debug("No affection from {} to {}, skipping decay",
-                    attacker.getName().getString(), target.getName().getString());
-            return;
-        }
+        // ========== 修复：移除 <= 0 的检查，允许好感度降到负数 ==========
+        // 不再检查 currentAffection <= 0，直接扣减
 
-        // ✅ 修复：攻击者对目标的好感度减少
         int penalty = calculatePenalty(damage);
         AffectionManager.addAffection(serverAttacker, serverTarget, -penalty);
 
-        // 发送通知
+        // 获取扣减后的好感度用于日志
+        int newAffection = AffectionManager.getAffection(serverAttacker, serverTarget);
+
+        // 发送通知（只有持有家谱的玩家才显示）
         if (hasFamilyTreeInInventory(serverAttacker)) {
             sendActionBarMessage(serverAttacker,
                     Component.translatable("message.mcaromanticexpansion.affection.decay.attacker",
@@ -74,9 +71,8 @@ public class AffectionDecayHandler {
                             .withStyle(ChatFormatting.RED));
         }
 
-        MCARomanticExpansion.LOGGER.info("Affection decayed: {} attacked {}, penalty: {} points (from {} to {})",
-                attacker.getName().getString(), target.getName().getString(), penalty,
-                serverAttacker.getName().getString(), serverTarget.getName().getString());
+        MCARomanticExpansion.LOGGER.debug("Affection decayed: {} attacked {}, penalty: {} points, new affection: {}",
+                attacker.getName().getString(), target.getName().getString(), penalty, newAffection);
     }
 
     @SubscribeEvent
@@ -86,13 +82,11 @@ public class AffectionDecayHandler {
         if (!(target instanceof ServerPlayer serverTarget)) return;
         if (attacker == target) return;
 
-        // ✅ 修复：检查攻击者对目标的好感度
-        int currentAffection = AffectionManager.getAffection(attacker, serverTarget);
-        if (currentAffection <= 0) return;
-
+        // ========== 修复：移除 <= 0 的检查，允许好感度降到负数 ==========
         int penalty = AFFECTION_PENALTY;
-        // ✅ 修复：攻击者对目标的好感度减少
         AffectionManager.addAffection(attacker, serverTarget, -penalty);
+
+        int newAffection = AffectionManager.getAffection(attacker, serverTarget);
 
         if (hasFamilyTreeInInventory(attacker)) {
             sendActionBarMessage(attacker,
@@ -108,8 +102,8 @@ public class AffectionDecayHandler {
                             .withStyle(ChatFormatting.RED));
         }
 
-        MCARomanticExpansion.LOGGER.info("Affection decayed: {} attacked {} (via AttackEntityEvent), penalty: {} points",
-                attacker.getName().getString(), target.getName().getString(), penalty);
+        MCARomanticExpansion.LOGGER.debug("Affection decayed: {} attacked {} (via AttackEntityEvent), penalty: {} points, new affection: {}",
+                attacker.getName().getString(), target.getName().getString(), penalty, newAffection);
     }
 
     private static int calculatePenalty(float damage) {

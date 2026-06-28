@@ -16,8 +16,8 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PregnancyAttemptHandler {
     // 使用线程安全的 ConcurrentHashMap
@@ -98,14 +98,14 @@ public class PregnancyAttemptHandler {
                 Gender gender = Gender.byId(genderId);
 
                 if (gender != Gender.UNASSIGNED) {
-                    MCARomanticExpansion.LOGGER.info("Found Gender field for {}: {}",
+                    MCARomanticExpansion.LOGGER.debug("Found Gender field for {}: {}",
                             player.getName().getString(), gender);
 
                     // 修复：同步到小写 gender 字段（让MCA的getGender()也能读到）
                     if (!entityData.contains("gender") || entityData.getInt("gender") != genderId) {
                         entityData.putInt("gender", genderId);
                         data.setDirty();
-                        MCARomanticExpansion.LOGGER.info("Fixed gender for {}: copied from 'Gender' to 'gender'",
+                        MCARomanticExpansion.LOGGER.debug("Fixed gender for {}: copied from 'Gender' to 'gender'",
                                 player.getName().getString());
                     }
                     return;
@@ -157,7 +157,7 @@ public class PregnancyAttemptHandler {
                 data.setEntityDataSet(true);
                 data.setDirty();
 
-                MCARomanticExpansion.LOGGER.info("Set gender for {} to {} (both fields)",
+                MCARomanticExpansion.LOGGER.debug("Set gender for {} to {} (both fields)",
                         player.getName().getString(), gender);
 
                 player.sendSystemMessage(Component.literal("§a[MCA] 你的性别已设置为: " +
@@ -187,13 +187,13 @@ public class PregnancyAttemptHandler {
             BlockPos bedPos = player.getSleepingPos().get();
             if (bedPos != null && !sleepingPlayers.containsKey(playerId)) {
                 sleepingPlayers.put(playerId, bedPos);
-                MCARomanticExpansion.LOGGER.info("Player {} is sleeping at position {}",
+                MCARomanticExpansion.LOGGER.debug("Player {} is sleeping at position {}",
                         player.getName().getString(), bedPos);
                 checkNearbySleepingPlayers(player, bedPos, player.serverLevel());
             }
         } else if (!player.isSleeping() && sleepingPlayers.containsKey(playerId)) {
             sleepingPlayers.remove(playerId);
-            MCARomanticExpansion.LOGGER.info("Player {} woke up", player.getName().getString());
+            MCARomanticExpansion.LOGGER.debug("Player {} woke up", player.getName().getString());
         }
     }
 
@@ -219,7 +219,7 @@ public class PregnancyAttemptHandler {
                     }
                     // 检查是否有玩家正在修改性别
                     if (isGenderChanging(player) || isGenderChanging(otherPlayer)) {
-                        MCARomanticExpansion.LOGGER.info("Gender changing in progress, skipping pregnancy check");
+                        MCARomanticExpansion.LOGGER.debug("Gender changing in progress, skipping pregnancy check");
                         continue;
                     }
                     checkPregnancyConditions(player, otherPlayer);
@@ -245,22 +245,22 @@ public class PregnancyAttemptHandler {
     }
 
     private static void checkPregnancyConditions(ServerPlayer player1, ServerPlayer player2) {
-        MCARomanticExpansion.LOGGER.info("Checking pregnancy conditions for {} and {}",
+        MCARomanticExpansion.LOGGER.debug("Checking pregnancy conditions for {} and {}",
                 player1.getName().getString(), player2.getName().getString());
 
         // 直接从 NBT 读取大写 Gender 字段（绕过MCA的getGender() Bug）
         Gender gender1 = getGenderFromNBT(player1);
         Gender gender2 = getGenderFromNBT(player2);
 
-        MCARomanticExpansion.LOGGER.info("Player {} gender: {}, Player {} gender: {}",
+        MCARomanticExpansion.LOGGER.debug("Player {} gender: {}, Player {} gender: {}",
                 player1.getName().getString(), gender1, player2.getName().getString(), gender2);
 
         if (gender1 == gender2 || gender1 == Gender.UNASSIGNED || gender2 == Gender.UNASSIGNED) {
             if (gender1 == gender2) {
-                MCARomanticExpansion.LOGGER.info("Same gender players ({} and {}), pregnancy check skipped",
+                MCARomanticExpansion.LOGGER.debug("Same gender players ({} and {}), pregnancy check skipped",
                         player1.getName().getString(), player2.getName().getString());
             } else {
-                MCARomanticExpansion.LOGGER.info("One or both players have UNASSIGNED gender, pregnancy check skipped");
+                MCARomanticExpansion.LOGGER.debug("One or both players have UNASSIGNED gender, pregnancy check skipped");
                 // 提示玩家设置性别
                 if (gender1 == Gender.UNASSIGNED) {
                     player1.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别！")
@@ -275,32 +275,32 @@ public class PregnancyAttemptHandler {
 
         if (PregnancyManager.isPlayerInPregnancyPeriod(player1.getUUID()) ||
                 PregnancyManager.isPlayerInPregnancyPeriod(player2.getUUID())) {
-            MCARomanticExpansion.LOGGER.info("One of the players is already in pregnancy period");
+            MCARomanticExpansion.LOGGER.debug("One of the players is already in pregnancy period");
             return;
         }
 
         boolean player1Satiated = PregnancyManager.isFullSatiated(player1);
         boolean player2Satiated = PregnancyManager.isFullSatiated(player2);
-        MCARomanticExpansion.LOGGER.info("Player {} satiated: {}, Player {} satiated: {}",
+        MCARomanticExpansion.LOGGER.debug("Player {} satiated: {}, Player {} satiated: {}",
                 player1.getName().getString(), player1Satiated, player2.getName().getString(), player2Satiated);
 
         if (!player1Satiated || !player2Satiated) {
-            MCARomanticExpansion.LOGGER.info("Players are not fully satiated, pregnancy check skipped");
+            MCARomanticExpansion.LOGGER.debug("Players are not fully satiated, pregnancy check skipped");
             return;
         }
 
         double chance = PregnancyManager.calculatePregnancyChance(player1, player2);
-        MCARomanticExpansion.LOGGER.info("Pregnancy chance between {} and {}: {}%",
+        MCARomanticExpansion.LOGGER.debug("Pregnancy chance between {} and {}: {}%",
                 player1.getName().getString(), player2.getName().getString(), chance * 100);
 
         double random = player1.getRandom().nextDouble();
-        MCARomanticExpansion.LOGGER.info("Random roll: {}, required: {}", random, chance);
+        MCARomanticExpansion.LOGGER.debug("Random roll: {}, required: {}", random, chance);
 
         if (random < chance) {
             ServerPlayer femalePlayer = gender1 == Gender.FEMALE ? player1 : player2;
             ServerPlayer malePlayer = gender1 == Gender.MALE ? player1 : player2;
 
-            MCARomanticExpansion.LOGGER.info("Pregnancy triggered! Female: {}, Male: {}",
+            MCARomanticExpansion.LOGGER.debug("Pregnancy triggered! Female: {}, Male: {}",
                     femalePlayer.getName().getString(), malePlayer.getName().getString());
 
             PregnancyManager.startPregnancyPeriod(femalePlayer, malePlayer, femalePlayer.serverLevel().getGameTime());
@@ -312,7 +312,7 @@ public class PregnancyAttemptHandler {
                     "message.mcaromanticexpansion.pregnancy_start_partner",
                     femalePlayer.getName().getString()));
         } else {
-            MCARomanticExpansion.LOGGER.info("Pregnancy not triggered this time");
+            MCARomanticExpansion.LOGGER.debug("Pregnancy not triggered this time");
         }
     }
 
@@ -328,7 +328,7 @@ public class PregnancyAttemptHandler {
 
                 // 确保数据已初始化
                 if (!data.isEntityDataSet()) {
-                    MCARomanticExpansion.LOGGER.info("Initializing MCA data for {}", player.getName().getString());
+                    MCARomanticExpansion.LOGGER.debug("Initializing MCA data for {}", player.getName().getString());
                     data.setEntityDataSet(true);
                     setGenderData(player, Gender.MALE); // 默认男性
                     return Gender.MALE;
@@ -339,7 +339,7 @@ public class PregnancyAttemptHandler {
                     int genderId = entityData.getInt("Gender");
                     Gender gender = Gender.byId(genderId);
                     if (gender != Gender.UNASSIGNED) {
-                        MCARomanticExpansion.LOGGER.info("Gender from 'Gender' field for {}: {}",
+                        MCARomanticExpansion.LOGGER.debug("Gender from 'Gender' field for {}: {}",
                                 player.getName().getString(), gender);
                         return gender;
                     }
@@ -352,7 +352,7 @@ public class PregnancyAttemptHandler {
                         int genderId = genetics.getInt("Gender");
                         Gender gender = Gender.byId(genderId);
                         if (gender != Gender.UNASSIGNED) {
-                            MCARomanticExpansion.LOGGER.info("Gender from Genetics.Gender for {}: {}",
+                            MCARomanticExpansion.LOGGER.debug("Gender from Genetics.Gender for {}: {}",
                                     player.getName().getString(), gender);
                             return gender;
                         }
@@ -364,7 +364,7 @@ public class PregnancyAttemptHandler {
                     int genderId = entityData.getInt("gender");
                     Gender gender = Gender.byId(genderId);
                     if (gender != Gender.UNASSIGNED) {
-                        MCARomanticExpansion.LOGGER.info("Gender from 'gender' field for {}: {}",
+                        MCARomanticExpansion.LOGGER.debug("Gender from 'gender' field for {}: {}",
                                 player.getName().getString(), gender);
                         return gender;
                     }
@@ -392,7 +392,7 @@ public class PregnancyAttemptHandler {
             return;
         }
 
-        MCARomanticExpansion.LOGGER.info("Attempting pregnancy for player {} with partner {}",
+        MCARomanticExpansion.LOGGER.debug("Attempting pregnancy for player {} with partner {}",
                 player.getName().getString(), partner.getName().getString());
 
         try {
@@ -414,7 +414,7 @@ public class PregnancyAttemptHandler {
                     "message.mcaromanticexpansion.pregnancy_success_partner",
                     player.getName().getString()));
 
-            MCARomanticExpansion.LOGGER.info("Pregnancy successful for player {}", player.getName().getString());
+            MCARomanticExpansion.LOGGER.debug("Pregnancy successful for player {}", player.getName().getString());
         } catch (Exception e) {
             MCARomanticExpansion.LOGGER.error("Failed to trigger procreation: {}", e.getMessage());
             e.printStackTrace();

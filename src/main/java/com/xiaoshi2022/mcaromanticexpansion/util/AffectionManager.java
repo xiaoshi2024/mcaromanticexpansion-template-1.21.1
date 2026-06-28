@@ -6,7 +6,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.scores.PlayerTeam;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,14 +51,15 @@ public class AffectionManager {
         }
         CompoundTag persistentData = serverPlayer.getPersistentData();
         int current = getAffectionFromNBT(persistentData, target.getUUID());
-        int newValue = Math.min(current + amount, 100);
-        
-        MCARomanticExpansion.LOGGER.debug("Affection change for {} -> {}: {} + {} = {}", 
+        int newValue = current + amount;  // 移除 Math.min(current + amount, 100) 限制
+        // 可以加一个最低限制，防止无限负值
+        if (newValue < -100) newValue = -100;
+
+        MCARomanticExpansion.LOGGER.debug("Affection change for {} -> {}: {} + {} = {}",
                 player.getName().getString(), target.getName().getString(), current, amount, newValue);
-        
+
         setAffectionToNBT(persistentData, target.getUUID(), newValue);
-        
-        // 发送同步包给客户端
+
         sendAffectionSync(serverPlayer, target.getUUID(), newValue);
     }
 

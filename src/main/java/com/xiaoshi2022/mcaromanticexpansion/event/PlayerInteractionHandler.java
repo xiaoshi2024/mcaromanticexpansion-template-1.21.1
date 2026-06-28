@@ -56,7 +56,7 @@ public class PlayerInteractionHandler {
         var stack = event.getItemStack();
         var item = stack.getItem();
 
-//        MCARomanticExpansion.LOGGER.info("Player {} interacting with {} using {}",
+//        MCARomanticExpansion.LOGGER.debug("Player {} interacting with {} using {}",
 //                player.getName().getString(), targetPlayer.getName().getString(), item.getClass().getSimpleName());
 
         if (item instanceof BouquetItem) {
@@ -125,7 +125,7 @@ public class PlayerInteractionHandler {
             
             // ========== 添加好感度：赠送礼物 ==========
             AffectionManager.handleInteraction(AffectionManager.InteractionType.GIFT, giver, receiver);
-            MCARomanticExpansion.LOGGER.info("Added GIFT affection for {} -> {}",
+            MCARomanticExpansion.LOGGER.debug("Added GIFT affection for {} -> {}",
                     giver.getName().getString(), receiver.getName().getString());
         }
     }
@@ -378,21 +378,21 @@ public class PlayerInteractionHandler {
 
     private static void sendProposalRequest(ServerPlayer sender, ServerPlayer receiver) {
         OpenProposalGUIPacket packet = new OpenProposalGUIPacket(sender.getUUID(), sender.getName().getString());
-        MCARomanticExpansion.LOGGER.info("Sending OpenProposalGUIPacket to {} from {}",
+        MCARomanticExpansion.LOGGER.debug("Sending OpenProposalGUIPacket to {} from {}",
                 receiver.getName().getString(), sender.getName().getString());
         receiver.connection.send(packet);
     }
 
     private static void sendBouquetRequest(ServerPlayer sender, ServerPlayer receiver) {
         OpenBouquetGUIPacket packet = new OpenBouquetGUIPacket(sender.getUUID(), sender.getName().getString());
-        MCARomanticExpansion.LOGGER.info("Sending OpenBouquetGUIPacket to {} from {}",
+        MCARomanticExpansion.LOGGER.debug("Sending OpenBouquetGUIPacket to {} from {}",
                 receiver.getName().getString(), sender.getName().getString());
         receiver.connection.send(packet);
     }
 
     private static void sendMarriageRequest(ServerPlayer sender, ServerPlayer receiver) {
         OpenMarriageGUIPacket packet = new OpenMarriageGUIPacket(sender.getUUID(), sender.getName().getString());
-        MCARomanticExpansion.LOGGER.info("Sending OpenMarriageGUIPacket to {} from {}",
+        MCARomanticExpansion.LOGGER.debug("Sending OpenMarriageGUIPacket to {} from {}",
                 receiver.getName().getString(), sender.getName().getString());
         receiver.connection.send(packet);
     }
@@ -452,11 +452,11 @@ public class PlayerInteractionHandler {
 
                         // 触发成就：红妆揭面
                         try {
-                            MCARomanticExpansion.LOGGER.info("Attempting to trigger unveil_veil advancement for player: {}", player.getName().getString());
+                            MCARomanticExpansion.LOGGER.debug("Attempting to trigger unveil_veil advancement for player: {}", player.getName().getString());
                             var trigger = CriterionTriggerRegister.UNVEIL_VEIL.get();
                             if (trigger != null) {
                                 trigger.trigger(player);
-                                MCARomanticExpansion.LOGGER.info("Successfully triggered unveil_veil advancement!");
+                                MCARomanticExpansion.LOGGER.debug("Successfully triggered unveil_veil advancement!");
                             } else {
                                 MCARomanticExpansion.LOGGER.error("UnveilVeilTrigger is null, cannot trigger advancement");
                             }

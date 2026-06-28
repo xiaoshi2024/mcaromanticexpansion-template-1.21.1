@@ -104,7 +104,7 @@ public class PregnancyManager {
     public static void saveAllToPersistentData() {
         // 注意：这个方法需要在正确获取 ServerPlayer 列表的地方调用
         // 由于没有现成的 player 实例，这个方法需要传入 player 或由外部调用
-        MCARomanticExpansion.LOGGER.info("Saving all pregnancy data to persistent storage");
+        MCARomanticExpansion.LOGGER.debug("Saving all pregnancy data to persistent storage");
     }
 
     /**
@@ -141,7 +141,7 @@ public class PregnancyManager {
 
             if (data != null && data.isActive()) {
                 playerPregnancyData.put(player.getUUID(), data);
-                MCARomanticExpansion.LOGGER.info("Loaded pregnancy data for player: {}", player.getName().getString());
+                MCARomanticExpansion.LOGGER.debug("Loaded pregnancy data for player: {}", player.getName().getString());
             }
         }
     }
@@ -178,7 +178,7 @@ public class PregnancyManager {
         // 保存到持久化数据
         saveToPersistentData(player);
 
-        MCARomanticExpansion.LOGGER.info("Player {} started pregnancy period with partner {}",
+        MCARomanticExpansion.LOGGER.debug("Player {} started pregnancy period with partner {}",
                 player.getName().getString(), partner.getName().getString());
 
         player.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
@@ -192,7 +192,7 @@ public class PregnancyManager {
     public static void removePregnancyPeriod(UUID playerId) {
         PregnancyData data = playerPregnancyData.remove(playerId);
         if (data != null) {
-            MCARomanticExpansion.LOGGER.info("Removed pregnancy period for player {}", playerId);
+            MCARomanticExpansion.LOGGER.debug("Removed pregnancy period for player {}", playerId);
         }
     }
 
@@ -207,7 +207,7 @@ public class PregnancyManager {
         PregnancyData data = playerPregnancyData.get(playerId);
         if (data != null) {
             data.setActive(false);
-            MCARomanticExpansion.LOGGER.info("Deactivated pregnancy period for player {}", playerId);
+            MCARomanticExpansion.LOGGER.debug("Deactivated pregnancy period for player {}", playerId);
         }
     }
 

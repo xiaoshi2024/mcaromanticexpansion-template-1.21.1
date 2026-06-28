@@ -5,10 +5,8 @@ import com.xiaoshi2022.mcaromanticexpansion.content.block.UmbrellaStandBlockEnti
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.DeferredHolder;
-
-import java.util.function.Supplier;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModBlockEntities {
     // BlockEntityType 使用 DeferredRegister 注册

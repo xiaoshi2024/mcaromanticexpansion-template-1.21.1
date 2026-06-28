@@ -237,9 +237,9 @@ public class HUDConfigScreen extends Screen {
                 centerX - 5, centerY - 28, 0xAAAAAA);
 
         // ★★★ 显示坐标信息 ★★★
-        String coordInfo = getPositionInfo(currentPos);
+        String coorddebug = getPositiondebug(currentPos);
         guiGraphics.drawString(this.font,
-                Component.literal("§8" + coordInfo),
+                Component.literal("§8" + coorddebug),
                 centerX - 145, centerY + 10, 0x666666);
 
         // ★★★ 提示 ★★★
@@ -257,7 +257,7 @@ public class HUDConfigScreen extends Screen {
     }
 
     // ★★★ 获取位置的文字描述 ★★★
-    private String getPositionInfo(String position) {
+    private String getPositiondebug(String position) {
         switch (position) {
             case "TOP_LEFT": return "左上角 (距左20px, 距顶20px)";
             case "TOP_CENTER": return "顶部居中 (距顶20px)";

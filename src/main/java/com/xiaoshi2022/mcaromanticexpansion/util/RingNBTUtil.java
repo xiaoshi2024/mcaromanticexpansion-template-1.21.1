@@ -60,7 +60,7 @@ public class RingNBTUtil {
             return ring;
         }
 
-        MCARomanticExpansion.LOGGER.info("Setting wedding ring partner: {}, isReceiver={}", partner.getName().getString(), isReceiver);
+        MCARomanticExpansion.LOGGER.debug("Setting wedding ring partner: {}, isReceiver={}", partner.getName().getString(), isReceiver);
 
         CustomData customData = getOrCreateCustomData(ring);
         CompoundTag tag = customData.copyTag();
@@ -72,7 +72,7 @@ public class RingNBTUtil {
 
         setCustomData(ring, tag);
 
-        MCARomanticExpansion.LOGGER.info("NBT data saved: PartnerName={}, PartnerUUID={}",
+        MCARomanticExpansion.LOGGER.debug("NBT data saved: PartnerName={}, PartnerUUID={}",
                 tag.getString(TAG_PARTNER_NAME), tag.getUUID(TAG_PARTNER_UUID));
 
         // 根据持有者身份设置不同显示名称
@@ -84,7 +84,7 @@ public class RingNBTUtil {
         }
         ring.set(DataComponents.CUSTOM_NAME, displayName);
 
-        MCARomanticExpansion.LOGGER.info("Set custom name: {}", displayName.getString());
+        MCARomanticExpansion.LOGGER.debug("Set custom name: {}", displayName.getString());
 
         return ring;
     }

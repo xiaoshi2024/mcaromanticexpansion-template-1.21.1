@@ -4,7 +4,9 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.loading.FMLPaths;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
@@ -50,7 +52,7 @@ public class MarriageConfig {
                     }
                 }
 
-                MCARomanticExpansion.LOGGER.info("Loaded marriage config: allowSameGender={}, playerOverrides={}",
+                MCARomanticExpansion.LOGGER.debug("Loaded marriage config: allowSameGender={}, playerOverrides={}",
                         allowSameGenderMarriage, playerOverrides.size());
             } catch (IOException e) {
                 MCARomanticExpansion.LOGGER.warn("Failed to load marriage config: {}", e.getMessage());
@@ -80,7 +82,7 @@ public class MarriageConfig {
 
         try (OutputStream out = Files.newOutputStream(CONFIG_PATH)) {
             props.store(out, "MCARomanticExpansion Marriage Config");
-            MCARomanticExpansion.LOGGER.info("Saved marriage config to: {}", CONFIG_PATH);
+            MCARomanticExpansion.LOGGER.debug("Saved marriage config to: {}", CONFIG_PATH);
         } catch (IOException e) {
             MCARomanticExpansion.LOGGER.error("Failed to save marriage config: {}", e.getMessage());
         }
@@ -101,7 +103,7 @@ public class MarriageConfig {
     public static void setGlobalAllowSameGenderMarriage(boolean allow) {
         allowSameGenderMarriage = allow;
         saveConfig();  // 自动保存
-        MCARomanticExpansion.LOGGER.info("Global same-gender marriage setting changed to: {}", allow);
+        MCARomanticExpansion.LOGGER.debug("Global same-gender marriage setting changed to: {}", allow);
     }
 
     public static boolean isGlobalAllowSameGenderMarriage() {
@@ -115,7 +117,7 @@ public class MarriageConfig {
             playerOverrides.put(playerName, allow);
         }
         saveConfig();  // 自动保存
-        MCARomanticExpansion.LOGGER.info("Player {} same-gender marriage setting changed to: {}", playerName, allow);
+        MCARomanticExpansion.LOGGER.debug("Player {} same-gender marriage setting changed to: {}", playerName, allow);
     }
 
     public static Boolean getPlayerAllowSameGenderMarriage(String playerName) {

@@ -5,7 +5,6 @@ package com.xiaoshi2022.mcaromanticexpansion.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;

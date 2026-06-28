@@ -78,7 +78,7 @@ public class RomanticEventManager {
         for (RomanticEvent event : RomanticEvent.values()) {
             if (event.id().equals(eventId)) {
                 triggerEvent(event, player, partner);
-                MCARomanticExpansion.LOGGER.info("✅ Manually triggered event: {} for {} and {}",
+                MCARomanticExpansion.LOGGER.debug("✅ Manually triggered event: {} for {} and {}",
                         eventId, player.getName().getString(), partner.getName().getString());
                 return;
             }
@@ -204,7 +204,7 @@ public class RomanticEventManager {
                 // 播放音效
                 ParticleEffectHelper.playRomanticSounds(level, centerX, baseY + 2, centerZ);
 
-                MCARomanticExpansion.LOGGER.info("✅ Semicircle rainbow arch generated! (Single player mode: {})", isSinglePlayer);
+                MCARomanticExpansion.LOGGER.debug("✅ Semicircle rainbow arch generated! (Single player mode: {})", isSinglePlayer);
             }
         },
 

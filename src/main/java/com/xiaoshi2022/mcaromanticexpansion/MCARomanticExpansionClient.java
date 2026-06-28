@@ -10,7 +10,6 @@ import com.xiaoshi2022.mcaromanticexpansion.config.HUDConfig;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
-import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModParticles;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -62,7 +61,7 @@ public class MCARomanticExpansionClient {
                 ModParticles.RAINBOW_PARTICLE.get(),
                 RainbowParticle.Provider::new
         );
-        MCARomanticExpansion.LOGGER.info("✅ Registered rainbow particle provider");
+        MCARomanticExpansion.LOGGER.debug("✅ Registered rainbow particle provider");
     }
 
     @SubscribeEvent

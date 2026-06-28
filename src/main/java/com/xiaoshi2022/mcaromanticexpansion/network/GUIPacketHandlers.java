@@ -12,34 +12,34 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class GUIPacketHandlers {
     @OnlyIn(Dist.CLIENT)
     public static void handleOpenBouquetGUI(OpenBouquetGUIPacket packet) {
-        MCARomanticExpansion.LOGGER.info("CLIENT: OpenBouquetGUIPacket received! giverUUID={}, giverName={}",
+        MCARomanticExpansion.LOGGER.debug("CLIENT: OpenBouquetGUIPacket received! giverUUID={}, giverName={}",
                 packet.giverUUID(), packet.giverName());
         Minecraft.getInstance().execute(() -> {
-            MCARomanticExpansion.LOGGER.info("CLIENT: Opening BouquetScreen for UUID: {}", packet.giverUUID());
+            MCARomanticExpansion.LOGGER.debug("CLIENT: Opening BouquetScreen for UUID: {}", packet.giverUUID());
             Minecraft.getInstance().setScreen(new BouquetScreen(packet.giverUUID(), packet.giverName()));
-            MCARomanticExpansion.LOGGER.info("CLIENT: BouquetScreen opened successfully!");
+            MCARomanticExpansion.LOGGER.debug("CLIENT: BouquetScreen opened successfully!");
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void handleOpenProposalGUI(OpenProposalGUIPacket packet) {
-        MCARomanticExpansion.LOGGER.info("CLIENT: OpenProposalGUIPacket received! proposerUUID={}, proposerName={}",
+        MCARomanticExpansion.LOGGER.debug("CLIENT: OpenProposalGUIPacket received! proposerUUID={}, proposerName={}",
                 packet.proposerUUID(), packet.proposerName());
         Minecraft.getInstance().execute(() -> {
-            MCARomanticExpansion.LOGGER.info("CLIENT: Opening ProposalScreen for UUID: {}", packet.proposerUUID());
+            MCARomanticExpansion.LOGGER.debug("CLIENT: Opening ProposalScreen for UUID: {}", packet.proposerUUID());
             Minecraft.getInstance().setScreen(new ProposalScreen(packet.proposerUUID(), packet.proposerName()));
-            MCARomanticExpansion.LOGGER.info("CLIENT: ProposalScreen opened successfully!");
+            MCARomanticExpansion.LOGGER.debug("CLIENT: ProposalScreen opened successfully!");
         });
     }
 
     @OnlyIn(Dist.CLIENT)
     public static void handleOpenMarriageGUI(OpenMarriageGUIPacket packet) {
-        MCARomanticExpansion.LOGGER.info("CLIENT: OpenMarriageGUIPacket received! partnerUUID={}, partnerName={}",
+        MCARomanticExpansion.LOGGER.debug("CLIENT: OpenMarriageGUIPacket received! partnerUUID={}, partnerName={}",
                 packet.partnerUUID(), packet.partnerName());
         Minecraft.getInstance().execute(() -> {
-            MCARomanticExpansion.LOGGER.info("CLIENT: Opening MarriageScreen for UUID: {}", packet.partnerUUID());
+            MCARomanticExpansion.LOGGER.debug("CLIENT: Opening MarriageScreen for UUID: {}", packet.partnerUUID());
             Minecraft.getInstance().setScreen(new MarriageScreen(packet.partnerUUID(), packet.partnerName()));
-            MCARomanticExpansion.LOGGER.info("CLIENT: MarriageScreen opened successfully!");
+            MCARomanticExpansion.LOGGER.debug("CLIENT: MarriageScreen opened successfully!");
         });
     }
 }

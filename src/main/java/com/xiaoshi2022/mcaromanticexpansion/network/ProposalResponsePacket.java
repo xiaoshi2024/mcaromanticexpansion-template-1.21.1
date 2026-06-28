@@ -45,7 +45,7 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
             return;
         }
 
-        MCARomanticExpansion.LOGGER.info("Processing proposal response: proposer={}, responder={}, accepted={}",
+        MCARomanticExpansion.LOGGER.debug("Processing proposal response: proposer={}, responder={}, accepted={}",
                 proposer.getName().getString(), responder.getName().getString(), accepted);
 
         if (accepted) {
@@ -83,7 +83,7 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
                     RingNBTUtil.setEngagementRingTarget(ringWithNBT, responder);
                     stack.shrink(1);
                     found = true;
-                    MCARomanticExpansion.LOGGER.info("Removed engagement ring from proposer");
+                    MCARomanticExpansion.LOGGER.debug("Removed engagement ring from proposer");
                     break;
                 }
             }
@@ -91,14 +91,14 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
             // 然后调用 MCA 的接受求婚方法
             try {
                 ServerInteractionManager.getInstance().acceptProposal(proposer, responder);
-                MCARomanticExpansion.LOGGER.info("MCA acceptProposal called successfully");
+                MCARomanticExpansion.LOGGER.debug("MCA acceptProposal called successfully");
             } catch (Exception e) {
                 MCARomanticExpansion.LOGGER.error("MCA acceptProposal failed", e);
             }
 
             if (found && ringWithNBT != null) {
                 responder.getInventory().add(ringWithNBT);
-                MCARomanticExpansion.LOGGER.info("Added custom engagement ring to responder");
+                MCARomanticExpansion.LOGGER.debug("Added custom engagement ring to responder");
             }
 
             // 发送成功消息 - 使用不同的格式避免与 MCA 冲突
@@ -107,7 +107,7 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
 
             // ========== 添加好感度：接受求婚 ==========
             AffectionManager.handleInteraction(AffectionManager.InteractionType.PROPOSAL_ACCEPT, proposer, responder);
-            MCARomanticExpansion.LOGGER.info("Added PROPOSAL_ACCEPT affection for {} and {}",
+            MCARomanticExpansion.LOGGER.debug("Added PROPOSAL_ACCEPT affection for {} and {}",
                     proposer.getName().getString(), responder.getName().getString());
         } else {
             ServerInteractionManager.getInstance().rejectProposal(proposer, responder);

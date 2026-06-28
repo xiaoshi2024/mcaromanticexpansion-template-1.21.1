@@ -5,7 +5,6 @@ import com.xiaoshi2022.mcaromanticexpansion.util.RomanticEventManager;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 
@@ -63,7 +62,7 @@ public class RomanticAdvancementListener {
         AdvancementHolder advancementHolder = event.getAdvancement();
         ResourceLocation advId = advancementHolder.id();
 
-        MCARomanticExpansion.LOGGER.info("Player {} earned advancement: {}",
+        MCARomanticExpansion.LOGGER.debug("Player {} earned advancement: {}",
                 player.getName().getString(), advId);
 
         String eventId = ADVANCEMENT_EVENT_MAP.get(advId);
@@ -71,7 +70,7 @@ public class RomanticAdvancementListener {
             return;
         }
 
-        MCARomanticExpansion.LOGGER.info("🎉 Romantic advancement detected: {}, triggering event: {}",
+        MCARomanticExpansion.LOGGER.debug("🎉 Romantic advancement detected: {}, triggering event: {}",
                 advId, eventId);
 
         // ========== 修改：找不到伴侣时，用自己作为伴侣 ==========

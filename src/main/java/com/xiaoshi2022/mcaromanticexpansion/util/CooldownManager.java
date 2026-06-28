@@ -48,7 +48,7 @@ public class CooldownManager {
                 marriageCooldown.put(playerId, currentTime);
                 break;
         }
-        MCARomanticExpansion.LOGGER.info("Set {} cooldown for player {}", type, playerId);
+        MCARomanticExpansion.LOGGER.debug("Set {} cooldown for player {}", type, playerId);
     }
 
     public static long getRemainingCooldown(UUID playerId, String type) {
