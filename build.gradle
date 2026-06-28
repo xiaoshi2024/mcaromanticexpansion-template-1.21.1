@@ -249,3 +249,33 @@ idea {
         downloadJavadoc = true
     }
 }
+
+// ========== 生成版本属性文件 ==========
+task generateVersionProperties(type: ProcessResources) {
+    def replaceProperties = [
+            mod_id      : project.mod_id,
+            mod_name    : project.mod_name,
+            mod_version : project.mod_version,
+            mod_license : project.mod_license,
+            mod_group_id: project.mod_group_id,
+            minecraft_version: project.minecraft_version,
+            neo_version : project.neo_version,
+            parchment_minecraft_version: project.parchment_minecraft_version,
+            parchment_mappings_version: project.parchment_mappings_version
+    ]
+
+    inputs.properties replaceProperties
+    expand replaceProperties
+
+    from 'src/main/templates'
+    into 'build/generated/resources'
+    include 'version.properties'
+}
+
+// 确保生成的资源被包含
+sourceSets.main.resources.srcDir 'build/generated/resources'
+
+// 让 processResources 依赖这个任务
+processResources {
+    dependsOn generateVersionProperties
+}

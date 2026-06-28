@@ -5,6 +5,7 @@ import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister
 import com.xiaoshi2022.mcaromanticexpansion.command.BirthdayCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
+import com.xiaoshi2022.mcaromanticexpansion.command.UpdateCommand;
 import com.xiaoshi2022.mcaromanticexpansion.config.HUDConfig;
 import com.xiaoshi2022.mcaromanticexpansion.event.*;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlockEntities;
@@ -12,6 +13,7 @@ import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModParticles;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
+import com.xiaoshi2022.mcaromanticexpansion.util.ModInfo;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,13 +31,18 @@ import org.slf4j.Logger;
 @Mod(MCARomanticExpansion.MODID)
 public class MCARomanticExpansion {
     public static final String MODID = "mcaromanticexpansion";
+
+    public static final String MOD_NAME = ModInfo.getModName();  // 从配置文件读取
+    public static final String MOD_VERSION = ModInfo.getModVersion();  // 从配置文件读取
+
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public MCARomanticExpansion(IEventBus modEventBus, ModContainer modContainer) {
         // 注册配置文件
         modContainer.registerConfig(ModConfig.Type.CLIENT, HUDConfig.SPEC, "mcaromanticexpansion-client.toml");
         HUDConfig.markLoaded();
-
+// 打印版本信息
+        LOGGER.info("Loading {} version {}", MOD_NAME, MOD_VERSION);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
@@ -61,6 +68,7 @@ public class MCARomanticExpansion {
         BirthdayCommand.register(event.getDispatcher());
         PregnancyCommand.register(event.getDispatcher());
         MarriageConfigCommand.register(event.getDispatcher());
+        UpdateCommand.register(event.getDispatcher()); // 新增
     }
 
     @SubscribeEvent
