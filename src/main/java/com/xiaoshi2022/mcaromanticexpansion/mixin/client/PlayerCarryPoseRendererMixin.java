@@ -83,7 +83,7 @@ public abstract class PlayerCarryPoseRendererMixin {
         //   X轴: 左右偏移 (正=右, 负=左)
         //   Y轴: 上下偏移 (正=上)
         //   Z轴: 前后偏移 (正=前, 负=后)
-        poseStack.translate(0.2D, -1.2D, 0.8D);
+        poseStack.translate(0.2D, -1.2D, 0.3D);
 
         // 7. 可选：进一步微调位置适应不同玩家模型
         // 如果是抱在左肩，可以这样调整：

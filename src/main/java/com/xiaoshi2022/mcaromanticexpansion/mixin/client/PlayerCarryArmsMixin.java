@@ -24,22 +24,47 @@ public abstract class PlayerCarryArmsMixin<T extends LivingEntity> {
     public ModelPart leftArm;
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
-            at = @At("TAIL"))
-    private void mcae$raiseCarryArms(T entity, float limbSwing, float limbSwingAmount,
-                                     float ageInTicks, float netHeadYaw, float headPitch,
-                                     CallbackInfo ci) {
+            at = @At("HEAD"),
+            cancellable = false)
+    private void mcae$raiseCarryArmsPre(T entity, float limbSwing, float limbSwingAmount,
+                                        float ageInTicks, float netHeadYaw, float headPitch,
+                                        CallbackInfo ci) {
         if (!(entity instanceof Player player)) {
             return;
         }
         if (!CarryClientState.isCarrier(player.getUUID())) {
             return;
         }
-        this.rightArm.xRot = (float) Math.toRadians(-120.0d);
-        this.rightArm.yRot = (float) Math.toRadians(-20.0d);
+
+        // 手臂角度：-40度，略微内收（30度）
+        this.rightArm.xRot = (float) Math.toRadians(-40.0d);
+        this.rightArm.yRot = (float) Math.toRadians(29.0d);   // 右臂略微内收
         this.rightArm.zRot = (float) Math.toRadians(0.0d);
 
-        this.leftArm.xRot = (float) Math.toRadians(-120.0d);
-        this.leftArm.yRot = (float) Math.toRadians(20.0d);
+        this.leftArm.xRot = (float) Math.toRadians(-40.0d);
+        this.leftArm.yRot = (float) Math.toRadians(-22.0d);  // 左臂略微内收
+        this.leftArm.zRot = (float) Math.toRadians(0.0d);
+    }
+
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
+            at = @At("TAIL"))
+    private void mcae$raiseCarryArmsPost(T entity, float limbSwing, float limbSwingAmount,
+                                         float ageInTicks, float netHeadYaw, float headPitch,
+                                         CallbackInfo ci) {
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+        if (!CarryClientState.isCarrier(player.getUUID())) {
+            return;
+        }
+
+        // 再次确认
+        this.rightArm.xRot = (float) Math.toRadians(-40.0d);
+        this.rightArm.yRot = (float) Math.toRadians(29.0d);
+        this.rightArm.zRot = (float) Math.toRadians(0.0d);
+
+        this.leftArm.xRot = (float) Math.toRadians(-40.0d);
+        this.leftArm.yRot = (float) Math.toRadians(-22.0d);
         this.leftArm.zRot = (float) Math.toRadians(0.0d);
     }
 }
