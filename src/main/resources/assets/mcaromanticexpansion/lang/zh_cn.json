@@ -179,6 +179,23 @@
   "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 月光洒落，与你共度良宵...",
 
   "event.mcaromanticexpansion.starfall.player": "§e🌟 流星划过天际，许个愿吧！",
-  "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星划过天际，与你一起许愿！"
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星划过天际，与你一起许愿！",
+
+  "key.categories.mcaromanticexpansion": "MCA 浪漫扩展",
+  "key.mcaromanticexpansion.princess_carry": "公主抱（请求/放下）",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "公主抱邀请",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s 想要公主抱你！",
+  "mcaromanticexpansion.gui.princess_carry.accept": "答应",
+  "mcaromanticexpansion.gui.princess_carry.reject": "拒绝",
+
+  "message.mcaromanticexpansion.carry.sent": "§d已向 %s 发送公主抱请求，等待对方回复...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s 拒绝了你的公主抱邀请。",
+  "message.mcaromanticexpansion.carry.busy": "§c你或对方当前正处于公主抱状态，无法再进行公主抱。",
+  "message.mcaromanticexpansion.carry.too_far": "§c对方离你太远了，请靠近后再试。",
+  "message.mcaromanticexpansion.carry.too_far_response": "§c对方已走远，公主抱请求取消。",
+  "message.mcaromanticexpansion.carry.failed": "§c公主抱失败，对方可能正在骑乘其他实体。",
+  "message.mcaromanticexpansion.carry.no_target": "§7视线中没有其他玩家，请面向其他玩家后再按按键。",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7任何一方按下 Shift（蹲下）或再次按 H 键即可结束公主抱。"
 
 }

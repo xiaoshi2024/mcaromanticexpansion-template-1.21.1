@@ -1,9 +1,13 @@
 package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.client.CarryClientState;
+import com.xiaoshi2022.mcaromanticexpansion.client.gui.PrincessCarryRequestScreen;
 import com.xiaoshi2022.mcaromanticexpansion.client.gui.BouquetScreen;
 import com.xiaoshi2022.mcaromanticexpansion.client.gui.MarriageScreen;
 import com.xiaoshi2022.mcaromanticexpansion.client.gui.ProposalScreen;
+import com.xiaoshi2022.mcaromanticexpansion.network.CarryInvitePacket;
+import com.xiaoshi2022.mcaromanticexpansion.network.CarryStatePayload;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -41,5 +45,20 @@ public class GUIPacketHandlers {
             Minecraft.getInstance().setScreen(new MarriageScreen(packet.partnerUUID(), packet.partnerName()));
             MCARomanticExpansion.LOGGER.debug("CLIENT: MarriageScreen opened successfully!");
         });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void handleOpenPrincessCarryGUI(CarryInvitePacket packet) {
+        MCARomanticExpansion.LOGGER.debug("CLIENT: CarryInvitePacket received! requesterUUID={}, requesterName={}",
+                packet.requesterUUID(), packet.requesterName());
+        Minecraft.getInstance().execute(() -> {
+            Minecraft.getInstance().setScreen(new PrincessCarryRequestScreen(packet.requesterUUID(), packet.requesterName()));
+        });
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void handleCarryState(CarryStatePayload payload) {
+        Minecraft.getInstance().execute(() ->
+                CarryClientState.accept(payload.carrier(), payload.passenger(), payload.carrying()));
     }
 }

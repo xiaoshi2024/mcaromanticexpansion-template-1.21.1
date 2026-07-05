@@ -13,6 +13,7 @@ import com.xiaoshi2022.mcaromanticexpansion.registry.ModBlocks;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModParticles;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
+import com.xiaoshi2022.mcaromanticexpansion.util.CarryRuntime;
 import com.xiaoshi2022.mcaromanticexpansion.util.ModInfo;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +27,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
 @Mod(MCARomanticExpansion.MODID)
@@ -75,6 +78,7 @@ public class MCARomanticExpansion {
     public void onPlayerDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             PregnancyManager.onPlayerDeath(player);
+            CarryRuntime.stopCarryFor(player.serverLevel(), player.getUUID());
         }
     }
 
@@ -83,6 +87,7 @@ public class MCARomanticExpansion {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PregnancyManager.loadFromPersistentData(serverPlayer);
             AffectionManager.initializeAffectionData(serverPlayer);
+            CarryRuntime.syncCarryStatesTo(serverPlayer);
         }
     }
 
@@ -90,6 +95,16 @@ public class MCARomanticExpansion {
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PregnancyManager.saveToPersistentData(serverPlayer);
+            CarryRuntime.onPlayerLoggedOut(serverPlayer.serverLevel(), serverPlayer.getUUID());
         }
+    }
+
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppingEvent event) {
+        event.getServer().getAllLevels().forEach(level -> {
+            for (java.util.UUID pid : CarryRuntime.snapshotCarriers()) {
+                CarryRuntime.stopCarry(pid, level);
+            }
+        });
     }
 }

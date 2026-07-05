@@ -179,6 +179,23 @@
   "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 Moonlight falls, spending the night with you...",
 
   "event.mcaromanticexpansion.starfall.player": "§e🌟 A shooting star streaks across the sky, make a wish!",
-  "event.mcaromanticexpansion.starfall.partner": "§e🌟 A shooting star streaks across the sky, wishing with you!"
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 A shooting star streaks across the sky, wishing with you!",
+
+  "key.categories.mcaromanticexpansion": "MCA Romantic Expansion",
+  "key.mcaromanticexpansion.princess_carry": "Princess Carry (Request/Release)",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "Princess Carry Invite",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s wants to carry you like a princess!",
+  "mcaromanticexpansion.gui.princess_carry.accept": "Accept",
+  "mcaromanticexpansion.gui.princess_carry.reject": "Decline",
+
+  "message.mcaromanticexpansion.carry.sent": "§dPrincess carry request sent to %s, waiting for their response...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s declined your princess carry invite.",
+  "message.mcaromanticexpansion.carry.busy": "§cYou or the target are already in a princess carry state.",
+  "message.mcaromanticexpansion.carry.too_far": "§cThe target is too far away, get closer first.",
+  "message.mcaromanticexpansion.carry.too_far_response": "§cThe target has moved out of range, request cancelled.",
+  "message.mcaromanticexpansion.carry.failed": "§cPrincess carry failed, the target might be riding another entity.",
+  "message.mcaromanticexpansion.carry.no_target": "§7No player in your crosshair, look at another player first.",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7Either of you can press Shift (Sneak) or press H again to end the carry."
 
 }

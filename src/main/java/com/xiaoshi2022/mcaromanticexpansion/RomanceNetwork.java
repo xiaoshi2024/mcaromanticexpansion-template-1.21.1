@@ -1,7 +1,9 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
 import com.xiaoshi2022.mcaromanticexpansion.network.*;
+import com.xiaoshi2022.mcaromanticexpansion.util.CarryRuntime;
 import com.xiaoshi2022.mcaromanticexpansion.util.SharedUmbrellaManager;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -66,7 +68,7 @@ public class RomanceNetwork {
                 BouquetResponsePacket.TYPE,
                 BouquetResponsePacket.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
                         payload.handle(serverPlayer);
                     }
                 })
@@ -76,7 +78,7 @@ public class RomanceNetwork {
                 ProposalResponsePacket.TYPE,
                 ProposalResponsePacket.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
                         payload.handle(serverPlayer);
                     }
                 })
@@ -86,7 +88,7 @@ public class RomanceNetwork {
                 MarriageResponsePacket.TYPE,
                 MarriageResponsePacket.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
                         payload.handle(serverPlayer);
                     }
                 })
@@ -98,7 +100,6 @@ public class RomanceNetwork {
                 SharedUmbrellaRequestHandler::handleClient
         );
 
-        // 好感度同步包
         registrar.playToClient(
                 AffectionSyncPacket.TYPE,
                 AffectionSyncPacket.STREAM_CODEC,
@@ -109,8 +110,66 @@ public class RomanceNetwork {
                 SharedUmbrellaResponsePacket.TYPE,
                 SharedUmbrellaResponsePacket.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
                         SharedUmbrellaManager.handleResponse(serverPlayer, payload);
+                    }
+                })
+        );
+
+        registrar.playToServer(
+                CarryRequestPacket.TYPE,
+                CarryRequestPacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        CarryRuntime.handleCarryRequest(serverPlayer, payload);
+                    }
+                })
+        );
+
+        registrar.playToClient(
+                CarryInvitePacket.TYPE,
+                CarryInvitePacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    try {
+                        Class<?> handlerClass = Class.forName("com.xiaoshi2022.mcaromanticexpansion.network.GUIPacketHandlers");
+                        java.lang.reflect.Method method = handlerClass.getMethod("handleOpenPrincessCarryGUI", CarryInvitePacket.class);
+                        method.invoke(null, payload);
+                    } catch (Exception e) {
+                        MCARomanticExpansion.LOGGER.warn("Failed to handle CarryInvitePacket (likely server-side)", e);
+                    }
+                })
+        );
+
+        registrar.playToServer(
+                CarryResponsePacket.TYPE,
+                CarryResponsePacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        CarryRuntime.handleCarryResponse(serverPlayer, payload);
+                    }
+                })
+        );
+
+        registrar.playToClient(
+                CarryStatePayload.TYPE,
+                CarryStatePayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    try {
+                        Class<?> handlerClass = Class.forName("com.xiaoshi2022.mcaromanticexpansion.network.GUIPacketHandlers");
+                        java.lang.reflect.Method method = handlerClass.getMethod("handleCarryState", CarryStatePayload.class);
+                        method.invoke(null, payload);
+                    } catch (Exception e) {
+                        MCARomanticExpansion.LOGGER.warn("Failed to handle CarryStatePayload (likely server-side)", e);
+                    }
+                })
+        );
+
+        registrar.playToServer(
+                CarryStopPacket.TYPE,
+                CarryStopPacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        CarryRuntime.handleStopRequest(serverPlayer);
                     }
                 })
         );
