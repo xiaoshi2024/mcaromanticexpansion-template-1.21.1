@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class CarryRuntime {
-    private static final double CARRY_HEIGHT = 3.8d;
+    private static final double CARRY_HEIGHT = 0.85d;
 
     private static final Map<UUID, UUID> CARRIER_PASSENGER = new ConcurrentHashMap<>();
     private static final Map<UUID, UUID> PASSENGER_CARRIER = new ConcurrentHashMap<>();

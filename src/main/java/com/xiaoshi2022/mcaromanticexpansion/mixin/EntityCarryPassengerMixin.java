@@ -23,8 +23,8 @@ public abstract class EntityCarryPassengerMixin {
             return;
         }
         double yawRad = Math.toRadians(carrier.getYRot());
-        double backX = Math.sin(yawRad) * 0.18d;
-        double backZ = -Math.cos(yawRad) * 0.18d;
+        double backX = Math.sin(yawRad) * 0.25d;
+        double backZ = -Math.cos(yawRad) * 0.25d;
         Vec3 pos = new Vec3(
                 carrier.getX() + backX,
                 carrier.getY() + CarryRuntime.carryHeight(),

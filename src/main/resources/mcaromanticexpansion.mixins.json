@@ -7,7 +7,6 @@
     "EntityCarryPassengerMixin"
   ],
   "client": [
-    "client.ClientEntityCarryPassengerMixin",
     "client.PlayerCarryArmsMixin",
     "client.PlayerCarryPoseRendererMixin"
   ],
