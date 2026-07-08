@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "mcaromanticexpansion:love_letter"
+    },
+    "title": {
+      "translate": "advancements.mcaromanticexpansion.love_letter_reply.title"
+    },
+    "description": {
+      "translate": "advancements.mcaromanticexpansion.love_letter_reply.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "mcaromanticexpansion:root",
+  "criteria": {
+    "reply_letter": {
+      "trigger": "mcaromanticexpansion:love_letter_reply"
+    }
+  }
+}

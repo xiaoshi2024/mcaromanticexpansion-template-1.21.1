@@ -32,6 +32,23 @@
   "item.mcaromanticexpansion.red_veil": "Red Veil",
   "item.mcaromanticexpansion.golden_hairpin": "Golden Hairpin",
   "item.mcaromanticexpansion.umbrella": "Umbrella",
+  "item.mcaromanticexpansion.love_letter": "Love Letter",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Write Love Letter ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ Love Letter ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "To:",
+  "mcaromanticexpansion.gui.love_letter.message_label": "Message:",
+  "mcaromanticexpansion.gui.love_letter.recipient": "Recipient name",
+  "mcaromanticexpansion.gui.love_letter.save": "Seal",
+  "mcaromanticexpansion.gui.love_letter.cancel": "Discard",
+  "mcaromanticexpansion.gui.love_letter.close": "Close",
+  "mcaromanticexpansion.gui.love_letter.reply": "Reply",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ Write Reply ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "Reply message:",
+  "mcaromanticexpansion.love_letter.not_written": "§eThis love letter is blank. Sneak + right-click to write",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "Letters of Love",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "Reply to a love letter you received, bringing two hearts closer",
 
   "curios.identifier.wedding": "Wedding",
 

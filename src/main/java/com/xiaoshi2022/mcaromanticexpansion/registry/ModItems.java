@@ -62,6 +62,10 @@ public class ModItems {
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA = ITEMS.register("umbrella",
             () -> new UmbrellaItem(new Item.Properties().stacksTo(1)));
 
+    // 情书
+    public static final DeferredHolder<Item, LoveLetterItem> LOVE_LETTER = ITEMS.register("love_letter",
+            () -> new LoveLetterItem(new Item.Properties().stacksTo(16)));
+
     // 注册物品组选项卡
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ROMANTIC_TAB = CREATIVE_TABS.register(
             "romantic_tab",
@@ -81,6 +85,7 @@ public class ModItems {
                         output.accept(GOLDEN_HAIRPIN.get());
                         output.accept(UMBRELLA.get());
                         output.accept(UMBRELLA_STAND.get());
+                        output.accept(LOVE_LETTER.get());
                     })
                     .build()
     );

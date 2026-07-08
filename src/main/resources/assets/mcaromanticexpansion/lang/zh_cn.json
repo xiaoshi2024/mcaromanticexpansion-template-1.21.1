@@ -29,6 +29,23 @@
   "item.mcaromanticexpansion.red_veil": "红盖头",
   "item.mcaromanticexpansion.golden_hairpin": "金发簪",
   "item.mcaromanticexpansion.umbrella": "伞",
+  "item.mcaromanticexpansion.love_letter": "情书",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ 写情书 ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ 情书 ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "致：",
+  "mcaromanticexpansion.gui.love_letter.message_label": "正文：",
+  "mcaromanticexpansion.gui.love_letter.recipient": "收信人名字",
+  "mcaromanticexpansion.gui.love_letter.save": "封笺",
+  "mcaromanticexpansion.gui.love_letter.cancel": "作废",
+  "mcaromanticexpansion.gui.love_letter.close": "收起",
+  "mcaromanticexpansion.gui.love_letter.reply": "回信",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ 写回信 ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "回信正文：",
+  "mcaromanticexpansion.love_letter.not_written": "§e这封情书还是空白的，潜行右键开始书写",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "鸿雁传书",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "回复一封收到的情书，两颗心靠得更近了",
 
   "curios.identifier.wedding": "婚服",
 

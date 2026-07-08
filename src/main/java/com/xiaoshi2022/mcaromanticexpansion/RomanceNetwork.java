@@ -173,5 +173,15 @@ public class RomanceNetwork {
                     }
                 })
         );
+
+        registrar.playToServer(
+                LoveLetterSavePacket.TYPE,
+                LoveLetterSavePacket.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> {
+                    if (context.player() instanceof ServerPlayer serverPlayer) {
+                        payload.handle(serverPlayer);
+                    }
+                })
+        );
     }
 }

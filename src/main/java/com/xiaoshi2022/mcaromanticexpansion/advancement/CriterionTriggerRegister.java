@@ -39,6 +39,10 @@ public class CriterionTriggerRegister {
     public static final DeferredHolder<net.minecraft.advancements.CriterionTrigger<?>, MutualUmbrellaGiftTrigger> MUTUAL_UMBRELLA_GIFT =
             TRIGGER_TYPES.register("mutual_umbrella_gift", MutualUmbrellaGiftTrigger::new);
 
+    // 情书回信触发器
+    public static final DeferredHolder<net.minecraft.advancements.CriterionTrigger<?>, LoveLetterReplyTrigger> LOVE_LETTER_REPLY =
+            TRIGGER_TYPES.register("love_letter_reply", LoveLetterReplyTrigger::new);
+
     public static class UnveilVeilTrigger extends SimpleCriterionTrigger<UnveilVeilTrigger.Instance> {
         @Override
         public Codec<Instance> codec() {
@@ -175,6 +179,26 @@ public class CriterionTriggerRegister {
                     instance.group(
                             ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(Instance::player),
                             Codec.INT.fieldOf("min_count").forGetter(Instance::minCount)
+                    ).apply(instance, Instance::new)
+            );
+        }
+    }
+
+    // 情书回信触发器
+    public static class LoveLetterReplyTrigger extends SimpleCriterionTrigger<LoveLetterReplyTrigger.Instance> {
+        @Override
+        public Codec<Instance> codec() {
+            return Instance.CODEC;
+        }
+
+        public void trigger(ServerPlayer player) {
+            this.trigger(player, instance -> true);
+        }
+
+        public record Instance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
+            public static final Codec<Instance> CODEC = RecordCodecBuilder.create(instance ->
+                    instance.group(
+                            ContextAwarePredicate.CODEC.optionalFieldOf("player").forGetter(Instance::player)
                     ).apply(instance, Instance::new)
             );
         }

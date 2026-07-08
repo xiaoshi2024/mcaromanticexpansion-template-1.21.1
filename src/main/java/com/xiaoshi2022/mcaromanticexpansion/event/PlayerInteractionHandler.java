@@ -6,6 +6,7 @@ import com.xiaoshi2022.mcaromanticexpansion.api.event.MarriageChangedEvent;
 import com.xiaoshi2022.mcaromanticexpansion.api.event.ProposalSentEvent;
 import com.xiaoshi2022.mcaromanticexpansion.api.event.SharedUmbrellaRequestEvent;
 import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
+import com.xiaoshi2022.mcaromanticexpansion.item.LoveLetterItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.OpenBouquetGUIPacket;
@@ -27,6 +28,7 @@ import net.conczin.mca.server.world.data.PlayerSaveData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -144,11 +146,18 @@ public class PlayerInteractionHandler {
     @SubscribeEvent
     public static void onPlayerRightClick(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();
+        var stack = event.getItemStack();
+
+        // 检查物品中是否夹藏了情书
+        if (tryExtractConcealedLetter(player, stack)) {
+            event.setCanceled(true);
+            return;
+        }
+
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
 
-        var stack = event.getItemStack();
         var item = stack.getItem();
         var hand = event.getHand();
 
@@ -196,11 +205,18 @@ public class PlayerInteractionHandler {
     @SubscribeEvent
     public static void onPlayerRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
+        var stack = event.getItemStack();
+
+        // 检查物品中是否夹藏了情书
+        if (tryExtractConcealedLetter(player, stack)) {
+            event.setCanceled(true);
+            return;
+        }
+
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return;
         }
 
-        var stack = event.getItemStack();
         var item = stack.getItem();
 
         // 右键方块打开礼盒
@@ -236,6 +252,50 @@ public class PlayerInteractionHandler {
                 event.setCanceled(true);
             }
         }
+    }
+
+    /**
+     * 尝试从物品中提取夹藏的情书
+     * @return true 如果已提取（调用方应取消事件），false 如果未处理
+     */
+    private static boolean tryExtractConcealedLetter(Player player, ItemStack stack) {
+        if (!LoveLetterItem.hasConcealedLetter(stack)) {
+            return false;
+        }
+
+        String recipient = LoveLetterItem.getConcealedRecipient(stack);
+        String playerName = player.getName().getString();
+
+        // 收信人可以提取；如果情书已回信，原发信人也可以提取（查看回信）
+        boolean isRecipient = playerName.equalsIgnoreCase(recipient);
+        boolean isSenderWithReply = LoveLetterItem.hasConcealedReply(stack)
+                && playerName.equalsIgnoreCase(LoveLetterItem.getConcealedSender(stack));
+
+        if (!isRecipient && !isSenderWithReply) {
+            // 既不是收信人，也不是已回信的发信人，不提取
+            return false;
+        }
+
+        // 是收信人，提取情书
+        if (player instanceof ServerPlayer serverPlayer) {
+            ItemStack letter = LoveLetterItem.extractFromItem(stack);
+            boolean added = serverPlayer.getInventory().add(letter);
+            if (!added) {
+                serverPlayer.drop(letter, false);
+                serverPlayer.sendSystemMessage(Component.literal("§c背包已满，情书掉落在了地上！")
+                        .withStyle(ChatFormatting.RED));
+            } else {
+                serverPlayer.sendSystemMessage(Component.literal("§d§l你发现了一封情书！§r§d快打开看看吧~")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            serverPlayer.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.2f);
+            serverPlayer.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 0.6f, 1.5f);
+
+            MCARomanticExpansion.LOGGER.debug("Love letter extracted by {} (from {})",
+                    playerName, LoveLetterItem.getSender(letter));
+        }
+
+        return true;
     }
 
     private static void handleBouquet(ServerPlayer sender, ServerPlayer receiver) {
