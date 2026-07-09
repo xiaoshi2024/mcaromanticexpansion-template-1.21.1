@@ -4,10 +4,50 @@
   "item.mcaromanticexpansion.player_engagement_ring": "Aliança de Noivado do Jogador",
   "item.mcaromanticexpansion.player_wedding_ring": "Aliança de Casamento do Jogador",
   "item.mcaromanticexpansion.gift_box": "Caixa de Presente",
-  "item.mcaromanticexpansion.gift_box.valentine": "Caixa de Presente de Valentines Day",
+  "item.mcaromanticexpansion.gift_box.valentine": "Caixa de Presente de Dia dos Namorados",
   "item.mcaromanticexpansion.gift_box.christmas": "Caixa de Presente de Natal",
   "item.mcaromanticexpansion.gift_box.halloween": "Caixa de Presente de Halloween",
   "item.mcaromanticexpansion.gift_box.birthday": "Caixa de Presente de Aniversário",
+
+  "item.mcaromanticexpansion.rose_brooch_red": "Broche de Rosa Vermelha",
+  "item.mcaromanticexpansion.rose_brooch_pink": "Broche de Rosa Rosa",
+  "item.mcaromanticexpansion.rose_brooch_white": "Broche de Rosa Branca",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7Um lindo broche para usar no peito",
+  "tooltip.mcaromanticexpansion.corsage.red": "§cRosa vermelha - Amor ardente",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§dRosa rosa - Doçura e ternura",
+  "tooltip.mcaromanticexpansion.corsage.white": "§fRosa branca - Pureza impecável",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "Traje de Noivo Chinês",
+  "item.mcaromanticexpansion.chinese_wedding_female": "Vestido de Noiva Chinesa",
+  "item.mcaromanticexpansion.western_wedding_male": "Traje de Noivo Ocidental",
+  "item.mcaromanticexpansion.western_wedding_female": "Vestido de Noiva Ocidental",
+
+  "item.mcaromanticexpansion.red_veil": "Véu Vermelho",
+  "item.mcaromanticexpansion.golden_hairpin": "Presilha Dourada",
+  "item.mcaromanticexpansion.umbrella": "Guarda-chuva",
+  "item.mcaromanticexpansion.love_letter": "Carta de Amor",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Escrever Carta de Amor ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ Carta de Amor ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "Para:",
+  "mcaromanticexpansion.gui.love_letter.message_label": "Mensagem:",
+  "mcaromanticexpansion.gui.love_letter.recipient": "Nome do destinatário",
+  "mcaromanticexpansion.gui.love_letter.save": "Selar",
+  "mcaromanticexpansion.gui.love_letter.cancel": "Descartar",
+  "mcaromanticexpansion.gui.love_letter.close": "Fechar",
+  "mcaromanticexpansion.gui.love_letter.reply": "Responder",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ Escrever Resposta ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "Mensagem de resposta:",
+  "mcaromanticexpansion.love_letter.not_written": "§eEsta carta de amor está em branco. Agache + clique direito para começar a escrever",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "Mensagens do Coração",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "Responda a uma carta de amor recebida, aproximando dois corações",
+
+  "curios.identifier.wedding": "Roupas de Casamento",
+
+  "advancements.mcaromanticexpansion.root.title": "MCA Expansão Romântica",
+  "advancements.mcaromanticexpansion.root.description": "Uma jornada romântica começa",
 
   "mcaromanticexpansion.gui.bouquet.title": "Buquê Recebido",
   "mcaromanticexpansion.gui.bouquet.question": "%s te deu um buquê!",
@@ -23,6 +63,12 @@
   "mcaromanticexpansion.gui.marriage.question": "%s quer trocar as alianças!\nAmbos os jogadores precisam ter uma aliança",
   "mcaromanticexpansion.gui.marriage.confirm": "Trocar as Alianças",
   "mcaromanticexpansion.gui.marriage.cancel": "Cancelar",
+
+  "mcaromanticexpansion.gui.shared_umbrella.title": "Convite para Compartilhar Guarda-chuva",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s está te convidando para compartilhar um guarda-chuva!",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "Aceitar",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "Recusar",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "Tempo restante: %ds",
 
   "mcaromanticexpansion.proposal.accepted": "§a%s aceitou seu pedido!",
   "mcaromanticexpansion.proposal.rejected": "§cPedido recusado.",
@@ -49,6 +95,9 @@
   "mcaromanticexpansion.command.birthday.today.not_birthday": "§eSeu aniversário é: %1$d/%2$d",
   "mcaromanticexpansion.command.birthday.today.not_set": "§cVocê ainda não definiu seu aniversário!",
 
+  "mcaromanticexpansion.command.birthday.check.other.success": "O aniversário de %s é %d/%d",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s ainda não definiu seu aniversário!",
+
   "item.mcaromanticexpansion.engagement_ring.target": "Aliança de Noivado - Com %s",
   "item.mcaromanticexpansion.wedding_ring.given": "Aliança de Casamento - De %s",
   "item.mcaromanticexpansion.wedding_ring.received": "Aliança de Casamento - Para %s",
@@ -57,11 +106,86 @@
   "mcaromanticexpansion.ring.tooltip.married_to": "Casado com %s",
   "mcaromanticexpansion.ring.tooltip.blessing": "Bênçãos para vocês dois",
 
+  "advancements.mcaromanticexpansion.unveil_veil.title": "Revelar o Véu Vermelho",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "Na cerimônia de casamento, o noivo remove pessoalmente o véu vermelho da noiva",
+
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "Guarda-chuva para Você",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "Presenteie um guarda-chuva a um jogador pela primeira vez",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "Canção Sob a Chuva",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "Presenteie um guarda-chuva a um jogador sob a chuva 10 vezes no total",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "Nosso Guarda-chuva",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "Troque guarda-chuvas com o mesmo jogador 20 vezes no total",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "Coração a Coração",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "Ative o evento Coração a Coração enquanto compartilha um guarda-chuva",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "Pacto do Arco-íris",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "Ative o evento Pacto do Arco-íris enquanto compartilha um guarda-chuva",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "O Tempo Para",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "Ative o evento O Tempo Para enquanto compartilha um guarda-chuva",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "Teste de Sincronia",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "Ative o evento Teste de Sincronia enquanto compartilha um guarda-chuva",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§dVocê entrou no período de concepção com %s!",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§dVocê entrou no período de concepção com %s!",
+  "message.mcaromanticexpansion.pregnancy_success": "§aParabéns! Você concebeu com sucesso!",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§aParabéns! %s concebeu com sucesso!",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§cSeu parceiro faleceu tragicamente, o período de concepção foi encerrado",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§ePeríodo de concepção em andamento: %d ticks decorridos / %d ticks totais (%d ticks restantes)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§cVocê não está em período de concepção",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "Período de concepção de %s em andamento: %d ticks decorridos / %d ticks totais (%d ticks restantes)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s não está em período de concepção",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§aPeríodo de concepção concluído! O bebê nasceu!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§cVocê não está em período de concepção!",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§aPeríodo de concepção de %s concluído!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s não está em período de concepção!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§aPeríodo de concepção cancelado",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§cVocê não está em período de concepção!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aPeríodo de concepção de %s cancelado",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s não está em período de concepção!",
+
+  "block.mcaromanticexpansion.umbrella_stand": "Porta-guarda-chuvas",
+
+  "event.mcaromanticexpansion.share_story.player": "§dVocê compartilhou uma história interessante com seu parceiro...",
+  "event.mcaromanticexpansion.share_story.partner": "§dSeu parceiro compartilhou uma história interessante com você...",
+
+  "event.mcaromanticexpansion.hold_hands.player": "§dAs mãos de vocês se tocaram acidentalmente, o coração acelerou...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§dAs mãos de vocês se tocaram acidentalmente, o coração acelerou...",
+
+  "event.mcaromanticexpansion.whisper_love.player": "§dVocê sussurrou as palavras escondidas em seu coração...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§dSeu parceiro sussurrou as palavras escondidas em seu coração...",
+
+  "event.mcaromanticexpansion.gentle_kiss.player": "§dSob o guarda-chuva, vocês trocaram um beijo gentil...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§dSob o guarda-chuva, vocês trocaram um beijo gentil...",
+
+  "event.mcaromanticexpansion.confession.player": "§dVocê reuniu coragem e se declarou!",
+  "event.mcaromanticexpansion.confession.partner": "§dSeu parceiro reuniu coragem e se declarou para você!",
+
+  "event.mcaromanticexpansion.heart_to_heart.player": "§dCoração a Coração: Vocês receberam a bênção da sorte e da velocidade!",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§dCoração a Coração: Vocês receberam a bênção da sorte e da velocidade!",
+
+  "event.mcaromanticexpansion.rainbow_pact.player": "§dPacto do Arco-íris: Um lindo arco-íris apareceu ao redor de vocês!",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§dPacto do Arco-íris: Um lindo arco-íris apareceu ao redor de vocês!",
+
+  "event.mcaromanticexpansion.time_stands_still.player": "§dO Tempo Para: Sob o guarda-chuva, o tempo pareceu desacelerar...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§dO Tempo Para: Sob o guarda-chuva, o tempo pareceu desacelerar...",
+
+  "event.mcaromanticexpansion.synchrony_test.player": "§dTeste de Sincronia: No próximo minuto, pulem ao mesmo tempo!",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§dTeste de Sincronia: No próximo minuto, pulem ao mesmo tempo!",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§cVocê machucou %s, a afeição diminuiu em %d pontos!",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s te machucou, a afeição diminuiu em %d pontos!",
+
   "advancements.mcaromanticexpansion.hero_resque.title": "Herói Resgatador",
   "advancements.mcaromanticexpansion.hero_resque.description": "Ative o evento 'Herói Resgatador' e proteja seu amor!",
 
   "advancements.mcaromanticexpansion.moonlight_serenade.title": "Serenata ao Luar",
-  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Aproveite uma noite romântica sob o luar!",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Aproveite uma noite romântica sob a luz do luar!",
 
   "advancements.mcaromanticexpansion.starfall.title": "Chuva de Estrelas",
   "advancements.mcaromanticexpansion.starfall.description": "Faça um pedido sob a chuva de estrelas!",
@@ -70,9 +194,25 @@
   "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Perigo! Zumbis estão se aproximando! Seu amor vai te proteger!",
 
   "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 A luz da lua ilumina a noite...",
-  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 A luz da lua ilumina a noite...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 A luz da lua ilumina a noite, passando-a com você...",
 
-  "event.mcaromanticexpansion.starfall.player": "§e🌟 Uma estrela cadente cruzou o céu, faça um pedido!",
-  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Uma estrela cadente cruzou o céu, fazendo um pedido com você!"
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 Uma estrela cadente cruza o céu, faça um pedido!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Uma estrela cadente cruza o céu, fazendo um pedido com você!",
 
+  "key.categories.mcaromanticexpansion": "MCA Expansão Romântica",
+  "key.mcaromanticexpansion.princess_carry": "Carregar Princesa (Solicitar/Soltar)",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "Convite de Carregar Princesa",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s quer te carregar como uma princesa!",
+  "mcaromanticexpansion.gui.princess_carry.accept": "Aceitar",
+  "mcaromanticexpansion.gui.princess_carry.reject": "Recusar",
+
+  "message.mcaromanticexpansion.carry.sent": "§dPedido de carregar princesa enviado para %s, aguardando resposta...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s recusou seu convite de carregar princesa.",
+  "message.mcaromanticexpansion.carry.busy": "§cVocê ou seu parceiro já estão em um carregamento de princesa, não é possível realizar outro.",
+  "message.mcaromanticexpansion.carry.too_far": "§cSeu parceiro está muito longe, aproxime-se e tente novamente.",
+  "message.mcaromanticexpansion.carry.too_far_response": "§cSeu parceiro se afastou demais, pedido de carregar princesa cancelado.",
+  "message.mcaromanticexpansion.carry.failed": "§cCarregar princesa falhou, seu parceiro pode estar montando outra entidade.",
+  "message.mcaromanticexpansion.carry.no_target": "§7Não há outros jogadores à vista, olhe para outro jogador e pressione a tecla novamente.",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7Qualquer um de vocês pode pressionar Shift (agachar) ou pressionar H novamente para encerrar o carregamento de princesa."
 }

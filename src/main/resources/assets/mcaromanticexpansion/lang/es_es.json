@@ -9,6 +9,46 @@
   "item.mcaromanticexpansion.gift_box.halloween": "Caja de Regalo de Halloween",
   "item.mcaromanticexpansion.gift_box.birthday": "Caja de Regalo de Cumpleaños",
 
+  "item.mcaromanticexpansion.rose_brooch_red": "Broche de Rosa Roja",
+  "item.mcaromanticexpansion.rose_brooch_pink": "Broche de Rosa Rosa",
+  "item.mcaromanticexpansion.rose_brooch_white": "Broche de Rosa Blanca",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7Un hermoso broche para llevar en el pecho",
+  "tooltip.mcaromanticexpansion.corsage.red": "§cRosa Roja - Pasión ardiente",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§dRosa Rosa - Dulzura y ternura",
+  "tooltip.mcaromanticexpansion.corsage.white": "§fRosa Blanca - Pureza impecable",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "Traje de Novio Chino",
+  "item.mcaromanticexpansion.chinese_wedding_female": "Vestido de Novia China",
+  "item.mcaromanticexpansion.western_wedding_male": "Traje de Novio Occidental",
+  "item.mcaromanticexpansion.western_wedding_female": "Vestido de Novia Occidental",
+
+  "item.mcaromanticexpansion.red_veil": "Velo Rojo",
+  "item.mcaromanticexpansion.golden_hairpin": "Horquilla Dorada",
+  "item.mcaromanticexpansion.umbrella": "Paraguas",
+  "item.mcaromanticexpansion.love_letter": "Carta de Amor",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Escribir Carta de Amor ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ Carta de Amor ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "Para:",
+  "mcaromanticexpansion.gui.love_letter.message_label": "Mensaje:",
+  "mcaromanticexpansion.gui.love_letter.recipient": "Nombre del destinatario",
+  "mcaromanticexpansion.gui.love_letter.save": "Sellar",
+  "mcaromanticexpansion.gui.love_letter.cancel": "Descartar",
+  "mcaromanticexpansion.gui.love_letter.close": "Cerrar",
+  "mcaromanticexpansion.gui.love_letter.reply": "Responder",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ Escribir Respuesta ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "Mensaje de respuesta:",
+  "mcaromanticexpansion.love_letter.not_written": "§eEsta carta de amor está en blanco. Shift+clic derecho para empezar a escribir",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "Mensajería del Corazón",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "Responde a una carta de amor recibida, dos corazones se acercan más",
+
+  "curios.identifier.wedding": "Ropa de Boda",
+
+  "advancements.mcaromanticexpansion.root.title": "MCA Expansión Romántica",
+  "advancements.mcaromanticexpansion.root.description": "Comienza un viaje romántico",
+
   "mcaromanticexpansion.gui.bouquet.title": "Ramo Recibido",
   "mcaromanticexpansion.gui.bouquet.question": "¡%s te regaló un ramo!",
   "mcaromanticexpansion.gui.bouquet.accept": "Aceptar",
@@ -23,6 +63,12 @@
   "mcaromanticexpansion.gui.marriage.question": "¡%s quiere intercambiar anillos!\nAmbos jugadores necesitan un anillo de boda",
   "mcaromanticexpansion.gui.marriage.confirm": "Intercambiar Anillos",
   "mcaromanticexpansion.gui.marriage.cancel": "Cancelar",
+
+  "mcaromanticexpansion.gui.shared_umbrella.title": "Invitación a Compartir Paraguas",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "¡%s te invita a compartir un paraguas!",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "Aceptar",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "Rechazar",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "Tiempo restante: %d s",
 
   "mcaromanticexpansion.proposal.accepted": "§a¡%s aceptó tu propuesta!",
   "mcaromanticexpansion.proposal.rejected": "§cPropuesta rechazada.",
@@ -49,6 +95,9 @@
   "mcaromanticexpansion.command.birthday.today.not_birthday": "§eTu cumpleaños es: %1$d/%2$d",
   "mcaromanticexpansion.command.birthday.today.not_set": "§c¡No has establecido tu cumpleaños!",
 
+  "mcaromanticexpansion.command.birthday.check.other.success": "El cumpleaños de %s es %d/%d",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "¡%s no ha establecido su cumpleaños!",
+
   "item.mcaromanticexpansion.engagement_ring.target": "Anillo de Compromiso - Con %s",
   "item.mcaromanticexpansion.wedding_ring.given": "Anillo de Boda - De %s",
   "item.mcaromanticexpansion.wedding_ring.received": "Anillo de Boda - Para %s",
@@ -56,6 +105,81 @@
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Comprometido con %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Casado con %s",
   "mcaromanticexpansion.ring.tooltip.blessing": "Bendiciones para ambos",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "Descubrir el Velo Rojo",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "En la ceremonia de boda, el novio retira personalmente el velo rojo de la novia",
+
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "Paraguas para Ti",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "Regala un paraguas a un jugador por primera vez",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "Canción Bajo la Lluvia",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "Regala un paraguas a un jugador bajo la lluvia 10 veces en total",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "Nuestro Paraguas",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "Intercambia paraguas con el mismo jugador 20 veces en total",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "Corazón a Corazón",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "Activa el evento Corazón a Corazón mientras compartes paraguas",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "Pacto del Arcoíris",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "Activa el evento Pacto del Arcoíris mientras compartes paraguas",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "El Tiempo se Detiene",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "Activa el evento El Tiempo se Detiene mientras compartes paraguas",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "Prueba de Sincronía",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "Activa el evento Prueba de Sincronía mientras compartes paraguas",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§d¡Has entrado en período de concepción con %s!",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§d¡Has entrado en período de concepción con %s!",
+  "message.mcaromanticexpansion.pregnancy_success": "§a¡Felicitaciones! ¡Has concebido con éxito!",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§a¡Felicitaciones! ¡%s ha concebido con éxito!",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§cTu pareja ha fallecido trágicamente, el período de concepción ha terminado",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§ePeríodo de concepción en progreso: %d tick transcurridos / %d tick totales (%d tick restantes)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§cNo estás en período de concepción",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "Período de concepción de %s en progreso: %d tick transcurridos / %d tick totales (%d tick restantes)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s no está en período de concepción",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§a¡El período de concepción ha terminado! ¡Ha nacido el bebé!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§c¡No estás en período de concepción!",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a¡El período de concepción de %s ha terminado!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c¡%s no está en período de concepción!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§aPeríodo de concepción cancelado",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§c¡No estás en período de concepción!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aPeríodo de concepción de %s cancelado",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c¡%s no está en período de concepción!",
+
+  "block.mcaromanticexpansion.umbrella_stand": "Paragüero",
+
+  "event.mcaromanticexpansion.share_story.player": "§dCompartiste una historia interesante con tu pareja...",
+  "event.mcaromanticexpansion.share_story.partner": "§dTu pareja compartió una historia interesante contigo...",
+
+  "event.mcaromanticexpansion.hold_hands.player": "§dTus manos se tocaron casualmente, el corazón se aceleró...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§dTus manos se tocaron casualmente, el corazón se aceleró...",
+
+  "event.mcaromanticexpansion.whisper_love.player": "§dSusurraste las palabras escondidas en tu corazón...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§dTu pareja susurró las palabras escondidas en su corazón...",
+
+  "event.mcaromanticexpansion.gentle_kiss.player": "§dBajo el paraguas, intercambiaste un tierno beso...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§dBajo el paraguas, intercambiaste un tierno beso...",
+
+  "event.mcaromanticexpansion.confession.player": "§d¡Te armaste de valor y te declaraste!",
+  "event.mcaromanticexpansion.confession.partner": "§d¡Tu pareja se armó de valor y se te declaró!",
+
+  "event.mcaromanticexpansion.heart_to_heart.player": "§dCorazón a Corazón: ¡Recibieron la bendición de la suerte y la velocidad!",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§dCorazón a Corazón: ¡Recibieron la bendición de la suerte y la velocidad!",
+
+  "event.mcaromanticexpansion.rainbow_pact.player": "§dPacto del Arcoíris: ¡Un hermoso arcoíris apareció a su lado!",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§dPacto del Arcoíris: ¡Un hermoso arcoíris apareció a su lado!",
+
+  "event.mcaromanticexpansion.time_stands_still.player": "§dEl Tiempo se Detiene: Bajo el paraguas, el tiempo parece ralentizarse...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§dEl Tiempo se Detiene: Bajo el paraguas, el tiempo parece ralentizarse...",
+
+  "event.mcaromanticexpansion.synchrony_test.player": "§dPrueba de Sincronía: ¡En el próximo minuto, salten al mismo tiempo!",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§dPrueba de Sincronía: ¡En el próximo minuto, salten al mismo tiempo!",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§cLastimaste a %s, ¡el afecto disminuyó en %d puntos!",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s te lastimó, ¡el afecto disminuyó en %d puntos!",
 
   "advancements.mcaromanticexpansion.hero_resque.title": "Héroe Rescatador",
   "advancements.mcaromanticexpansion.hero_resque.description": "¡Activa el evento 'Héroe Rescatador' y protege a tu amor!",
@@ -73,5 +197,22 @@
   "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 La luz de la luna ilumina la noche...",
 
   "event.mcaromanticexpansion.starfall.player": "§e🌟 Una estrella fugaz cruza el cielo, ¡pide un deseo!",
-  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Una estrella fugaz cruza el cielo, pidiendo un deseo contigo!"
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Una estrella fugaz cruza el cielo, pidiendo un deseo contigo!",
+
+  "key.categories.mcaromanticexpansion": "MCA Expansión Romántica",
+  "key.mcaromanticexpansion.princess_carry": "Carga de Princesa (Solicitar/Soltar)",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "Invitación de Carga de Princesa",
+  "mcaromanticexpansion.gui.princess_carry.question": "¡%s quiere cargarte como princesa!",
+  "mcaromanticexpansion.gui.princess_carry.accept": "Aceptar",
+  "mcaromanticexpansion.gui.princess_carry.reject": "Rechazar",
+
+  "message.mcaromanticexpansion.carry.sent": "§dSolicitud de carga de princesa enviada a %s, esperando respuesta...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s rechazó tu invitación de carga de princesa.",
+  "message.mcaromanticexpansion.carry.busy": "§cTú o tu pareja ya están en una carga de princesa, no se puede realizar otra.",
+  "message.mcaromanticexpansion.carry.too_far": "§cTu pareja está demasiado lejos, acércate e inténtalo de nuevo.",
+  "message.mcaromanticexpansion.carry.too_far_response": "§cTu pareja se ha alejado, solicitud de carga de princesa cancelada.",
+  "message.mcaromanticexpansion.carry.failed": "§cLa carga de princesa falló, tu pareja podría estar montando otra entidad.",
+  "message.mcaromanticexpansion.carry.no_target": "§7No hay otros jugadores a la vista, mira a otro jugador y presiona la tecla de nuevo.",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7Cualquiera de los dos puede presionar Shift (agacharse) o presionar H nuevamente para terminar la carga de princesa."
 }

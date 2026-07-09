@@ -9,6 +9,46 @@
   "item.mcaromanticexpansion.gift_box.halloween": "Halloween-Geschenkbox",
   "item.mcaromanticexpansion.gift_box.birthday": "Geburtstags-Geschenkbox",
 
+  "item.mcaromanticexpansion.rose_brooch_red": "Rote Rosenbrosche",
+  "item.mcaromanticexpansion.rose_brooch_pink": "Rosa Rosenbrosche",
+  "item.mcaromanticexpansion.rose_brooch_white": "Weiße Rosenbrosche",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7Eine feine Brosche, die an der Brust getragen wird",
+  "tooltip.mcaromanticexpansion.corsage.red": "§cRote Rose - Leidenschaftlich",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§dRosa Rose - Süß und sanft",
+  "tooltip.mcaromanticexpansion.corsage.white": "§fWeiße Rose - Rein und makellos",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "Chinesisches Bräutigams-Hochzeitsgewand",
+  "item.mcaromanticexpansion.chinese_wedding_female": "Chinesisches Braut-Hochzeitsgewand",
+  "item.mcaromanticexpansion.western_wedding_male": "Westlicher Bräutigams-Anzug",
+  "item.mcaromanticexpansion.western_wedding_female": "Westliches Brautkleid",
+
+  "item.mcaromanticexpansion.red_veil": "Roter Schleier",
+  "item.mcaromanticexpansion.golden_hairpin": "Goldene Haarnadel",
+  "item.mcaromanticexpansion.umbrella": "Regenschirm",
+  "item.mcaromanticexpansion.love_letter": "Liebesbrief",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Liebesbrief schreiben ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ Liebesbrief ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "An:",
+  "mcaromanticexpansion.gui.love_letter.message_label": "Nachricht:",
+  "mcaromanticexpansion.gui.love_letter.recipient": "Name des Empfängers",
+  "mcaromanticexpansion.gui.love_letter.save": "Versiegeln",
+  "mcaromanticexpansion.gui.love_letter.cancel": "Verwerfen",
+  "mcaromanticexpansion.gui.love_letter.close": "Schließen",
+  "mcaromanticexpansion.gui.love_letter.reply": "Antworten",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ Antwort schreiben ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "Antwort-Nachricht:",
+  "mcaromanticexpansion.love_letter.not_written": "§eDieser Liebesbrief ist noch leer. Schleichen und rechtsklicken, um zu schreiben.",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "Briefwechsel",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "Antworte auf einen erhaltenen Liebesbrief, zwei Herzen kommen sich näher",
+
+  "curios.identifier.wedding": "Hochzeitskleidung",
+
+  "advancements.mcaromanticexpansion.root.title": "MCA Romantische Erweiterung",
+  "advancements.mcaromanticexpansion.root.description": "Eine romantische Reise beginnt",
+
   "mcaromanticexpansion.gui.bouquet.title": "Blumenstrauß erhalten",
   "mcaromanticexpansion.gui.bouquet.question": "%s hat dir einen Blumenstrauß geschenkt!",
   "mcaromanticexpansion.gui.bouquet.accept": "Annehmen",
@@ -23,6 +63,12 @@
   "mcaromanticexpansion.gui.marriage.question": "%s möchte Ringe tauschen!\nBeide Spieler müssen einen Ehering haben",
   "mcaromanticexpansion.gui.marriage.confirm": "Ringe tauschen",
   "mcaromanticexpansion.gui.marriage.cancel": "Abbrechen",
+
+  "mcaromanticexpansion.gui.shared_umbrella.title": "Einladung zum gemeinsamen Schirm",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s lädt dich ein, einen Schirm zu teilen!",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "Annehmen",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "Ablehnen",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "Verbleibende Zeit: %d Sekunden",
 
   "mcaromanticexpansion.proposal.accepted": "§a%s hat deinen Antrag angenommen!",
   "mcaromanticexpansion.proposal.rejected": "§cAntrag abgelehnt.",
@@ -57,6 +103,84 @@
   "mcaromanticexpansion.ring.tooltip.married_to": "Verheiratet mit %s",
   "mcaromanticexpansion.ring.tooltip.blessing": "Segen euch beiden",
 
+  "mcaromanticexpansion.command.birthday.check.other.success": "%ss Geburtstag ist der %d.%d.",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s hat keinen Geburtstag gesetzt!",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "Schleier lüften",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "Hebe bei der Hochzeitszeremonie den roten Schleier der Braut",
+
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "Schirm für dich",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "Schenke zum ersten Mal einem Spieler einen Schirm",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "Lied im Regen",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "Schenke einem Spieler im Regen insgesamt 10 Mal einen Schirm",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "Unser Schirm",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "Tausche mit demselben Spieler insgesamt 20 Mal Schirme aus",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "Herzensverbindung",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "Löse beim gemeinsamen Schirmtragen das Herzensverbindungs-Event aus",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "Regenbogenbund",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "Löse beim gemeinsamen Schirmtragen das Regenbogenbund-Event aus",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "Stillstehende Zeit",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "Löse beim gemeinsamen Schirmtragen das Stillstehende-Zeit-Event aus",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "Harmonieprüfung",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "Löse beim gemeinsamen Schirmtragen das Harmonieprüfungs-Event aus",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§dDu bist mit %s in die Empfängnisbereitschaft eingetreten!",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§dDu bist mit %s in die Empfängnisbereitschaft eingetreten!",
+  "message.mcaromanticexpansion.pregnancy_success": "§aGlückwunsch! Du bist schwanger geworden!",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§aGlückwunsch! %s ist schwanger geworden!",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§cDein Partner ist leider verstorben, die Empfängnisbereitschaft wurde beendet",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§eEmpfängnisbereitschaft läuft: %d Tick vergangen / %d Tick gesamt (%d Tick verbleibend)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§cDu bist aktuell nicht in der Empfängnisbereitschaft",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "%ss Empfängnisbereitschaft läuft: %d Tick vergangen / %d Tick gesamt (%d Tick verbleibend)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s ist aktuell nicht in der Empfängnisbereitschaft",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§aEmpfängnisbereitschaft abgeschlossen! Das Baby ist geboren!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§cDu bist aktuell nicht in der Empfängnisbereitschaft!",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a%ss Empfängnisbereitschaft ist abgeschlossen!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s ist aktuell nicht in der Empfängnisbereitschaft!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§aEmpfängnisbereitschaft wurde abgebrochen",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§cDu bist aktuell nicht in der Empfängnisbereitschaft!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a%ss Empfängnisbereitschaft wurde abgebrochen",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s ist aktuell nicht in der Empfängnisbereitschaft!",
+
+  "block.mcaromanticexpansion.umbrella_stand": "Schirmständer",
+
+  "event.mcaromanticexpansion.share_story.player": "§dDu hast eine interessante Geschichte geteilt...",
+  "event.mcaromanticexpansion.share_story.partner": "§dJemand hat eine interessante Geschichte mit dir geteilt...",
+
+  "event.mcaromanticexpansion.hold_hands.player": "§dEure Hände berührten sich versehentlich, das Herz schlägt schneller...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§dEure Hände berührten sich versehentlich, das Herz schlägt schneller...",
+
+  "event.mcaromanticexpansion.whisper_love.player": "§dDu hast leise die Worte geflüstert, die tief in deinem Herzen lagen...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§dJemand hat dir leise die Worte geflüstert, die tief im Herzen lagen...",
+
+  "event.mcaromanticexpansion.gentle_kiss.player": "§dUnter dem Schirm tauschtet ihr einen sanften Kuss aus...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§dUnter dem Schirm tauschtet ihr einen sanften Kuss aus...",
+
+  "event.mcaromanticexpansion.confession.player": "§dDu hast den Mut gefunden, deine Liebe zu gestehen!",
+  "event.mcaromanticexpansion.confession.partner": "§dJemand hat den Mut gefunden, dir seine Liebe zu gestehen!",
+
+  "event.mcaromanticexpansion.heart_to_heart.player": "§dHerzensverbindung: Ihr habt den Segen von Glück und Geschwindigkeit erhalten!",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§dHerzensverbindung: Ihr habt den Segen von Glück und Geschwindigkeit erhalten!",
+
+  "event.mcaromanticexpansion.rainbow_pact.player": "§dRegenbogenbund: Ein wunderschöner Regenbogen erschien neben euch!",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§dRegenbogenbund: Ein wunderschöner Regenbogen erschien neben euch!",
+
+  "event.mcaromanticexpansion.time_stands_still.player": "§dStillstehende Zeit: Unter dem Schirm scheint die Zeit langsamer zu werden...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§dStillstehende Zeit: Unter dem Schirm scheint die Zeit langsamer zu werden...",
+
+  "event.mcaromanticexpansion.synchrony_test.player": "§dHarmonieprüfung: Springt in der nächsten Minute gleichzeitig auf!",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§dHarmonieprüfung: Springt in der nächsten Minute gleichzeitig auf!",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§cDu hast %s verletzt, die Zuneigung ist um %d Punkte gesunken!",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s hat dich verletzt, die Zuneigung ist um %d Punkte gesunken!",
+
   "advancements.mcaromanticexpansion.hero_resque.title": "Heldenretter",
   "advancements.mcaromanticexpansion.hero_resque.description": "Aktiviere das 'Heldenretter'-Event und beschütze deine Liebe!",
 
@@ -73,5 +197,22 @@
   "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 Mondlicht erhellt die Nacht...",
 
   "event.mcaromanticexpansion.starfall.player": "§e🌟 Eine Sternschnuppe durchquert den Himmel, wünsch dir was!",
-  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Eine Sternschnuppe durchquert den Himmel, gemeinsam mit dir!"
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 Eine Sternschnuppe durchquert den Himmel, gemeinsam mit dir!",
+
+  "key.categories.mcaromanticexpansion": "MCA Romantische Erweiterung",
+  "key.mcaromanticexpansion.princess_carry": "Prinzessinentrag (Anfragen/Ablegen)",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "Einladung zum Prinzessinentrag",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s möchte dich wie eine Prinzessin tragen!",
+  "mcaromanticexpansion.gui.princess_carry.accept": "Zustimmen",
+  "mcaromanticexpansion.gui.princess_carry.reject": "Ablehnen",
+
+  "message.mcaromanticexpansion.carry.sent": "§dPrinzessinentrag-Anfrage an %s gesendet, warte auf Antwort...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s hat deine Prinzessinentrag-Einladung abgelehnt.",
+  "message.mcaromanticexpansion.carry.busy": "§cDu oder die andere Person befindet sich bereits im Prinzessinentrag, ein weiterer ist nicht möglich.",
+  "message.mcaromanticexpansion.carry.too_far": "§cDie andere Person ist zu weit entfernt, bitte näher kommen.",
+  "message.mcaromanticexpansion.carry.too_far_response": "§cDie andere Person ist weggegangen, die Prinzessinentrag-Anfrage wurde abgebrochen.",
+  "message.mcaromanticexpansion.carry.failed": "§cPrinzessinentrag fehlgeschlagen, die Person reitet möglicherweise auf einer anderen Entität.",
+  "message.mcaromanticexpansion.carry.no_target": "§7Kein anderer Spieler im Sichtfeld. Bitte einem anderen Spieler zugewandt die Taste drücken.",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7Beide Seiten können Shift (Schleichen) drücken oder erneut H drücken, um den Prinzessinentrag zu beenden."
 }

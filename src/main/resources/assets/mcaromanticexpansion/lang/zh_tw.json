@@ -29,6 +29,23 @@
   "item.mcaromanticexpansion.red_veil": "紅蓋頭",
   "item.mcaromanticexpansion.golden_hairpin": "金髮簪",
   "item.mcaromanticexpansion.umbrella": "傘",
+  "item.mcaromanticexpansion.love_letter": "情書",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ 寫情書 ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ 情書 ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "致：",
+  "mcaromanticexpansion.gui.love_letter.message_label": "正文：",
+  "mcaromanticexpansion.gui.love_letter.recipient": "收信人名字",
+  "mcaromanticexpansion.gui.love_letter.save": "封箋",
+  "mcaromanticexpansion.gui.love_letter.cancel": "作廢",
+  "mcaromanticexpansion.gui.love_letter.close": "收起",
+  "mcaromanticexpansion.gui.love_letter.reply": "回信",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ 寫回信 ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "回信正文：",
+  "mcaromanticexpansion.love_letter.not_written": "§e這封情書還是空白的，潛行右鍵開始書寫",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "鴻雁傳書",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "回覆一封收到的情書，兩顆心靠得更近了",
 
   "curios.identifier.wedding": "婚服",
 
@@ -112,15 +129,6 @@
   "advancements.mcaromanticexpansion.synchrony_test.title": "默契考驗",
   "advancements.mcaromanticexpansion.synchrony_test.description": "在共傘時觸發了默契考驗事件",
 
-  "advancements.mcaromanticexpansion.hero_resque.title": "英雄救美",
-  "advancements.mcaromanticexpansion.hero_resque.description": "觸發英雄救美事件，保護你的愛人！",
-
-  "advancements.mcaromanticexpansion.moonlight_serenade.title": "月光小夜曲",
-  "advancements.mcaromanticexpansion.moonlight_serenade.description": "在月光下享受浪漫的夜晚！",
-
-  "advancements.mcaromanticexpansion.starfall.title": "流星雨",
-  "advancements.mcaromanticexpansion.starfall.description": "在流星雨下許願！",
-
   "message.mcaromanticexpansion.pregnancy_start": "§d你與 %s 進入了備孕期！",
   "message.mcaromanticexpansion.pregnancy_start_partner": "§d你與 %s 進入了備孕期！",
   "message.mcaromanticexpansion.pregnancy_success": "§a恭喜！你成功懷孕了！",
@@ -169,6 +177,18 @@
   "event.mcaromanticexpansion.synchrony_test.player": "§d默契考驗：在接下來的1分鐘內，同時跳起！",
   "event.mcaromanticexpansion.synchrony_test.partner": "§d默契考驗：在接下來的1分鐘內，同時跳起！",
 
+  "message.mcaromanticexpansion.affection.decay.attacker": "§c你傷害了 %s，好感度減少了 %d 點！",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s 傷害了你，好感度減少了 %d 點！",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "英雄救美",
+  "advancements.mcaromanticexpansion.hero_resque.description": "觸發英雄救美事件，保護你的愛人！",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "月光小夜曲",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "在月光下享受浪漫的夜晚！",
+
+  "advancements.mcaromanticexpansion.starfall.title": "流星雨",
+  "advancements.mcaromanticexpansion.starfall.description": "在流星雨下許願！",
+
   "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 危險！殭屍正在靠近！保護好你的愛人！",
   "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 危險！殭屍正在靠近！你的愛人會保護你的！",
 
@@ -178,6 +198,20 @@
   "event.mcaromanticexpansion.starfall.player": "§e🌟 流星劃過天際，許個願吧！",
   "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星劃過天際，與你一起許願！",
 
-  "message.mcaromanticexpansion.affection.decay.attacker": "§c你傷害了 %s，好感度減少了 %d 點！",
-  "message.mcaromanticexpansion.affection.decay.target": "§c%s 傷害了你，好感度減少了 %d 點！"
+  "key.categories.mcaromanticexpansion": "MCA 浪漫擴展",
+  "key.mcaromanticexpansion.princess_carry": "公主抱（請求/放下）",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "公主抱邀請",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s 想要公主抱你！",
+  "mcaromanticexpansion.gui.princess_carry.accept": "答應",
+  "mcaromanticexpansion.gui.princess_carry.reject": "拒絕",
+
+  "message.mcaromanticexpansion.carry.sent": "§d已向 %s 發送公主抱請求，等待對方回覆...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s 拒絕了你的公主抱邀請。",
+  "message.mcaromanticexpansion.carry.busy": "§c你或對方目前正處於公主抱狀態，無法再進行公主抱。",
+  "message.mcaromanticexpansion.carry.too_far": "§c對方離你太遠了，請靠近後再試。",
+  "message.mcaromanticexpansion.carry.too_far_response": "§c對方已走遠，公主抱請求取消。",
+  "message.mcaromanticexpansion.carry.failed": "§c公主抱失敗，對方可能正在騎乘其他實體。",
+  "message.mcaromanticexpansion.carry.no_target": "§7視線中沒有其他玩家，請面向其他玩家後再按按鍵。",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7任何一方按下 Shift（蹲下）或再次按 H 鍵即可結束公主抱。"
 }
