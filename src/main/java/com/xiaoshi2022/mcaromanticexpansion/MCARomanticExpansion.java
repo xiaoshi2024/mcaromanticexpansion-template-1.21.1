@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.xiaoshi2022.mcaromanticexpansion.command.BirthdayCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
-import com.xiaoshi2022.mcaromanticexpansion.command.UpdateCommand;
 import com.xiaoshi2022.mcaromanticexpansion.config.HUDConfig;
 import com.xiaoshi2022.mcaromanticexpansion.event.*;
 import com.xiaoshi2022.mcaromanticexpansion.network.ModNetwork;
@@ -14,7 +13,6 @@ import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModParticles;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
 import com.xiaoshi2022.mcaromanticexpansion.util.CarryRuntime;
-import com.xiaoshi2022.mcaromanticexpansion.util.ModInfo;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,8 +34,8 @@ import org.slf4j.Logger;
 public class MCARomanticExpansion {
     public static final String MODID = "mcaromanticexpansion";
 
-    public static final String MOD_NAME = ModInfo.getModName();
-    public static final String MOD_VERSION = ModInfo.getModVersion();
+//    public static final String MOD_NAME = ModInfo.getModName();
+//    public static final String MOD_VERSION = ModInfo.getModVersion();
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -48,7 +46,7 @@ public class MCARomanticExpansion {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, HUDConfig.SPEC, "mcaromanticexpansion-client.toml");
         HUDConfig.markLoaded();
 
-        LOGGER.info("Loading {} version {}", MOD_NAME, MOD_VERSION);
+//        LOGGER.info("Loading {} version {}", MOD_NAME, MOD_VERSION);
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -86,7 +84,7 @@ public class MCARomanticExpansion {
         BirthdayCommand.register(event.getDispatcher());
         PregnancyCommand.register(event.getDispatcher());
         MarriageConfigCommand.register(event.getDispatcher());
-        UpdateCommand.register(event.getDispatcher());
+//        UpdateCommand.register(event.getDispatcher());
     }
 
     @SubscribeEvent
