@@ -27,6 +27,9 @@ import forge.net.mca.item.WeddingRingItem;
 import forge.net.mca.server.ServerInteractionManager;
 import forge.net.mca.server.world.data.PlayerSaveData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -77,8 +80,7 @@ public class PlayerInteractionHandler {
         } else if (item instanceof WeddingRingItem) {
             handleMarriage(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
-            // 【修复】使用物品的注册名称判断离婚协议书
-        } else if (item != null && isDivorcePapersItem(item)) {
+        } else if (item == ItemsMCA.DIVORCE_PAPERS.get()) {
             handleDivorcePapers(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
         } else if (stack.is(ModItems.UMBRELLA.get())) {
@@ -88,61 +90,6 @@ public class PlayerInteractionHandler {
             handleUnveilVeil(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
         }
-    }
-
-    /**
-     * 判断物品是否为离婚协议书
-     * 使用字符串比较避免 RegistrySupplier 的 .get() 问题
-     */
-    private static boolean isDivorcePapersItem(net.minecraft.world.item.Item item) {
-        if (item == null) return false;
-        String registryName = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).toString();
-        return "mca:divorce_papers".equals(registryName);
-    }
-
-    /**
-     * 判断物品栈是否为离婚协议书
-     */
-    private static boolean isDivorcePapersStack(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        String registryName = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
-        return "mca:divorce_papers".equals(registryName);
-    }
-
-    private static void handleDivorcePapers(ServerPlayer sender, ServerPlayer target) {
-        PlayerSaveData senderData = PlayerSaveData.get(sender);
-
-        boolean senderIsMarried = senderData.getRelationshipState() == RelationshipState.MARRIED_TO_PLAYER;
-        boolean targetIsSpouse = senderData.getPartnerUUID().isPresent() &&
-                senderData.getPartnerUUID().get().equals(target.getUUID());
-
-        if (!senderIsMarried || !targetIsSpouse) {
-            sender.sendSystemMessage(Component.literal("§c只有已婚玩家才能向配偶递交离婚协议书！").withStyle(ChatFormatting.RED));
-            return;
-        }
-
-        MarriageChangedEvent forgeEvent = new MarriageChangedEvent(
-                sender, target, MarriageChangedEvent.ChangeType.DIVORCED
-        );
-        if (MinecraftForge.EVENT_BUS.post(forgeEvent)) {
-            MCARomanticExpansion.LOGGER.debug("Divorce canceled by event listener for {} -> {}",
-                    sender.getName().getString(), target.getName().getString());
-            return;
-        }
-
-        ServerInteractionManager.getInstance().endMarriage(sender);
-
-        // 【修复】使用字符串比较消耗离婚协议书
-        for (int i = 0; i < sender.getInventory().getContainerSize(); i++) {
-            var stack = sender.getInventory().getItem(i);
-            if (!stack.isEmpty() && isDivorcePapersStack(stack)) {
-                stack.shrink(1);
-                break;
-            }
-        }
-
-        sender.sendSystemMessage(Component.literal("§c你与 " + target.getName().getString() + " 的婚姻已结束。").withStyle(ChatFormatting.RED));
-        target.sendSystemMessage(Component.literal("§c" + sender.getName().getString() + " 已递交离婚协议书，你们的婚姻已结束。").withStyle(ChatFormatting.RED));
     }
 
     private static void handleSharedUmbrella(ServerPlayer player, ServerPlayer target) {
@@ -342,6 +289,7 @@ public class PlayerInteractionHandler {
         CooldownManager.setCooldown(sender.getUUID(), "bouquet");
     }
 
+    // ==================== 🆕 修复后的求婚方法 ====================
     private static void handleProposal(ServerPlayer proposer, ServerPlayer target) {
         if (CooldownManager.isOnCooldown(proposer.getUUID(), "proposal")) {
             long remaining = CooldownManager.getRemainingCooldown(proposer.getUUID(), "proposal");
@@ -350,11 +298,21 @@ public class PlayerInteractionHandler {
             return;
         }
 
-        // 【修复】将 Object 转换为 Gender
-        Object proposerGenderObj = PregnancyAttemptHandler.getGenderFromNBT(proposer);
-        Object targetGenderObj = PregnancyAttemptHandler.getGenderFromNBT(target);
-        Gender proposerGender = (Gender) proposerGenderObj;
-        Gender targetGender = (Gender) targetGenderObj;
+        // ========== 🆕 强制修复性别数据 ==========
+        PregnancyAttemptHandler.forceFixGenderData(proposer);
+        PregnancyAttemptHandler.forceFixGenderData(target);
+
+        // ========== 诊断性别数据 ==========
+        PregnancyAttemptHandler.diagnoseGenderData(proposer);
+        PregnancyAttemptHandler.diagnoseGenderData(target);
+
+        // ========== 检查性别 ==========
+        Gender proposerGender = PregnancyAttemptHandler.getGenderFromNBT(proposer);
+        Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
+
+        MCARomanticExpansion.LOGGER.info("🔍 [Proposal] {} gender: {}, {} gender: {}",
+                proposer.getName().getString(), proposerGender,
+                target.getName().getString(), targetGender);
 
         if (proposerGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
             proposer.sendSystemMessage(Component.literal("§c请双方都使用 /mca editor 设置性别后再求婚！")
@@ -398,6 +356,7 @@ public class PlayerInteractionHandler {
         proposer.sendSystemMessage(Component.literal("§a已向 " + target.getName().getString() + " 发送求婚请求！").withStyle(ChatFormatting.GREEN));
     }
 
+    // ==================== 🆕 修复后的结婚方法 ====================
     private static void handleMarriage(ServerPlayer sender, ServerPlayer target) {
         if (CooldownManager.isOnCooldown(sender.getUUID(), "marriage")) {
             long remaining = CooldownManager.getRemainingCooldown(sender.getUUID(), "marriage");
@@ -406,11 +365,17 @@ public class PlayerInteractionHandler {
             return;
         }
 
-        // 【修复】将 Object 转换为 Gender
-        Object senderGenderObj = PregnancyAttemptHandler.getGenderFromNBT(sender);
-        Object targetGenderObj = PregnancyAttemptHandler.getGenderFromNBT(target);
-        Gender senderGender = (Gender) senderGenderObj;
-        Gender targetGender = (Gender) targetGenderObj;
+        // ========== 🆕 强制修复性别数据 ==========
+        PregnancyAttemptHandler.forceFixGenderData(sender);
+        PregnancyAttemptHandler.forceFixGenderData(target);
+
+        // ========== 检查性别 ==========
+        Gender senderGender = PregnancyAttemptHandler.getGenderFromNBT(sender);
+        Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
+
+        MCARomanticExpansion.LOGGER.info("🔍 [Marriage] {} gender: {}, {} gender: {}",
+                sender.getName().getString(), senderGender,
+                target.getName().getString(), targetGender);
 
         if (senderGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
             sender.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别后再结婚！")
@@ -458,6 +423,41 @@ public class PlayerInteractionHandler {
         sender.sendSystemMessage(Component.literal("§a已向 " + target.getName().getString() + " 发送婚礼请求！").withStyle(ChatFormatting.GREEN));
     }
 
+    private static void handleDivorcePapers(ServerPlayer sender, ServerPlayer target) {
+        PlayerSaveData senderData = PlayerSaveData.get(sender);
+
+        boolean senderIsMarried = senderData.getRelationshipState() == RelationshipState.MARRIED_TO_PLAYER;
+        boolean targetIsSpouse = senderData.getPartnerUUID().isPresent() &&
+                senderData.getPartnerUUID().get().equals(target.getUUID());
+
+        if (!senderIsMarried || !targetIsSpouse) {
+            sender.sendSystemMessage(Component.literal("§c只有已婚玩家才能向配偶递交离婚协议书！").withStyle(ChatFormatting.RED));
+            return;
+        }
+
+        MarriageChangedEvent forgeEvent = new MarriageChangedEvent(
+                sender, target, MarriageChangedEvent.ChangeType.DIVORCED
+        );
+        if (MinecraftForge.EVENT_BUS.post(forgeEvent)) {
+            MCARomanticExpansion.LOGGER.debug("Divorce canceled by event listener for {} -> {}",
+                    sender.getName().getString(), target.getName().getString());
+            return;
+        }
+
+        ServerInteractionManager.getInstance().endMarriage(sender);
+
+        for (int i = 0; i < sender.getInventory().getContainerSize(); i++) {
+            var stack = sender.getInventory().getItem(i);
+            if (!stack.isEmpty() && stack.getItem() == ItemsMCA.DIVORCE_PAPERS.get()) {
+                stack.shrink(1);
+                break;
+            }
+        }
+
+        sender.sendSystemMessage(Component.literal("§c你与 " + target.getName().getString() + " 的婚姻已结束。").withStyle(ChatFormatting.RED));
+        target.sendSystemMessage(Component.literal("§c" + sender.getName().getString() + " 已递交离婚协议书，你们的婚姻已结束。").withStyle(ChatFormatting.RED));
+    }
+
     private static void sendProposalRequest(ServerPlayer sender, ServerPlayer receiver) {
         OpenProposalGUIPacket packet = new OpenProposalGUIPacket(sender.getUUID(), sender.getName().getString());
         MCARomanticExpansion.LOGGER.debug("Sending OpenProposalGUIPacket to {} from {}",
@@ -480,64 +480,82 @@ public class PlayerInteractionHandler {
     }
 
     private static void handleUnveilVeil(ServerPlayer player, ServerPlayer target) {
+        MCARomanticExpansion.LOGGER.info("🔵 [UnveilVeil] {} right-clicked {}",
+                player.getName().getString(), target.getName().getString());
+
         if (!com.xiaoshi2022.mcaromanticexpansion.compat.curios.CuriosIntegration.isCuriosAvailable()) {
+            MCARomanticExpansion.LOGGER.warn("❌ Curios not available");
             return;
         }
 
         PlayerSaveData playerData = PlayerSaveData.get(player);
-        PlayerSaveData targetData = PlayerSaveData.get(target);
+        if (playerData == null) {
+            MCARomanticExpansion.LOGGER.warn("❌ PlayerSaveData is null for {}", player.getName().getString());
+            return;
+        }
 
         boolean playerIsMarried = playerData.getRelationshipState() == RelationshipState.MARRIED_TO_PLAYER;
         boolean targetIsSpouse = playerData.getPartnerUUID().isPresent() &&
                 playerData.getPartnerUUID().get().equals(target.getUUID());
 
+        MCARomanticExpansion.LOGGER.info("🔵 Married: {}, IsSpouse: {}", playerIsMarried, targetIsSpouse);
+
         if (!playerIsMarried || !targetIsSpouse) {
+            MCARomanticExpansion.LOGGER.warn("❌ Not married or not spouse");
             return;
         }
 
         try {
-            Class<?> curiosApiClass = Class.forName("top.theillusivec4.curios.api.CuriosApi");
+            // ========== 🆕 使用 Curios Capability 直接获取 ==========
+            var curiosInventoryOpt = target.getCapability(
+                    top.theillusivec4.curios.api.CuriosCapability.INVENTORY);
 
-            Object optionalCuriosInventory = curiosApiClass.getDeclaredMethod("getCuriosInventory", net.minecraft.world.entity.LivingEntity.class)
-                    .invoke(null, target);
+            if (!curiosInventoryOpt.isPresent()) {
+                MCARomanticExpansion.LOGGER.info("❌ No curios inventory for {}", target.getName().getString());
+                return;
+            }
 
-            if (optionalCuriosInventory instanceof java.util.Optional<?> opt && opt.isPresent()) {
-                Object curiosInventory = opt.get();
-                Class<?> inventoryClass = curiosInventory.getClass();
+            var curiosInventory = curiosInventoryOpt.resolve().get();
 
-                Object optionalSlotResult = inventoryClass.getDeclaredMethod("findFirstCurio", java.util.function.Predicate.class)
-                        .invoke(curiosInventory, (java.util.function.Predicate<ItemStack>) stack ->
-                                !stack.isEmpty() && stack.getItem() instanceof RedVeilItem);
+            // 查找红盖头
+            var optionalSlotResult = curiosInventory.findFirstCurio(stack ->
+                    !stack.isEmpty() && stack.getItem() instanceof RedVeilItem);
 
-                if (optionalSlotResult instanceof java.util.Optional<?> slotOpt && slotOpt.isPresent()) {
-                    Object slotResult = slotOpt.get();
-                    Class<?> slotResultClass = slotResult.getClass();
+            if (optionalSlotResult.isEmpty()) {
+                MCARomanticExpansion.LOGGER.info("❌ No red veil found in curios slots for {}", target.getName().getString());
+                return;
+            }
 
-                    ItemStack stack = (ItemStack) slotResultClass.getDeclaredMethod("stack").invoke(slotResult);
-                    ItemStack veilStack = stack.copy();
+            var slotResult = optionalSlotResult.get();
+            ItemStack veilStack = slotResult.stack().copy();
+            var slotContext = slotResult.slotContext();
 
-                    Object slotContext = slotResultClass.getDeclaredMethod("slotContext").invoke(slotResult);
-                    Class<?> slotContextClass = slotContext.getClass();
+            // 移除红盖头
+            curiosInventory.setEquippedCurio(slotContext.identifier(), slotContext.index(), ItemStack.EMPTY);
 
-                    String identifier = (String) slotContextClass.getDeclaredMethod("identifier").invoke(slotContext);
-                    int index = (int) slotContextClass.getDeclaredMethod("index").invoke(slotContext);
+            MCARomanticExpansion.LOGGER.info("✅ Removed red veil from {} slot {}",
+                    slotContext.identifier(), slotContext.index());
 
-                    inventoryClass.getDeclaredMethod("setEquippedCurio", String.class, int.class, ItemStack.class)
-                            .invoke(curiosInventory, identifier, index, ItemStack.EMPTY);
+            // 将红盖头给玩家
+            if (!player.getInventory().add(veilStack)) {
+                target.drop(veilStack, false);
+                player.sendSystemMessage(Component.literal("§c背包已满，红盖头掉落在地上！").withStyle(ChatFormatting.RED));
+            } else {
+                player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
+                target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
 
-                    if (!player.getInventory().add(veilStack)) {
-                        target.drop(veilStack, false);
-                        player.sendSystemMessage(Component.literal("§c背包已满，红盖头掉落在地上！").withStyle(ChatFormatting.RED));
-                    } else {
-                        player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
-                        target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
-
-                        ModAdvancements.triggerUnveilVeil(player);
-                    }
+                try {
+                    MCARomanticExpansion.LOGGER.info("🔵 Triggering unveil_veil achievement for {}", player.getName().getString());
+                    ModAdvancements.triggerUnveilVeil(player);
+                    MCARomanticExpansion.LOGGER.info("✅ UnveilVeil achievement triggered successfully!");
+                } catch (Exception ex) {
+                    MCARomanticExpansion.LOGGER.error("Failed to trigger unveil_veil advancement: {}", ex.getMessage());
                 }
             }
+
         } catch (Exception e) {
-            MCARomanticExpansion.LOGGER.warn("Failed to check for red veil: {}", e.getMessage());
+            MCARomanticExpansion.LOGGER.error("Failed to handle unveil veil", e);
+            e.printStackTrace();
         }
     }
 }

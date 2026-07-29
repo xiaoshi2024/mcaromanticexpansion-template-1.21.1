@@ -222,7 +222,8 @@ public class PregnancyManager {
     }
 
     public static boolean isFullSatiated(Player player) {
-        return player.getFoodData().getFoodLevel() >= 20 && player.getFoodData().getSaturationLevel() >= 5.0F;
+        // 需要 90% 饱食度（18 点 = 9 个鸡腿）
+        return player.getFoodData().getFoodLevel() >= 18;
     }
 
     public static double calculatePregnancyChance(ServerPlayer player, ServerPlayer partner) {
