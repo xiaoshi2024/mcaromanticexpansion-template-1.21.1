@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "mcaromanticexpansion:umbrella"
+    },
+    "title": {
+      "translate": "advancements.mcaromanticexpansion.first_umbrella_gift.title"
+    },
+    "description": {
+      "translate": "advancements.mcaromanticexpansion.first_umbrella_gift.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "mcaromanticexpansion:root",
+  "criteria": {
+    "first_gift": {
+      "trigger": "mcaromanticexpansion:first_umbrella_gift"
+    }
+  }
+}

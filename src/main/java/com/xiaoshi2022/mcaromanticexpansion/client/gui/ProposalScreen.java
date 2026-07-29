@@ -1,0 +1,90 @@
+package com.xiaoshi2022.mcaromanticexpansion.client.gui;
+
+import com.xiaoshi2022.mcaromanticexpansion.network.ModNetwork;
+import com.xiaoshi2022.mcaromanticexpansion.network.ProposalResponsePacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.UUID;
+
+@OnlyIn(Dist.CLIENT)
+public class ProposalScreen extends Screen {
+    private final UUID proposerUUID;
+    private final String proposerName;
+    private long lastClickTime = 0;
+
+    public ProposalScreen(UUID proposerUUID, String proposerName) {
+        super(Component.translatable("mcaromanticexpansion.gui.proposal.title"));
+        this.proposerUUID = proposerUUID;
+        this.proposerName = proposerName;
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public void onClose() {
+        Minecraft.getInstance().setScreen(null);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+
+        this.addRenderableWidget(Button.builder(Component.translatable("mcaromanticexpansion.gui.proposal.accept"), button -> {
+            if (System.currentTimeMillis() - lastClickTime > 500) {
+                lastClickTime = System.currentTimeMillis();
+                sendResponse(true);
+                this.onClose();
+            }
+        }).pos(centerX - 90, centerY + 10).size(80, 20).build());
+
+        this.addRenderableWidget(Button.builder(Component.translatable("mcaromanticexpansion.gui.proposal.reject"), button -> {
+            if (System.currentTimeMillis() - lastClickTime > 500) {
+                lastClickTime = System.currentTimeMillis();
+                sendResponse(false);
+                this.onClose();
+            }
+        }).pos(centerX + 10, centerY + 10).size(80, 20).build());
+    }
+
+    private void sendResponse(boolean accepted) {
+        // 使用 Forge 网络系统发送
+        ModNetwork.CHANNEL.sendToServer(new ProposalResponsePacket(proposerUUID, accepted));
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+            onClose();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+
+        int centerX = this.width / 2;
+        int centerY = this.height / 2;
+
+        guiGraphics.fill(centerX - 100, centerY - 60, centerX + 100, centerY + 40, 0x77000000);
+        guiGraphics.drawCenteredString(this.font, this.title, centerX, centerY - 45, 0xFFFFFFFF);
+        guiGraphics.hLine(centerX - 80, centerX + 80, centerY - 35, 0xAAFFFFFF);
+
+        // 使用带参数的语言键
+        Component question = Component.translatable("mcaromanticexpansion.gui.proposal.question", proposerName);
+        guiGraphics.drawCenteredString(this.font, question, centerX, centerY - 20, 0xFFFFFFFF);
+    }
+}

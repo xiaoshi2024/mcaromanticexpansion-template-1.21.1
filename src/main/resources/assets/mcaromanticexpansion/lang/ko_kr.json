@@ -1,0 +1,217 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA 로맨틱 익스팬션",
+  "item.mcaromanticexpansion.player_bouquet": "플레이어 꽃다발",
+  "item.mcaromanticexpansion.player_engagement_ring": "플레이어 약혼 반지",
+  "item.mcaromanticexpansion.player_wedding_ring": "플레이어 결혼 반지",
+  "item.mcaromanticexpansion.gift_box": "선물 상자",
+  "item.mcaromanticexpansion.gift_box.valentine": "발렌타인 선물 상자",
+  "item.mcaromanticexpansion.gift_box.christmas": "크리스마스 선물 상자",
+  "item.mcaromanticexpansion.gift_box.halloween": "할로윈 선물 상자",
+  "item.mcaromanticexpansion.gift_box.birthday": "생일 선물 상자",
+  "item.mcaromanticexpansion.engagement_ring.target": "약혼 반지 - %s 와",
+  "item.mcaromanticexpansion.wedding_ring.given": "결혼 반지 - %s 로부터",
+  "item.mcaromanticexpansion.wedding_ring.received": "결혼 반지 - %s 에게",
+
+  "item.mcaromanticexpansion.rose_brooch_red": "빨간 장미 브로치",
+  "item.mcaromanticexpansion.rose_brooch_pink": "분홍 장미 브로치",
+  "item.mcaromanticexpansion.rose_brooch_white": "하얀 장미 브로치",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7가슴에 다는 정교한 브로치",
+  "tooltip.mcaromanticexpansion.corsage.red": "§c빨간 장미 - 불꽃 같은 열정",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§d분홍 장미 - 달콤하고 부드러운",
+  "tooltip.mcaromanticexpansion.corsage.white": "§f하얀 장미 - 순결하고 흠 없는",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "중국식 신랑 혼복",
+  "item.mcaromanticexpansion.chinese_wedding_female": "중국식 신부 혼복",
+  "item.mcaromanticexpansion.western_wedding_male": "서양식 신랑 정장",
+  "item.mcaromanticexpansion.western_wedding_female": "서양식 신부 웨딩드레스",
+
+  "item.mcaromanticexpansion.red_veil": "붉은 면사포",
+  "item.mcaromanticexpansion.golden_hairpin": "금비녀",
+  "item.mcaromanticexpansion.umbrella": "우산",
+  "item.mcaromanticexpansion.love_letter": "러브레터",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ 러브레터 쓰기 ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ 러브레터 ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "받는 사람:",
+  "mcaromanticexpansion.gui.love_letter.message_label": "본문:",
+  "mcaromanticexpansion.gui.love_letter.recipient": "받는 사람 이름",
+  "mcaromanticexpansion.gui.love_letter.save": "봉인",
+  "mcaromanticexpansion.gui.love_letter.cancel": "폐기",
+  "mcaromanticexpansion.gui.love_letter.close": "닫기",
+  "mcaromanticexpansion.gui.love_letter.reply": "답장",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ 답장 쓰기 ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "답장 본문:",
+  "mcaromanticexpansion.love_letter.not_written": "§e이 러브레터는 아직 빈칸입니다. 웅크린 채로 우클릭하여 작성을 시작하세요",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "편지로 마음 전하기",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "받은 러브레터에 답장하여 두 마음이 더 가까워졌습니다",
+
+  "curios.identifier.wedding": "혼복",
+
+  "advancements.mcaromanticexpansion.root.title": "MC 로맨틱 익스팬션",
+  "advancements.mcaromanticexpansion.root.description": "로맨틱한 여정이 시작됩니다",
+
+  "mcaromanticexpansion.gui.bouquet.title": "꽃다발을 받았습니다",
+  "mcaromanticexpansion.gui.bouquet.question": "%s님이 당신에게 꽃다발을 선물했습니다!",
+  "mcaromanticexpansion.gui.bouquet.accept": "받기",
+  "mcaromanticexpansion.gui.bouquet.reject": "거절",
+
+  "mcaromanticexpansion.gui.proposal.title": "결혼 제안",
+  "mcaromanticexpansion.gui.proposal.question": "%s님이 당신과 결혼하고 싶어합니다!",
+  "mcaromanticexpansion.gui.proposal.accept": "기꺼이!",
+  "mcaromanticexpansion.gui.proposal.reject": "미안해요",
+
+  "mcaromanticexpansion.gui.marriage.title": "웨딩 ceremony",
+  "mcaromanticexpansion.gui.marriage.question": "%s님이 반지를 교환하고 싶어합니다!\n두 플레이어 모두 결혼 반지를 가지고 있어야 합니다",
+  "mcaromanticexpansion.gui.marriage.confirm": "반지 교환",
+  "mcaromanticexpansion.gui.marriage.cancel": "취소",
+
+  "mcaromanticexpansion.gui.shared_umbrella.title": "우산 공유 초대",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s님이 우산을 함께 쓰자고 초대했습니다!",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "수락",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "거절",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "남은 시간: %d초",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s님이あなたの求婚を受け入れました！",
+  "mcaromanticexpansion.proposal.rejected": "§c求婚이 거절되었습니다.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s님이あなたの求婚を거절했습니다.",
+
+  "mcaromanticexpansion.marriage.declined": "§c 결혼이 취소되었습니다.",
+  "mcaromanticexpansion.marriage.missing_ring": "§c두 플레이어 모두 결혼 반지를 가지고 있어야 합니다!",
+  "mcaromanticexpansion.marriage.success": "§d축하합니다! 당신은 %s님과 결혼했습니다!",
+  "mcaromanticexpansion.marriage.failed": "§c결혼에 실패했습니다. 두 사람 모두 반지를 가지고 있는지 확인하세요.",
+
+  "mcaromanticexpansion.message.cannot_propose": "제안할 수 없음: 당신들은 적합하지 않습니다",
+  "mcaromanticexpansion.message.proposal_sent": "결혼 제안을 보냈습니다!",
+  "mcaromanticexpansion.message.cannot_marry": "결혼할 수 없음: 두 플레이어 모두 결혼 반지를 가지고 있어야 합니다",
+  "mcaromanticexpansion.message.marriage_sent": "결혼 신청을 보냈습니다!",
+  "mcaromanticexpansion.message.married": "결혼 축하합니다!",
+  "mcaromanticexpansion.message.divorce_success": "이혼 성공",
+  "mcaromanticexpansion.message.gift_placed": "선물 상자에 아이템을 넣었습니다",
+  "mcaromanticexpansion.message.gift_opened": "선물 상자를 열어서 아이템을 받았습니다",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§a생일을 %1$d월 %2$d일로 설정했습니다",
+  "mcaromanticexpansion.command.birthday.check.success": "§e당신의 생일은 %1$d월 %2$d일입니다",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§c생일이 설정되지 않았습니다! 사용법: /birthday set <월> <일>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂生日快乐！오늘이 당신의 생일입니다!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§e당신의 생일은 %1$d월 %2$d일입니다",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§c생일이 설정되지 않았습니다!",
+
+  "mcaromanticexpansion.command.birthday.check.other.success": "%s님의 생일은 %d월 %d일입니다",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s님은 아직 생일을 설정하지 않았습니다!",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "%s 와 약혼 중",
+  "mcaromanticexpansion.ring.tooltip.married_to": "%s 와 결혼 중",
+  "mcaromanticexpansion.ring.tooltip.blessing": "둘의 행복을 기원합니다",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "붉은 면사포 걷기",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "결혼식에서 신랑이 직접 신부의 붉은 면사포를 걷어냅니다",
+
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "우산을 씌워드립니다",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "처음으로 플레이어에게 우산을 선물하세요",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "빗속의 노래",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "비 오는 날 플레이어에게 우산을 누적 10번 선물하세요",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "우리의 우산",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "같은 플레이어와 우산을 주고받은 횟수가 누적 20번",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "마음이 통하다",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "우산을 함께 쓸 때 마음이 통하는 이벤트를 발동했습니다",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "무지개의 약속",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "우산을 함께 쓸 때 무지개의 약속 이벤트를 발동했습니다",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "시간의 기념",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "우산을 함께 쓸 때 시간의 기념 이벤트를 발동했습니다",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "호흡의 시험",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "우산을 함께 쓸 때 호흡의 시험 이벤트를 발동했습니다",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§d당신은 %s님과 임신 준비기에 들어갔습니다!",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§d당신은 %s님과 임신 준비기에 들어갔습니다!",
+  "message.mcaromanticexpansion.pregnancy_success": "§a축하합니다! 임신에 성공했습니다!",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§a축하합니다! %s님이 임신에 성공했습니다!",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§c당신의 반려자가 안타깝게 세상을 떠나 임신 준비기가 종료되었습니다",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§e임신 준비기 진행 중: %d tick 경과 / 총 %d tick (남은 %d tick)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§c현재 임신 준비기가 아닙니다",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "%s님의 임신 준비기 진행 중: %d tick 경과 / 총 %d tick (남은 %d tick)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s님은 현재 임신 준비기가 아닙니다",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§a임신 준비기가 완료되었습니다! 아기가 태어났습니다!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§c현재 임신 준비기가 아닙니다!",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a%s님의 임신 준비기가 완료되었습니다!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s님은 현재 임신 준비기가 아닙니다!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§a임신 준비기가 취소되었습니다",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§c현재 임신 준비기가 아닙니다!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a%s님의 임신 준비기를 취소했습니다",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s님은 현재 임신 준비기가 아닙니다!",
+
+  "block.mcaromanticexpansion.umbrella_stand": "우산 꽂이",
+
+  "event.mcaromanticexpansion.share_story.player": "§d당신은 상대방에게 재미있는 이야기를 들려주었습니다...",
+  "event.mcaromanticexpansion.share_story.partner": "§d상대방이 당신에게 재미있는 이야기를 들려주었습니다...",
+
+  "event.mcaromanticexpansion.hold_hands.player": "§d두 사람의 손이 우연히 닿았고, 심장이 뛰기 시작했습니다...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§d두 사람의 손이 우연히 닿았고, 심장이 뛰기 시작했습니다...",
+
+  "event.mcaromanticexpansion.whisper_love.player": "§d당신은 마음속에 숨겨둔 말을 조용히 꺼냈습니다...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§d상대방이 마음속에 숨겨둔 말을 조용히 꺼냈습니다...",
+
+  "event.mcaromanticexpansion.gentle_kiss.player": "§d우산 아래에서 두 사람은 부드러운 입맞춤을 나누었습니다...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§d우산 아래에서 두 사람은 부드러운 입맞춤을 나누었습니다...",
+
+  "event.mcaromanticexpansion.confession.player": "§d당신은 용기를 내어 고백했습니다!",
+  "event.mcaromanticexpansion.confession.partner": "§d상대방이 용기를 내어 당신에게 고백했습니다!",
+
+  "event.mcaromanticexpansion.heart_to_heart.player": "§d마음이 통하다: 두 사람은 행운과 속도의 축복을 받았습니다!",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§d마음이 통하다: 두 사람은 행운과 속도의 축복을 받았습니다!",
+
+  "event.mcaromanticexpansion.rainbow_pact.player": "§d무지개의 약속: 화려한 무지개가 두 사람 곁에 나타났습니다!",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§d무지개의 약속: 화려한 무지개가 두 사람 곁에 나타났습니다!",
+
+  "event.mcaromanticexpansion.time_stands_still.player": "§d시간의 기념: 우산 아래에서 시간이 느려진 것 같습니다...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§d시간의 기념: 우산 아래에서 시간이 느려진 것 같습니다...",
+
+  "event.mcaromanticexpansion.synchrony_test.player": "§d호흡의 시험: 앞으로 1분 동안 동시에 점프하세요!",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§d호흡의 시험: 앞으로 1분 동안 동시에 점프하세요!",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§c당신은 %s님을 공격하여 호감도가 %d 감소했습니다!",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s님이 당신을 공격하여 호감도가 %d 감소했습니다!",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "영웅 구출",
+  "advancements.mcaromanticexpansion.hero_resque.description": "영웅 구출 이벤트를 발동시키고 사랑하는 사람을 보호하세요!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "달빛 세레나데",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "달빛 아래 로맨틱한 밤을 즐겨보세요!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "유성우",
+  "advancements.mcaromanticexpansion.starfall.description": "유성우 아래에서 소원을 빌어보세요!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 위험! 좀비가 접근 중입니다! 사랑하는 사람을 지키세요!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 위험! 좀비가 접근 중입니다! 당신의 사랑이 당신을 지킬 거예요!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 달빛이 내리고, 밤이 아름답습니다...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 달빛이 내리고, 당신과 함께하는 밤...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 유성이 하늘을 가르며 떨어집니다, 소원을 빌어보세요!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 유성이 하늘을 가르며 떨어집니다, 당신과 함께 소원을 빕니다!",
+
+  "key.categories.mcaromanticexpansion": "MCA 로맨틱 익스팬션",
+  "key.mcaromanticexpansion.princess_carry": "프린세스 캐리 (요청/내려놓기)",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "프린세스 캐리 초대",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s님이 당신을 프린세스 캐리 하려고 합니다!",
+  "mcaromanticexpansion.gui.princess_carry.accept": "응낙",
+  "mcaromanticexpansion.gui.princess_carry.reject": "거절",
+
+  "message.mcaromanticexpansion.carry.sent": "§d%s님에게 프린세스 캐리 요청을 보냈습니다, 상대방의 응답을 기다리는 중...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s님이 프린세스 캐리 초대를 거절했습니다.",
+  "message.mcaromanticexpansion.carry.busy": "§c당신 또는 상대방이 현재 프린세스 캐리 상태입니다, 다시 진행할 수 없습니다.",
+  "message.mcaromanticexpansion.carry.too_far": "§c상대방이 너무 멀리 있습니다, 가까이 다가간 후 다시 시도하세요.",
+  "message.mcaromanticexpansion.carry.too_far_response": "§c상대방이 멀리 떠나 프린세스 캐리 요청이 취소되었습니다.",
+  "message.mcaromanticexpansion.carry.failed": "§c프린세스 캐리 실패, 상대방이 다른 개체를 타고 있을 수 있습니다.",
+  "message.mcaromanticexpansion.carry.no_target": "§7시야에 다른 플레이어가 없습니다, 다른 플레이어를 향한 후 키를 누르세요.",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7어느 한쪽이 Shift(웅크리기)를 누르거나 다시 H 키를 누르면 프린세스 캐리가 종료됩니다."
+}

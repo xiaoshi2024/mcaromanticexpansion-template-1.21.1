@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "RGR",
+    "W W"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "R": { "item": "minecraft:red_dye" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": {
+    "id": "mcaromanticexpansion:chinese_wedding_male",
+    "count": 1
+  }
+}

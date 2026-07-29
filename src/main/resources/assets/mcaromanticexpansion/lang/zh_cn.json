@@ -1,0 +1,219 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA 浪漫扩展",
+  "item.mcaromanticexpansion.player_bouquet": "玩家花束",
+  "item.mcaromanticexpansion.player_engagement_ring": "玩家订婚戒指",
+  "item.mcaromanticexpansion.player_wedding_ring": "玩家结婚戒指",
+  "item.mcaromanticexpansion.gift_box": "礼盒",
+  "item.mcaromanticexpansion.gift_box.valentine": "情人节礼盒",
+  "item.mcaromanticexpansion.gift_box.christmas": "圣诞礼盒",
+  "item.mcaromanticexpansion.gift_box.halloween": "万圣节礼盒",
+  "item.mcaromanticexpansion.gift_box.birthday": "生日礼盒",
+  "item.mcaromanticexpansion.engagement_ring.target": "订婚戒指 - 与 %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "婚戒 - 来自 %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "婚戒 - 送给 %s",
+
+  "item.mcaromanticexpansion.rose_brooch_red": "红玫瑰胸针",
+  "item.mcaromanticexpansion.rose_brooch_pink": "粉玫瑰胸针",
+  "item.mcaromanticexpansion.rose_brooch_white": "白玫瑰胸针",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7佩戴在胸前的精美胸针",
+  "tooltip.mcaromanticexpansion.corsage.red": "§c红玫瑰 - 热情似火",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§d粉玫瑰 - 甜蜜温柔",
+  "tooltip.mcaromanticexpansion.corsage.white": "§f白玫瑰 - 纯洁无瑕",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "中式新郎婚服",
+  "item.mcaromanticexpansion.chinese_wedding_female": "中式新娘婚服",
+  "item.mcaromanticexpansion.western_wedding_male": "西式新郎西装",
+  "item.mcaromanticexpansion.western_wedding_female": "西式新娘婚纱",
+
+  "item.mcaromanticexpansion.red_veil": "红盖头",
+  "item.mcaromanticexpansion.golden_hairpin": "金发簪",
+  "item.mcaromanticexpansion.umbrella": "伞",
+  "item.mcaromanticexpansion.love_letter": "情书",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ 写情书 ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ 情书 ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "致：",
+  "mcaromanticexpansion.gui.love_letter.message_label": "正文：",
+  "mcaromanticexpansion.gui.love_letter.recipient": "收信人名字",
+  "mcaromanticexpansion.gui.love_letter.save": "封笺",
+  "mcaromanticexpansion.gui.love_letter.cancel": "作废",
+  "mcaromanticexpansion.gui.love_letter.close": "收起",
+  "mcaromanticexpansion.gui.love_letter.reply": "回信",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ 写回信 ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "回信正文：",
+  "mcaromanticexpansion.love_letter.not_written": "§e这封情书还是空白的，潜行右键开始书写",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "鸿雁传书",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "回复一封收到的情书，两颗心靠得更近了",
+
+  "curios.identifier.wedding": "婚服",
+
+  "advancements.mcaromanticexpansion.root.title": "MC 浪漫扩展",
+  "advancements.mcaromanticexpansion.root.description": "一段浪漫的旅程开始了",
+
+  "mcaromanticexpansion.gui.bouquet.title": "收到花束",
+  "mcaromanticexpansion.gui.bouquet.question": "%s 送给你一束花！",
+  "mcaromanticexpansion.gui.bouquet.accept": "收下",
+  "mcaromanticexpansion.gui.bouquet.reject": "拒收",
+
+  "mcaromanticexpansion.gui.proposal.title": "求婚",
+  "mcaromanticexpansion.gui.proposal.question": "%s 想要和你结婚！",
+  "mcaromanticexpansion.gui.proposal.accept": "我愿意！",
+  "mcaromanticexpansion.gui.proposal.reject": "抱歉，不能",
+
+  "mcaromanticexpansion.gui.marriage.title": "婚礼仪式",
+  "mcaromanticexpansion.gui.marriage.question": "%s 请求与你交换戒指结婚！双方都需要拥有结婚戒指",
+  "mcaromanticexpansion.gui.marriage.confirm": "交换戒指",
+  "mcaromanticexpansion.gui.marriage.cancel": "取消",
+
+  "mcaromanticexpansion.gui.shared_umbrella.title": "共伞邀请",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s 邀请你共撑一把伞！",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "接受",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "拒绝",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "剩余时间: %d秒",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s 接受了你的求婚！",
+  "mcaromanticexpansion.proposal.rejected": "§c求婚被拒绝了。",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s 拒绝了你的求婚。",
+
+  "mcaromanticexpansion.marriage.declined": "§c婚礼已取消。",
+  "mcaromanticexpansion.marriage.missing_ring": "§c双方都需要拥有结婚戒指！",
+  "mcaromanticexpansion.marriage.success": "§d恭喜你们！你和 %s 结为夫妻了！",
+  "mcaromanticexpansion.marriage.failed": "§c婚礼失败，请确保双方都有戒指。",
+
+  "mcaromanticexpansion.message.cannot_propose": "无法求婚：你们不合适",
+  "mcaromanticexpansion.message.proposal_sent": "求婚请求已发送！",
+  "mcaromanticexpansion.message.cannot_marry": "无法结婚：双方都需要拥有结婚戒指",
+  "mcaromanticexpansion.message.marriage_sent": "婚礼请求已发送！",
+  "mcaromanticexpansion.message.married": "恭喜你们结婚了！",
+  "mcaromanticexpansion.message.divorce_success": "离婚成功",
+  "mcaromanticexpansion.message.gift_placed": "已将物品放入礼盒",
+  "mcaromanticexpansion.message.gift_opened": "打开礼盒获得了物品",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§a生日已设置为: %1$d月%2$d日",
+  "mcaromanticexpansion.command.birthday.check.success": "§e你的生日是: %1$d月%2$d日",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§c你还没有设置生日！使用方法: /birthday set <月份> <日期>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 生日快乐！今天是你的生日！",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§e你的生日是: %1$d月%2$d日",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§c你还没有设置生日！",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "已与 %s 订婚",
+  "mcaromanticexpansion.ring.tooltip.married_to": "已与 %s 结婚",
+  "mcaromanticexpansion.ring.tooltip.blessing": "祝你们幸福美满",
+
+  "mcaromanticexpansion.command.birthday.check.other.success": "%s 的生日是 %d月%d日",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s 还没有设置生日！",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "红妆揭面",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "在婚礼仪式上，新郎亲手揭下新娘的红盖头",
+
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "为你撑伞",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "首次送伞给玩家",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "雨中曲",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "雨天送伞给玩家累计10次",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "我们的伞",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "与同一玩家互赠伞累计20次",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "心意相通",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "在共伞时触发了心意相通事件",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "彩虹之约",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "在共伞时触发了彩虹之约事件",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "时光留念",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "在共伞时触发了时光留念事件",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "默契考验",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "在共伞时触发了默契考验事件",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§d你与 %s 进入了备孕期！",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§d你与 %s 进入了备孕期！",
+  "message.mcaromanticexpansion.pregnancy_success": "§a恭喜！你成功怀孕了！",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§a恭喜！%s 成功怀孕了！",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§c你的伴侣不幸离世，备孕期已结束",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§e备孕期进行中: 已过 %d tick / 共 %d tick (剩余 %d tick)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§c你当前不在备孕期",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "%s 的备孕期进行中: 已过 %d tick / 共 %d tick (剩余 %d tick)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s 当前不在备孕期",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§a备孕期已完成！婴儿已出生！",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§c你当前不在备孕期！",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a%s 的备孕期已完成！",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s 当前不在备孕期！",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§a备孕期已取消",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§c你当前不在备孕期！",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a已取消 %s 的备孕期",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 当前不在备孕期！",
+
+  "block.mcaromanticexpansion.umbrella_stand": "伞架",
+
+  "event.mcaromanticexpansion.share_story.player": "§d你与对方分享了一个有趣的故事...",
+  "event.mcaromanticexpansion.share_story.partner": "§d对方与你分享了一个有趣的故事...",
+  
+  "event.mcaromanticexpansion.hold_hands.player": "§d你们的手不经意间触碰到了一起，心跳加速...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§d你们的手不经意间触碰到了一起，心跳加速...",
+  
+  "event.mcaromanticexpansion.whisper_love.player": "§d你轻声说出了藏在心底的话...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§d对方轻声说出了藏在心底的话...",
+  
+  "event.mcaromanticexpansion.gentle_kiss.player": "§d在伞下，你们交换了一个温柔的吻...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§d在伞下，你们交换了一个温柔的吻...",
+  
+  "event.mcaromanticexpansion.confession.player": "§d你鼓起勇气表白了！",
+  "event.mcaromanticexpansion.confession.partner": "§d对方鼓起勇气向你表白了！",
+  
+  "event.mcaromanticexpansion.heart_to_heart.player": "§d心意相通：你们获得了幸运和速度的祝福！",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§d心意相通：你们获得了幸运和速度的祝福！",
+  
+  "event.mcaromanticexpansion.rainbow_pact.player": "§d彩虹之约：一道绚丽的彩虹出现在你们身边！",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§d彩虹之约：一道绚丽的彩虹出现在你们身边！",
+  
+  "event.mcaromanticexpansion.time_stands_still.player": "§d时光留念：雨伞下，时间仿佛变慢了...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§d时光留念：雨伞下，时间仿佛变慢了...",
+  
+  "event.mcaromanticexpansion.synchrony_test.player": "§d默契考验：在接下来的1分钟内，同时跳起！",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§d默契考验：在接下来的1分钟内，同时跳起！",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§c你伤害了 %s，好感度减少了 %d 点！",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s 伤害了你，好感度减少了 %d 点！",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "英雄救美",
+  "advancements.mcaromanticexpansion.hero_resque.description": "触发英雄救美事件，保护你的爱人！",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "月光小夜曲",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "在月光下享受浪漫的夜晚！",
+
+  "advancements.mcaromanticexpansion.starfall.title": "流星雨",
+  "advancements.mcaromanticexpansion.starfall.description": "在流星雨下许愿！",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ 危险！僵尸正在靠近！保护好你的爱人！",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ 危险！僵尸正在靠近！你的爱人会保护你的！",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 月光洒落，夜晚如此美好...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 月光洒落，与你共度良宵...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 流星划过天际，许个愿吧！",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 流星划过天际，与你一起许愿！",
+
+  "key.categories.mcaromanticexpansion": "MCA 浪漫扩展",
+  "key.mcaromanticexpansion.princess_carry": "公主抱（请求/放下）",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "公主抱邀请",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s 想要公主抱你！",
+  "mcaromanticexpansion.gui.princess_carry.accept": "答应",
+  "mcaromanticexpansion.gui.princess_carry.reject": "拒绝",
+
+  "message.mcaromanticexpansion.carry.sent": "§d已向 %s 发送公主抱请求，等待对方回复...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s 拒绝了你的公主抱邀请。",
+  "message.mcaromanticexpansion.carry.busy": "§c你或对方当前正处于公主抱状态，无法再进行公主抱。",
+  "message.mcaromanticexpansion.carry.too_far": "§c对方离你太远了，请靠近后再试。",
+  "message.mcaromanticexpansion.carry.too_far_response": "§c对方已走远，公主抱请求取消。",
+  "message.mcaromanticexpansion.carry.failed": "§c公主抱失败，对方可能正在骑乘其他实体。",
+  "message.mcaromanticexpansion.carry.no_target": "§7视线中没有其他玩家，请面向其他玩家后再按按键。",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7任何一方按下 Shift（蹲下）或再次按 H 键即可结束公主抱。",
+  "tooltip.mcaromanticexpansion.gift_box.contains_gift": "§a含有礼物",
+  "tooltip.mcaromanticexpansion.gift_box.empty": "§7空的礼盒"
+}

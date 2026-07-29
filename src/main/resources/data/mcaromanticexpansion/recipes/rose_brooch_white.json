@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "GRG",
+    " R "
+  ],
+  "key": {
+    "R": { "item": "minecraft:oxeye_daisy" },
+    "G": { "item": "minecraft:gold_nugget" }
+  },
+  "result": {
+    "id": "mcaromanticexpansion:rose_brooch_white",
+    "count": 1
+  }
+}

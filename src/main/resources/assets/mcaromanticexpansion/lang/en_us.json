@@ -1,0 +1,220 @@
+{
+  "itemGroup.mcaromanticexpansion": "MCA Romantic Expansion",
+  "item.mcaromanticexpansion.player_bouquet": "Player Bouquet",
+  "item.mcaromanticexpansion.player_engagement_ring": "Player Engagement Ring",
+  "item.mcaromanticexpansion.player_wedding_ring": "Player Wedding Ring",
+  "item.mcaromanticexpansion.gift_box": "Gift Box",
+  "item.mcaromanticexpansion.gift_box.valentine": "Valentine Gift Box",
+  "item.mcaromanticexpansion.gift_box.christmas": "Christmas Gift Box",
+  "item.mcaromanticexpansion.gift_box.halloween": "Halloween Gift Box",
+  "item.mcaromanticexpansion.gift_box.birthday": "Birthday Gift Box",
+  "item.mcaromanticexpansion.engagement_ring.target": "Engagement Ring - With %s",
+  "item.mcaromanticexpansion.wedding_ring.given": "Wedding Ring - From %s",
+  "item.mcaromanticexpansion.wedding_ring.received": "Wedding Ring - To %s",
+
+  "item.mcaromanticexpansion.rose_brooch_red": "Red Rose Brooch",
+  "item.mcaromanticexpansion.rose_brooch_pink": "Pink Rose Brooch",
+  "item.mcaromanticexpansion.rose_brooch_white": "White Rose Brooch",
+
+  "tooltip.mcaromanticexpansion.corsage": "§7A beautiful brooch to wear on your chest",
+  "tooltip.mcaromanticexpansion.corsage.red": "§cRed rose - Romantic love",
+  "tooltip.mcaromanticexpansion.corsage.pink": "§dPink rose - Sweet and gentle",
+  "tooltip.mcaromanticexpansion.corsage.white": "§fWhite rose - Pure and innocent",
+
+  "item.mcaromanticexpansion.chinese_wedding_male": "Chinese Wedding Groom Outfit",
+  "item.mcaromanticexpansion.chinese_wedding_female": "Chinese Wedding Bride Outfit",
+  "item.mcaromanticexpansion.western_wedding_male": "Western Wedding Groom Suit",
+  "item.mcaromanticexpansion.western_wedding_female": "Western Wedding Bride Dress",
+
+  "advancements.mcaromanticexpansion.root.title": "MC Romantic Expansion",
+  "advancements.mcaromanticexpansion.root.description": "A romantic journey begins",
+
+  "item.mcaromanticexpansion.red_veil": "Red Veil",
+  "item.mcaromanticexpansion.golden_hairpin": "Golden Hairpin",
+  "item.mcaromanticexpansion.umbrella": "Umbrella",
+  "item.mcaromanticexpansion.love_letter": "Love Letter",
+
+  "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Write Love Letter ✉",
+  "mcaromanticexpansion.gui.love_letter.read.title": "✉ Love Letter ✉",
+  "mcaromanticexpansion.gui.love_letter.recipient_label": "To:",
+  "mcaromanticexpansion.gui.love_letter.message_label": "Message:",
+  "mcaromanticexpansion.gui.love_letter.recipient": "Recipient name",
+  "mcaromanticexpansion.gui.love_letter.save": "Seal",
+  "mcaromanticexpansion.gui.love_letter.cancel": "Discard",
+  "mcaromanticexpansion.gui.love_letter.close": "Close",
+  "mcaromanticexpansion.gui.love_letter.reply": "Reply",
+  "mcaromanticexpansion.gui.love_letter.reply_title": "✉ Write Reply ✉",
+  "mcaromanticexpansion.gui.love_letter.reply_message_label": "Reply message:",
+  "mcaromanticexpansion.love_letter.not_written": "§eThis love letter is blank. Sneak + right-click to write",
+
+  "advancements.mcaromanticexpansion.love_letter_reply.title": "Letters of Love",
+  "advancements.mcaromanticexpansion.love_letter_reply.description": "Reply to a love letter you received, bringing two hearts closer",
+
+  "curios.identifier.wedding": "Wedding",
+
+  "mcaromanticexpansion.gui.bouquet.title": "Received Bouquet",
+  "mcaromanticexpansion.gui.bouquet.question": "%s gave you a bouquet!",
+  "mcaromanticexpansion.gui.bouquet.accept": "Accept",
+  "mcaromanticexpansion.gui.bouquet.reject": "Reject",
+
+  "mcaromanticexpansion.gui.proposal.title": "Marriage Proposal",
+  "mcaromanticexpansion.gui.proposal.question": "%s wants to marry you!",
+  "mcaromanticexpansion.gui.proposal.accept": "I Accept!",
+  "mcaromanticexpansion.gui.proposal.reject": "Sorry, No",
+
+  "mcaromanticexpansion.gui.marriage.title": "Wedding Ceremony",
+  "mcaromanticexpansion.gui.marriage.question": "%s wants to exchange rings! Both players need a wedding ring",
+  "mcaromanticexpansion.gui.marriage.confirm": "Exchange Rings",
+  "mcaromanticexpansion.gui.marriage.cancel": "Cancel",
+
+  "mcaromanticexpansion.gui.shared_umbrella.title": "Shared Umbrella Invitation",
+  "mcaromanticexpansion.gui.shared_umbrella.question": "%s invites you to share an umbrella!",
+  "mcaromanticexpansion.gui.shared_umbrella.accept": "Accept",
+  "mcaromanticexpansion.gui.shared_umbrella.reject": "Reject",
+  "mcaromanticexpansion.gui.shared_umbrella.time_left": "Time remaining: %ds",
+
+  "mcaromanticexpansion.proposal.accepted": "§a%s accepted your proposal!",
+  "mcaromanticexpansion.proposal.rejected": "§cProposal rejected.",
+  "mcaromanticexpansion.proposal.rejected_by": "§c%s rejected your proposal.",
+
+  "mcaromanticexpansion.marriage.declined": "§cWedding cancelled.",
+  "mcaromanticexpansion.marriage.missing_ring": "§cBoth players need a wedding ring!",
+  "mcaromanticexpansion.marriage.success": "§dCongratulations! You married %s!",
+  "mcaromanticexpansion.marriage.failed": "§cWedding failed. Make sure both have rings.",
+
+  "mcaromanticexpansion.message.cannot_propose": "Cannot propose: You are not compatible",
+  "mcaromanticexpansion.message.proposal_sent": "Proposal sent!",
+  "mcaromanticexpansion.message.cannot_marry": "Cannot marry: Both players need a wedding ring",
+  "mcaromanticexpansion.message.marriage_sent": "Wedding request sent!",
+  "mcaromanticexpansion.message.married": "Congratulations on your marriage!",
+  "mcaromanticexpansion.message.divorce_success": "Divorce successful",
+  "mcaromanticexpansion.message.gift_placed": "Item placed in gift box",
+  "mcaromanticexpansion.message.gift_opened": "Opened gift box and received item",
+
+  "mcaromanticexpansion.command.birthday.set.success": "§aBirthday set to: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.success": "§eYour birthday is: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.check.not_set": "§cYou haven't set your birthday! Usage: /birthday set <month> <day>",
+  "mcaromanticexpansion.command.birthday.today.success": "§a🎂 Happy Birthday! Today is your birthday!",
+  "mcaromanticexpansion.command.birthday.today.not_birthday": "§eYour birthday is: %1$d/%2$d",
+  "mcaromanticexpansion.command.birthday.today.not_set": "§cYou haven't set your birthday!",
+
+  "mcaromanticexpansion.ring.tooltip.engaged_to": "Engaged to %s",
+  "mcaromanticexpansion.ring.tooltip.married_to": "Married to %s",
+  "mcaromanticexpansion.ring.tooltip.blessing": "Blessings to you both",
+
+  "mcaromanticexpansion.command.birthday.check.other.success": "%s's birthday is %d/%d",
+  "mcaromanticexpansion.command.birthday.check.other.not_set": "%s has not set their birthday!",
+
+  "advancements.mcaromanticexpansion.unveil_veil.title": "Unveil Red Veil",
+  "advancements.mcaromanticexpansion.unveil_veil.description": "In the wedding ceremony, the groom manually removes the bride's red veil",
+
+  "advancements.mcaromanticexpansion.first_umbrella_gift.title": "Holding an Umbrella for You",
+  "advancements.mcaromanticexpansion.first_umbrella_gift.description": "First time sharing your umbrella with another player",
+
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "Rainy Melody",
+  "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "Shared your umbrella in the rain 10 times",
+
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "Our Umbrella",
+  "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "Shared umbrellas with the same player 20 times",
+
+  "advancements.mcaromanticexpansion.heart_to_heart.title": "Heart to Heart",
+  "advancements.mcaromanticexpansion.heart_to_heart.description": "Triggered the Heart to Heart romantic event while sharing an umbrella",
+
+  "advancements.mcaromanticexpansion.rainbow_pact.title": "Rainbow Pact",
+  "advancements.mcaromanticexpansion.rainbow_pact.description": "Triggered the Rainbow Pact romantic event while sharing an umbrella",
+
+  "advancements.mcaromanticexpansion.time_stands_still.title": "Time Stands Still",
+  "advancements.mcaromanticexpansion.time_stands_still.description": "Triggered the Time Stands Still romantic event while sharing an umbrella",
+
+  "advancements.mcaromanticexpansion.synchrony_test.title": "Synchrony Test",
+  "advancements.mcaromanticexpansion.synchrony_test.description": "Triggered the Synchrony Test romantic event while sharing an umbrella",
+
+  "message.mcaromanticexpansion.pregnancy_start": "§dYou and %s have entered the conception period!",
+  "message.mcaromanticexpansion.pregnancy_start_partner": "§dYou and %s have entered the conception period!",
+  "message.mcaromanticexpansion.pregnancy_success": "§aCongratulations! You're pregnant!",
+  "message.mcaromanticexpansion.pregnancy_success_partner": "§aCongratulations! %s is pregnant!",
+  "message.mcaromanticexpansion.pregnancy_ended_death": "§cYour partner has passed away, conception period ended",
+
+  "mcaromanticexpansion.command.pregnancy.status.active": "§eConception period in progress: %d ticks / %d total (remaining %d ticks)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive": "§cYou are not in a conception period",
+  "mcaromanticexpansion.command.pregnancy.status.active.other": "%s's conception period: %d ticks / %d total (remaining %d ticks)",
+  "mcaromanticexpansion.command.pregnancy.status.inactive.other": "%s is not in a conception period",
+  "mcaromanticexpansion.command.pregnancy.complete.success": "§aConception period completed! Baby has been born!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure": "§cYou are not in a conception period!",
+  "mcaromanticexpansion.command.pregnancy.complete.success.other": "§a%s's conception period completed!",
+  "mcaromanticexpansion.command.pregnancy.complete.failure.other": "§c%s is not in a conception period!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success": "§aConception period cancelled",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure": "§cYou are not in a conception period!",
+  "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aCancelled %s's conception period",
+  "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s is not in a conception period!",
+
+  "block.mcaromanticexpansion.umbrella_stand": "Umbrella Stand",
+
+  "event.mcaromanticexpansion.share_story.player": "§dYou shared an interesting story with each other...",
+  "event.mcaromanticexpansion.share_story.partner": "§dThey shared an interesting story with you...",
+  
+  "event.mcaromanticexpansion.hold_hands.player": "§dYour hands accidentally touched, heart racing...",
+  "event.mcaromanticexpansion.hold_hands.partner": "§dYour hands accidentally touched, heart racing...",
+  
+  "event.mcaromanticexpansion.whisper_love.player": "§dYou whispered the words hidden in your heart...",
+  "event.mcaromanticexpansion.whisper_love.partner": "§dThey whispered the words hidden in their heart...",
+  
+  "event.mcaromanticexpansion.gentle_kiss.player": "§dUnder the umbrella, you exchanged a gentle kiss...",
+  "event.mcaromanticexpansion.gentle_kiss.partner": "§dUnder the umbrella, you exchanged a gentle kiss...",
+  
+  "event.mcaromanticexpansion.confession.player": "§dYou mustered up the courage to confess your love!",
+  "event.mcaromanticexpansion.confession.partner": "§dThey mustered up the courage to confess their love!",
+  
+  "event.mcaromanticexpansion.heart_to_heart.player": "§dHeart to Heart: You both received blessings of luck and speed!",
+  "event.mcaromanticexpansion.heart_to_heart.partner": "§dHeart to Heart: You both received blessings of luck and speed!",
+  
+  "event.mcaromanticexpansion.rainbow_pact.player": "§dRainbow Pact: A beautiful rainbow appeared around you!",
+  "event.mcaromanticexpansion.rainbow_pact.partner": "§dRainbow Pact: A beautiful rainbow appeared around you!",
+  
+  "event.mcaromanticexpansion.time_stands_still.player": "§dTime Stands Still: Under the umbrella, time seemed to slow down...",
+  "event.mcaromanticexpansion.time_stands_still.partner": "§dTime Stands Still: Under the umbrella, time seemed to slow down...",
+  
+  "event.mcaromanticexpansion.synchrony_test.player": "§dSynchrony Test: Jump at the same time within the next minute!",
+  "event.mcaromanticexpansion.synchrony_test.partner": "§dSynchrony Test: Jump at the same time within the next minute!",
+
+  "message.mcaromanticexpansion.affection.decay.attacker": "§cYou hurt %s, affection decreased by %d points!",
+  "message.mcaromanticexpansion.affection.decay.target": "§c%s hurt you, affection decreased by %d points!",
+
+  "advancements.mcaromanticexpansion.hero_resque.title": "Hero Rescue",
+  "advancements.mcaromanticexpansion.hero_resque.description": "Trigger the Hero Rescue event and protect your love!",
+
+  "advancements.mcaromanticexpansion.moonlight_serenade.title": "Moonlight Serenade",
+  "advancements.mcaromanticexpansion.moonlight_serenade.description": "Enjoy a romantic night under the moonlight!",
+
+  "advancements.mcaromanticexpansion.starfall.title": "Starfall",
+  "advancements.mcaromanticexpansion.starfall.description": "Make a wish under the shooting stars!",
+
+  "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Danger! Zombies are approaching! Protect your love!",
+  "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Danger! Zombies are approaching! Your love will protect you!",
+
+  "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 Moonlight falls, the night is beautiful...",
+  "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 Moonlight falls, spending the night with you...",
+
+  "event.mcaromanticexpansion.starfall.player": "§e🌟 A shooting star streaks across the sky, make a wish!",
+  "event.mcaromanticexpansion.starfall.partner": "§e🌟 A shooting star streaks across the sky, wishing with you!",
+
+  "key.categories.mcaromanticexpansion": "MCA Romantic Expansion",
+  "key.mcaromanticexpansion.princess_carry": "Princess Carry (Request/Release)",
+
+  "mcaromanticexpansion.gui.princess_carry.title": "Princess Carry Invite",
+  "mcaromanticexpansion.gui.princess_carry.question": "%s wants to carry you like a princess!",
+  "mcaromanticexpansion.gui.princess_carry.accept": "Accept",
+  "mcaromanticexpansion.gui.princess_carry.reject": "Decline",
+
+  "message.mcaromanticexpansion.carry.sent": "§dPrincess carry request sent to %s, waiting for their response...",
+  "message.mcaromanticexpansion.carry.rejected": "§c%s declined your princess carry invite.",
+  "message.mcaromanticexpansion.carry.busy": "§cYou or the target are already in a princess carry state.",
+  "message.mcaromanticexpansion.carry.too_far": "§cThe target is too far away, get closer first.",
+  "message.mcaromanticexpansion.carry.too_far_response": "§cThe target has moved out of range, request cancelled.",
+  "message.mcaromanticexpansion.carry.failed": "§cPrincess carry failed, the target might be riding another entity.",
+  "message.mcaromanticexpansion.carry.no_target": "§7No player in your crosshair, look at another player first.",
+  "message.mcaromanticexpansion.carry.self_release_hint": "§7Either of you can press Shift (Sneak) or press H again to end the carry.",
+  "tooltip.mcaromanticexpansion.gift_box.contains_gift": "§aContains gift",
+  "tooltip.mcaromanticexpansion.gift_box.empty": "§7Empty gift box"
+
+}

@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.mcaromanticexpansion.starfall.title"
+    },
+    "description": {
+      "translate": "advancements.mcaromanticexpansion.starfall.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "mcaromanticexpansion:root",
+  "criteria": {
+    "event_triggered": {
+      "trigger": "mcaromanticexpansion:romantic_event",
+      "conditions": {
+        "event_id": "starfall"
+      }
+    }
+  }
+}

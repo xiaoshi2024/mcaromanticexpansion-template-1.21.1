@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "id": "mcaromanticexpansion:rose_brooch_red"
+    },
+    "title": {
+      "translate": "advancements.mcaromanticexpansion.root.title"
+    },
+    "description": {
+      "translate": "advancements.mcaromanticexpansion.root.description"
+    },
+    "background": "minecraft:textures/block/red_wool.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    ["tick"]
+  ]
+}
