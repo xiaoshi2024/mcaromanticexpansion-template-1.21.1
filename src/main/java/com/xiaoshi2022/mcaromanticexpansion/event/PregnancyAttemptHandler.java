@@ -300,9 +300,92 @@ public class PregnancyAttemptHandler {
     @SubscribeEvent
     public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            MCARomanticExpansion.LOGGER.debug("Player {} logged in, checking gender...",
-                    serverPlayer.getName().getString());
-            fixGenderData(serverPlayer);
+            UUID playerId = serverPlayer.getUUID();
+
+            // 先尝试从 persistentData 读取
+            CompoundTag persistentData = serverPlayer.getPersistentData();
+            Gender savedGender = Gender.UNASSIGNED;
+
+            if (persistentData.contains("gender")) {
+                int id = persistentData.getInt("gender");
+                Gender g = Gender.byId(id);
+                if (g != null && g != Gender.UNASSIGNED) {
+                    savedGender = g;
+                    MCARomanticExpansion.LOGGER.info("📖 Found gender in persistentData for {}: {}",
+                            serverPlayer.getName().getString(), savedGender);
+                }
+            }
+
+            if (savedGender != Gender.UNASSIGNED) {
+                // 从 persistentData 恢复
+                lastKnownGender.put(playerId, savedGender);
+                forceSetGender(serverPlayer, savedGender);
+                MCARomanticExpansion.LOGGER.info("✅ Restored gender for {} from persistentData: {}",
+                        serverPlayer.getName().getString(), savedGender);
+                return;
+            }
+
+            // 如果 persistentData 没有，从 NBT 读取
+            Gender gender = readGenderFromNBT(serverPlayer);
+            if (gender != Gender.UNASSIGNED) {
+                lastKnownGender.put(playerId, gender);
+                // 也保存到 persistentData
+                persistentData.putInt("gender", gender.getId());
+                persistentData.putInt("Gender", gender.getId());
+                MCARomanticExpansion.LOGGER.info("✅ Loaded gender for {} from NBT: {}",
+                        serverPlayer.getName().getString(), gender);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            UUID playerId = serverPlayer.getUUID();
+
+            // 从 NBT 读取当前性别
+            Gender currentGender = readGenderFromNBT(serverPlayer);
+
+            if (currentGender != Gender.UNASSIGNED) {
+                // 更新缓存
+                lastKnownGender.put(playerId, currentGender);
+
+                // 强制写入所有可能的位置
+                forceSetGender(serverPlayer, currentGender);
+
+                // 额外：写入 persistentData
+                CompoundTag persistentData = serverPlayer.getPersistentData();
+                persistentData.putInt("gender", currentGender.getId());
+                persistentData.putInt("Gender", currentGender.getId());
+                if (persistentData.contains("mca")) {
+                    CompoundTag mcaData = persistentData.getCompound("mca");
+                    mcaData.putInt("gender", currentGender.getId());
+                }
+
+                MCARomanticExpansion.LOGGER.info("💾 Saved gender on logout for {}: {}",
+                        serverPlayer.getName().getString(), currentGender);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerSave(PlayerEvent.SaveToFile event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            UUID playerId = serverPlayer.getUUID();
+            Gender cached = lastKnownGender.get(playerId);
+
+            if (cached != null && cached != Gender.UNASSIGNED) {
+                // 确保写入
+                forceSetGender(serverPlayer, cached);
+
+                // 写入 persistentData
+                CompoundTag persistentData = serverPlayer.getPersistentData();
+                persistentData.putInt("gender", cached.getId());
+                persistentData.putInt("Gender", cached.getId());
+
+                MCARomanticExpansion.LOGGER.debug("💾 Saved gender on world save for {}: {}",
+                        serverPlayer.getName().getString(), cached);
+            }
         }
     }
 
