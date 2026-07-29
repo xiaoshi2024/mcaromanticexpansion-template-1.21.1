@@ -12,7 +12,7 @@
     "G": { "item": "minecraft:gold_ingot" }
   },
   "result": {
-    "id": "mcaromanticexpansion:chinese_wedding_male",
+    "item": "mcaromanticexpansion:chinese_wedding_male",
     "count": 1
   }
 }

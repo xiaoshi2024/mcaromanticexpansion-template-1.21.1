@@ -13,7 +13,7 @@
     "A": { "item": "minecraft:diamond" }
   },
   "result": {
-    "id": "mcaromanticexpansion:western_wedding_female",
+    "item": "mcaromanticexpansion:western_wedding_female",
     "count": 1
   }
 }

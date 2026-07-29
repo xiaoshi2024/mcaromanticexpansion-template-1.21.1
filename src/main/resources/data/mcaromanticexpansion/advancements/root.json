@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "mcaromanticexpansion:rose_brooch_red"
+      "item": "mcaromanticexpansion:rose_brooch_red"
     },
     "title": {
       "translate": "advancements.mcaromanticexpansion.root.title"

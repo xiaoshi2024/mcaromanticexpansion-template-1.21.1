@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "mcaromanticexpansion:umbrella"
+      "item": "mcaromanticexpansion:umbrella"
     },
     "title": {
       "translate": "advancements.mcaromanticexpansion.first_umbrella_gift.title"

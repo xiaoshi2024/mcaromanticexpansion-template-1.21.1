@@ -7,15 +7,11 @@
         " S "
     ],
     "key": {
-        "S": {
-            "item": "minecraft:stick"
-        },
-        "W": {
-            "item": "minecraft:white_wool"
-        }
+        "S": { "item": "minecraft:stick" },
+        "W": { "item": "minecraft:white_wool" }
     },
     "result": {
-        "id": "mcaromanticexpansion:umbrella",
+        "item": "mcaromanticexpansion:umbrella",
         "count": 1
     }
 }

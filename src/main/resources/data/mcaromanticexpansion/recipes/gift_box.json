@@ -7,18 +7,12 @@
     "ABA"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:paper"
-    },
-    "B": {
-      "item": "minecraft:string"
-    },
-    "C": {
-      "tag": "minecraft:planks"
-    }
+    "A": { "item": "minecraft:paper" },
+    "B": { "item": "minecraft:string" },
+    "C": { "tag": "minecraft:planks" }
   },
   "result": {
-    "id": "mcaromanticexpansion:gift_box",
+    "item": "mcaromanticexpansion:gift_box",
     "count": 1
   }
 }

@@ -89,7 +89,6 @@ public class SharedUmbrellaManager {
     }
 
     public static void handleResponse(ServerPlayer responder, SharedUmbrellaResponsePacket response) {
-        // 【修复】使用 getTargetUUID() 替代 targetUUID()
         UUID requesterUUID = response.getTargetUUID();
 
         if (!pendingRequests.containsKey(responder.getUUID()) ||
@@ -111,7 +110,6 @@ public class SharedUmbrellaManager {
         pendingRequests.remove(responder.getUUID());
         pendingRequests.remove(requesterUUID);
 
-        // 【修复】使用 isAccepted() 替代 accepted()
         if (response.isAccepted()) {
             ItemStack mainHand = requester.getMainHandItem();
             ItemStack offHand = requester.getOffhandItem();
@@ -167,24 +165,32 @@ public class SharedUmbrellaManager {
             requester.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
             responder.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
 
-            // 【修复】使用 ModAdvancements 替代 CriterionTriggerRegister
+            // ✅ ========== 触发共伞成就 ==========
+
+            // 1. 初次共伞
+            MCARomanticExpansion.LOGGER.info("🔵 [Achievement] Triggering first umbrella gift for {}",
+                    requester.getName().getString());
             ModAdvancements.triggerFirstUmbrellaGift(requester);
 
+            // 2. 雨中共伞（先检查天气）
             boolean isRaining = requester.level().isRaining();
             if (isRaining) {
-                int rainyCount = getRainyUmbrellaCount(requester);
-                rainyCount++;
+                int rainyCount = getRainyUmbrellaCount(requester) + 1;
                 setRainyUmbrellaCount(requester, rainyCount);
+                MCARomanticExpansion.LOGGER.info("🔵 [Achievement] Rainy count: {}, triggering rainy umbrella gift", rainyCount);
                 ModAdvancements.triggerRainyUmbrellaGift(requester);
             }
 
-            int mutualCount = getMutualUmbrellaCount(requester, responder);
-            mutualCount++;
+            // 3. 多次共伞（累加计数）
+            int mutualCount = getMutualUmbrellaCount(requester, responder) + 1;
             setMutualUmbrellaCount(requester, responder, mutualCount);
+            MCARomanticExpansion.LOGGER.info("🔵 [Achievement] Mutual count: {}, triggering mutual umbrella gift", mutualCount);
             ModAdvancements.triggerMutualUmbrellaGift(requester);
             ModAdvancements.triggerMutualUmbrellaGift(responder);
 
+            // 4. 触发浪漫事件
             RomanticEventManager.onSharedUmbrellaEstablished(requester, responder);
+
         } else {
             requester.sendSystemMessage(Component.literal("§c对方拒绝了你的共伞邀请").withStyle(ChatFormatting.RED));
             responder.sendSystemMessage(Component.literal("§a已拒绝共伞邀请").withStyle(ChatFormatting.GREEN));
@@ -301,6 +307,7 @@ public class SharedUmbrellaManager {
         }
     }
 
+    // ========== 计数存储 ==========
     private static final String RAINY_UMBRELLA_COUNT_KEY = "mcaromanticexpansion.rainy_umbrella_count";
 
     private static int getRainyUmbrellaCount(ServerPlayer player) {

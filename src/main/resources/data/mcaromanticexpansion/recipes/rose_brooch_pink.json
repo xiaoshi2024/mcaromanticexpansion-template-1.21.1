@@ -10,7 +10,7 @@
     "G": { "item": "minecraft:gold_nugget" }
   },
   "result": {
-    "id": "mcaromanticexpansion:rose_brooch_pink",
+    "item": "mcaromanticexpansion:rose_brooch_pink",
     "count": 1
   }
 }

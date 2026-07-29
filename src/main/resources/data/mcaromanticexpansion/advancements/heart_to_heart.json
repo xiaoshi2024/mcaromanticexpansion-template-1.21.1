@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "minecraft:heart"
+      "item": "minecraft:heart"
     },
     "title": {
       "translate": "advancements.mcaromanticexpansion.heart_to_heart.title"

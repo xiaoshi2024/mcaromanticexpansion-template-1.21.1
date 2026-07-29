@@ -12,7 +12,7 @@
     "S": { "item": "minecraft:stick" }
   },
   "result": {
-    "id": "mcaromanticexpansion:golden_hairpin",
+    "item": "mcaromanticexpansion:golden_hairpin",
     "count": 1
   }
 }

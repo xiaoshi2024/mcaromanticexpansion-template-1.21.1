@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
 import com.mojang.logging.LogUtils;
+import com.xiaoshi2022.mcaromanticexpansion.advancement.ModCriteriaTriggers;
 import com.xiaoshi2022.mcaromanticexpansion.command.BirthdayCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.MarriageConfigCommand;
 import com.xiaoshi2022.mcaromanticexpansion.command.PregnancyCommand;
@@ -67,6 +68,9 @@ public class MCARomanticExpansion {
         MinecraftForge.EVENT_BUS.register(AffectionDecayHandler.class);
         MinecraftForge.EVENT_BUS.register(RomanticAdvancementListener.class);
         MinecraftForge.EVENT_BUS.register(this);
+
+        // ✅ 确保自定义触发器被加载
+        ModCriteriaTriggers.register();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

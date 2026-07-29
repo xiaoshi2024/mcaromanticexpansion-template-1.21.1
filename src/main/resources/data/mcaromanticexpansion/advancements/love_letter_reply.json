@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "id": "mcaromanticexpansion:love_letter"
+      "item": "mcaromanticexpansion:love_letter"
     },
     "title": {
       "translate": "advancements.mcaromanticexpansion.love_letter_reply.title"

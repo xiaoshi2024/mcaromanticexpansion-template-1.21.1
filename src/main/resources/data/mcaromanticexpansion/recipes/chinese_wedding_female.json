@@ -13,7 +13,7 @@
     "A": { "item": "minecraft:diamond" }
   },
   "result": {
-    "id": "mcaromanticexpansion:chinese_wedding_female",
+    "item": "mcaromanticexpansion:chinese_wedding_female",
     "count": 1
   }
 }

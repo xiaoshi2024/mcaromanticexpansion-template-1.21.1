@@ -35,7 +35,7 @@ public class UmbrellaProtectionHandler {
             villagerEntityClass = Class.forName("forge.net.mca.entity.VillagerEntityMCA");
             getVillagerBrainMethod = villagerEntityClass.getMethod("getVillagerBrain");
             // 获取 rewardHearts 方法
-            Class<?> villagerBrainClass = Class.forName("net.conczin.mca.entity.ai.VillagerBrainMCA");
+            Class<?> villagerBrainClass = Class.forName("forge.net.mca.entity.ai.VillagerBrainMCA");
             rewardHeartsMethod = villagerBrainClass.getMethod("rewardHearts", net.minecraft.world.entity.player.Player.class, int.class);
             MCARomanticExpansion.LOGGER.info("MCA VillagerEntityMCA found for umbrella protection");
         } catch (Exception e) {

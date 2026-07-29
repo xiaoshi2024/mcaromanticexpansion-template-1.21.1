@@ -11,7 +11,7 @@
     "R": { "item": "minecraft:red_dye" }
   },
   "result": {
-    "id": "mcaromanticexpansion:red_veil",
+    "item": "mcaromanticexpansion:red_veil",
     "count": 1
   }
 }

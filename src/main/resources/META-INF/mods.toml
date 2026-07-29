@@ -20,6 +20,7 @@ Features:
 
 [[mixins]]
 config="${mod_id}.mixins.json"
+refmap="${mod_id}.refmap.json"
 
 [[dependencies.${mod_id}]]
     modId="forge"

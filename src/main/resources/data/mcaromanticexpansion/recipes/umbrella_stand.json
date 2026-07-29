@@ -7,12 +7,10 @@
         "SSS"
     ],
     "key": {
-        "S": {
-            "item": "minecraft:stick"
-        }
+        "S": { "item": "minecraft:stick" }
     },
     "result": {
-        "id": "mcaromanticexpansion:umbrella_stand",
+        "item": "mcaromanticexpansion:umbrella_stand",
         "count": 1
     }
 }

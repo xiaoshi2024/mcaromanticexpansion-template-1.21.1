@@ -2,7 +2,7 @@
   "parent": "mcaromanticexpansion:root",
   "display": {
     "icon": {
-      "id": "mcaromanticexpansion:red_veil"
+      "item": "mcaromanticexpansion:red_veil"
     },
     "title": {
       "translate": "advancements.mcaromanticexpansion.unveil_veil.title"
