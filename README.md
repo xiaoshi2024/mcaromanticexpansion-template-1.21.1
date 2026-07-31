@@ -96,7 +96,7 @@ MCA Romantic Expansion 是 Minecraft Comes Alive (MCA) 模组的扩展，让你�
 
 ## 要求
 
-- Minecraft 1.21.1
+- Minecraft 1.21.1 or 1.20.1
 - NeoForge
 - **Minecraft Comes Alive Reborn (MCA)** - 必须安装
 
