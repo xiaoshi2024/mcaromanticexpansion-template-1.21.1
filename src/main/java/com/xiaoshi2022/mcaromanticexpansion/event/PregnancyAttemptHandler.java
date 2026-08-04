@@ -98,7 +98,7 @@ public class PregnancyAttemptHandler {
         // ========== 🆕 简化逻辑：检测到变化就更新缓存，不自动恢复 ==========
         // 因为用户通过 MCA 编辑器设置的性别会写入 NBT，我们应该信任 NBT 的值
         if (currentGender != Gender.UNASSIGNED && currentGender != cachedGender) {
-            MCARomanticExpansion.LOGGER.info("🔄 Gender updated for {}: {} -> {} (cache updated)",
+            MCARomanticExpansion.LOGGER.debug("🔄 Gender updated for {}: {} -> {} (cache updated)",
                     player.getName().getString(), cachedGender, currentGender);
             lastKnownGender.put(playerId, currentGender);
         }
@@ -265,11 +265,11 @@ public class PregnancyAttemptHandler {
                 // 更新缓存
                 lastKnownGender.put(playerId, gender);
 
-                MCARomanticExpansion.LOGGER.info("✅ Set gender for {} to {} (user preference)",
+                MCARomanticExpansion.LOGGER.debug("✅ Set gender for {} to {} (user preference)",
                         player.getName().getString(), gender);
 
-                player.sendSystemMessage(Component.literal("§a[MCA] 你的性别已设置为: " +
-                        (gender == Gender.MALE ? "男性" : "女性")));
+//                player.sendSystemMessage(Component.literal("§a[MCA] 你的性别已设置为: " +
+//                        (gender == Gender.MALE ? "男性" : "女性")));
 
             } catch (Exception e) {
                 MCARomanticExpansion.LOGGER.error("Failed to set gender for {}: {}",
@@ -311,7 +311,7 @@ public class PregnancyAttemptHandler {
                 Gender g = Gender.byId(id);
                 if (g != null && g != Gender.UNASSIGNED) {
                     savedGender = g;
-                    MCARomanticExpansion.LOGGER.info("📖 Found gender in persistentData for {}: {}",
+                    MCARomanticExpansion.LOGGER.debug("📖 Found gender in persistentData for {}: {}",
                             serverPlayer.getName().getString(), savedGender);
                 }
             }
@@ -320,7 +320,7 @@ public class PregnancyAttemptHandler {
                 // 从 persistentData 恢复
                 lastKnownGender.put(playerId, savedGender);
                 forceSetGender(serverPlayer, savedGender);
-                MCARomanticExpansion.LOGGER.info("✅ Restored gender for {} from persistentData: {}",
+                MCARomanticExpansion.LOGGER.debug("✅ Restored gender for {} from persistentData: {}",
                         serverPlayer.getName().getString(), savedGender);
                 return;
             }
@@ -332,7 +332,7 @@ public class PregnancyAttemptHandler {
                 // 也保存到 persistentData
                 persistentData.putInt("gender", gender.getId());
                 persistentData.putInt("Gender", gender.getId());
-                MCARomanticExpansion.LOGGER.info("✅ Loaded gender for {} from NBT: {}",
+                MCARomanticExpansion.LOGGER.debug("✅ Loaded gender for {} from NBT: {}",
                         serverPlayer.getName().getString(), gender);
             }
         }
@@ -362,7 +362,7 @@ public class PregnancyAttemptHandler {
                     mcaData.putInt("gender", currentGender.getId());
                 }
 
-                MCARomanticExpansion.LOGGER.info("💾 Saved gender on logout for {}: {}",
+                MCARomanticExpansion.LOGGER.debug("💾 Saved gender on logout for {}: {}",
                         serverPlayer.getName().getString(), currentGender);
             }
         }
@@ -473,7 +473,7 @@ public class PregnancyAttemptHandler {
             if (finalGender != Gender.UNASSIGNED) {
                 if (changed) {
                     data.setDirty();
-                    MCARomanticExpansion.LOGGER.info("✅ Fixed gender for {}: {} (user preference preserved)",
+                    MCARomanticExpansion.LOGGER.debug("✅ Fixed gender for {}: {} (user preference preserved)",
                             player.getName().getString(), finalGender);
                 }
                 // 更新缓存
@@ -494,66 +494,66 @@ public class PregnancyAttemptHandler {
     public static void diagnoseGenderData(ServerPlayer player) {
         if (player == null) return;
 
-        MCARomanticExpansion.LOGGER.info("========== Gender Diagnosis for {} ==========",
+        MCARomanticExpansion.LOGGER.debug("========== Gender Diagnosis for {} ==========",
                 player.getName().getString());
 
         try {
             CompoundTag persistentData = player.getPersistentData();
-            MCARomanticExpansion.LOGGER.info("persistentData keys: {}", persistentData.getAllKeys());
+            MCARomanticExpansion.LOGGER.debug("persistentData keys: {}", persistentData.getAllKeys());
 
             if (persistentData.contains("mca")) {
                 CompoundTag mcaData = persistentData.getCompound("mca");
-                MCARomanticExpansion.LOGGER.info("mca tag keys: {}", mcaData.getAllKeys());
+                MCARomanticExpansion.LOGGER.debug("mca tag keys: {}", mcaData.getAllKeys());
                 if (mcaData.contains("gender")) {
                     int id = mcaData.getInt("gender");
-                    MCARomanticExpansion.LOGGER.info("  - mca.gender = {} ({})", id, Gender.byId(id));
+                    MCARomanticExpansion.LOGGER.debug("  - mca.gender = {} ({})", id, Gender.byId(id));
                 }
             }
             if (persistentData.contains("gender")) {
                 int id = persistentData.getInt("gender");
-                MCARomanticExpansion.LOGGER.info("  - persistent.gender = {} ({})", id, Gender.byId(id));
+                MCARomanticExpansion.LOGGER.debug("  - persistent.gender = {} ({})", id, Gender.byId(id));
             }
             if (persistentData.contains("Gender")) {
                 int id = persistentData.getInt("Gender");
-                MCARomanticExpansion.LOGGER.info("  - persistent.Gender = {} ({})", id, Gender.byId(id));
+                MCARomanticExpansion.LOGGER.debug("  - persistent.Gender = {} ({})", id, Gender.byId(id));
             }
 
             PlayerSaveData data = PlayerSaveData.get(player);
             if (data != null) {
                 CompoundTag entityData = data.getEntityData();
-                MCARomanticExpansion.LOGGER.info("entityData keys: {}", entityData.getAllKeys());
+                MCARomanticExpansion.LOGGER.debug("entityData keys: {}", entityData.getAllKeys());
 
                 if (entityData.contains("Genetics")) {
                     CompoundTag genetics = entityData.getCompound("Genetics");
-                    MCARomanticExpansion.LOGGER.info("Genetics keys: {}", genetics.getAllKeys());
+                    MCARomanticExpansion.LOGGER.debug("Genetics keys: {}", genetics.getAllKeys());
                     if (genetics.contains("Gender")) {
                         int id = genetics.getInt("Gender");
-                        MCARomanticExpansion.LOGGER.info("  - Genetics.Gender = {} ({})", id, Gender.byId(id));
+                        MCARomanticExpansion.LOGGER.debug("  - Genetics.Gender = {} ({})", id, Gender.byId(id));
                     }
                     if (genetics.contains("gender")) {
                         int id = genetics.getInt("gender");
-                        MCARomanticExpansion.LOGGER.info("  - Genetics.gender = {} ({})", id, Gender.byId(id));
+                        MCARomanticExpansion.LOGGER.debug("  - Genetics.gender = {} ({})", id, Gender.byId(id));
                     }
                 }
                 if (entityData.contains("Gender")) {
                     int id = entityData.getInt("Gender");
-                    MCARomanticExpansion.LOGGER.info("  - entityData.Gender = {} ({})", id, Gender.byId(id));
+                    MCARomanticExpansion.LOGGER.debug("  - entityData.Gender = {} ({})", id, Gender.byId(id));
                 }
                 if (entityData.contains("gender")) {
                     int id = entityData.getInt("gender");
-                    MCARomanticExpansion.LOGGER.info("  - entityData.gender = {} ({})", id, Gender.byId(id));
+                    MCARomanticExpansion.LOGGER.debug("  - entityData.gender = {} ({})", id, Gender.byId(id));
                 }
             }
 
             // 缓存信息
             Gender cached = lastKnownGender.get(player.getUUID());
-            MCARomanticExpansion.LOGGER.info("  - cached gender: {}", cached);
+            MCARomanticExpansion.LOGGER.debug("  - cached gender: {}", cached);
 
         } catch (Exception e) {
             MCARomanticExpansion.LOGGER.error("Diagnosis failed: {}", e.getMessage());
         }
 
-        MCARomanticExpansion.LOGGER.info("================================================");
+        MCARomanticExpansion.LOGGER.debug("================================================");
     }
 
     // ==================== 怀孕相关方法（保持不变） ====================
@@ -672,7 +672,7 @@ public class PregnancyAttemptHandler {
                     "message.mcaromanticexpansion.pregnancy_start_partner",
                     femalePlayer.getName().getString()));
 
-            MCARomanticExpansion.LOGGER.info("🎉 Pregnancy started: {} (female) and {} (male)",
+            MCARomanticExpansion.LOGGER.debug("🎉 Pregnancy started: {} (female) and {} (male)",
                     femalePlayer.getName().getString(), malePlayer.getName().getString());
         }
     }
@@ -704,7 +704,7 @@ public class PregnancyAttemptHandler {
             partner.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy_success_partner",
                     player.getName().getString()));
 
-            MCARomanticExpansion.LOGGER.info("👶 Pregnancy completed: {} and {}",
+            MCARomanticExpansion.LOGGER.debug("👶 Pregnancy completed: {} and {}",
                     player.getName().getString(), partner.getName().getString());
 
         } catch (Exception e) {
