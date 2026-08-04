@@ -17,6 +17,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,7 @@ public class ModrinthUpdateChecker {
     // ========== 从 ModInfo 读取版本信息 ==========
     private static final String CURRENT_VERSION = ModInfo.getModVersion();
     private static final String MOD_NAME = ModInfo.getModName();
+    private static final String MINECRAFT_VERSION = ModInfo.getMinecraftVersion();
 
     private static String latestVersion = null;
     private static String latestVersionUrl = null;
@@ -80,18 +83,46 @@ public class ModrinthUpdateChecker {
                 JsonArray versions = JsonParser.parseString(response.toString()).getAsJsonArray();
 
                 if (versions != null && versions.size() > 0) {
+                    boolean foundCompatibleVersion = false;
+
                     for (int i = 0; i < versions.size(); i++) {
                         JsonObject versionObj = versions.get(i).getAsJsonObject();
                         String versionNumber = versionObj.get("version_number").getAsString();
                         String versionType = versionObj.get("version_type").getAsString();
 
+                        // 只检查 release 版本
                         if (!"release".equals(versionType)) {
                             continue;
                         }
 
+                        // 检查是否支持当前 Minecraft 版本
+                        JsonArray gameVersions = versionObj.getAsJsonArray("game_versions");
+                        boolean supportsCurrentMC = false;
+                        if (gameVersions != null) {
+                            for (int j = 0; j < gameVersions.size(); j++) {
+                                String supportedVersion = gameVersions.get(j).getAsString();
+                                if (MINECRAFT_VERSION.equals(supportedVersion)) {
+                                    supportsCurrentMC = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!supportsCurrentMC) {
+                            // 不支持当前 Minecraft 版本，跳过
+                            MCARomanticExpansion.LOGGER.debug("Skipping version {} (not compatible with {})",
+                                    versionNumber, MINECRAFT_VERSION);
+                            continue;
+                        }
+
+                        // 找到了一个兼容的版本
+                        foundCompatibleVersion = true;
+
+                        // 检查版本号是否比当前版本新
                         if (isNewerVersion(versionNumber, CURRENT_VERSION)) {
                             latestVersion = versionNumber;
 
+                            // 获取下载 URL
                             JsonArray files = versionObj.getAsJsonArray("files");
                             if (files != null && files.size() > 0) {
                                 JsonObject file = files.get(0).getAsJsonObject();
@@ -100,6 +131,7 @@ public class ModrinthUpdateChecker {
                                 }
                             }
 
+                            // 获取更新日志
                             if (versionObj.has("changelog")) {
                                 changelog = versionObj.get("changelog").getAsString();
                                 if (changelog.length() > 200) {
@@ -110,18 +142,27 @@ public class ModrinthUpdateChecker {
                         }
                     }
 
-                    if (latestVersion == null && versions.size() > 0) {
-                        JsonObject latest = versions.get(0).getAsJsonObject();
-                        latestVersion = latest.get("version_number").getAsString();
-                    }
+                    // 只有在找到了兼容版本的情况下才更新状态
+                    if (foundCompatibleVersion) {
+                        hasChecked = true;
+                        lastCheckTime = System.currentTimeMillis();
 
-                    hasChecked = true;
-                    lastCheckTime = System.currentTimeMillis();
-                    MCARomanticExpansion.LOGGER.info("Modrinth latest version: {}, current: {}",
-                            latestVersion, CURRENT_VERSION);
+                        if (latestVersion != null) {
+                            MCARomanticExpansion.LOGGER.info("Modrinth latest version for {}: {}, current: {}",
+                                    MINECRAFT_VERSION, latestVersion, CURRENT_VERSION);
+                        } else {
+                            MCARomanticExpansion.LOGGER.info("Already on latest version for {}: {}",
+                                    MINECRAFT_VERSION, CURRENT_VERSION);
+                        }
 
-                    if (!latestVersion.equals(CURRENT_VERSION) && player != null) {
-                        notifyPlayer(player);
+                        if (latestVersion != null && !latestVersion.equals(CURRENT_VERSION) && player != null) {
+                            notifyPlayer(player);
+                        }
+                    } else {
+                        // 没有找到任何兼容的版本
+                        MCARomanticExpansion.LOGGER.info("No compatible versions found for Minecraft {}", MINECRAFT_VERSION);
+                        hasChecked = true;
+                        lastCheckTime = System.currentTimeMillis();
                     }
                 }
             } catch (Exception e) {
@@ -175,6 +216,9 @@ public class ModrinthUpdateChecker {
                 .append(Component.literal("§7当前版本: §c" + CURRENT_VERSION))
                 .append(Component.literal("  §7→  "))
                 .append(Component.literal("§a" + latestVersion)));
+
+        player.sendSystemMessage(Component.literal("")
+                .append(Component.literal("§7Minecraft: §f" + MINECRAFT_VERSION)));
 
         if (changelog != null && !changelog.isEmpty()) {
             player.sendSystemMessage(Component.literal("")
