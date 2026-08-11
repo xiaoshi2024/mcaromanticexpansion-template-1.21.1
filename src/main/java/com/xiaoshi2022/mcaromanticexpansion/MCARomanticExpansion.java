@@ -25,6 +25,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
@@ -96,6 +97,19 @@ public class MCARomanticExpansion {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PregnancyManager.saveToPersistentData(serverPlayer);
             CarryRuntime.onPlayerLoggedOut(serverPlayer.serverLevel(), serverPlayer.getUUID());
+        }
+    }
+
+    // 修复 CurseForge 反馈：玩家在公主抱状态下跳入维度传送门（下界/末地等）会导致
+    // 骑乘关系跨维度损坏，进而崩溃玩家且无法重新加入，并可能阻止服务器正常关闭。
+    // 在实体穿越维度之前触发，提前干净地解除公主抱，避免损坏状态产生。
+    @SubscribeEvent
+    public void onEntityTravelToDimension(EntityTravelToDimensionEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            if (CarryRuntime.isCarrier(serverPlayer.getUUID())
+                    || CarryRuntime.isCarried(serverPlayer.getUUID())) {
+                CarryRuntime.stopCarryFor(serverPlayer.serverLevel(), serverPlayer.getUUID());
+            }
         }
     }
 
