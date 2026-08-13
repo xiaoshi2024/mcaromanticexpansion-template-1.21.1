@@ -14,7 +14,7 @@ public class ModInfo {
     // 模组信息缓存
     private static String MOD_ID = "mcaromanticexpansion";
     private static String MOD_NAME = "MCA: Romantic Expansion";
-    private static String MOD_VERSION = "1.1.0";
+    private static String MOD_VERSION = "1.1.1";
     private static String MOD_GROUP_ID = "com.xiaoshi2022.mcaromanticexpansion";
     private static String MOD_LICENSE = "GNU General Public License v3.0 (GPL-3.0)";
     private static String MINECRAFT_VERSION = "1.21.1";

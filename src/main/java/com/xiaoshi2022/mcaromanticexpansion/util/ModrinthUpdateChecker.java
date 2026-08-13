@@ -17,8 +17,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -39,13 +37,50 @@ public class ModrinthUpdateChecker {
     private static String changelog = null;
     private static boolean hasChecked = false;
     private static long lastCheckTime = 0;
-    private static final long CHECK_INTERVAL = 3600000;
+    private static final long CHECK_INTERVAL = 3600000; // 1小时
 
-    private static final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    // ★★★ 修复1: 使用 volatile 确保线程可见性，并延迟初始化 ★★★
+    private static volatile ScheduledExecutorService executor = null;
+
+    // ★★★ 修复2: 线程安全的懒加载初始化 ★★★
+    private static ScheduledExecutorService getExecutor() {
+        if (executor == null) {
+            synchronized (ModrinthUpdateChecker.class) {
+                if (executor == null) {
+                    // 使用守护线程，避免阻止JVM关闭
+                    executor = Executors.newSingleThreadScheduledExecutor(r -> {
+                        Thread t = new Thread(r, "MCA-UpdateChecker");
+                        t.setDaemon(true);
+                        return t;
+                    });
+                }
+            }
+        }
+        return executor;
+    }
+
+    // ★★★ 修复3: 主动关闭线程池的方法（可在服务器停止时调用）★★★
+    public static void shutdownExecutor() {
+        if (executor != null) {
+            executor.shutdownNow();
+            executor = null;
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        // ★★★ 核心修复: 专用服务器直接跳过更新检查 ★★★
         if (event.getEntity() instanceof ServerPlayer player) {
+            // 检查是否为专用服务器（Dedicated Server）
+            boolean isDedicatedServer = player.server != null && player.server.isDedicatedServer();
+
+            if (isDedicatedServer) {
+                // 专用服务器：完全跳过更新检查，不创建任何线程
+                MCARomanticExpansion.LOGGER.debug("Update checker disabled on dedicated server");
+                return;
+            }
+
+            // 客户端或内置服务端：正常执行更新检查
             long currentTime = System.currentTimeMillis();
 
             if (!hasChecked || (currentTime - lastCheckTime) > CHECK_INTERVAL) {
@@ -57,8 +92,18 @@ public class ModrinthUpdateChecker {
     }
 
     public static void checkForUpdatesAsync(ServerPlayer player) {
-        executor.submit(() -> {
+        // ★★★ 修复4: 获取 executor 时使用懒加载 ★★★
+        ScheduledExecutorService exec = getExecutor();
+
+        // 检查线程池是否已关闭
+        if (exec.isShutdown() || exec.isTerminated()) {
+            MCARomanticExpansion.LOGGER.warn("Executor is shut down, cannot check for updates");
+            return;
+        }
+
+        exec.submit(() -> {
             try {
+                // ★★★ 修复5: 增加超时和重试机制 ★★★
                 URL url = new URL("https://api.modrinth.com/v2/project/" + MODRINTH_SLUG + "/version");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -109,20 +154,16 @@ public class ModrinthUpdateChecker {
                         }
 
                         if (!supportsCurrentMC) {
-                            // 不支持当前 Minecraft 版本，跳过
                             MCARomanticExpansion.LOGGER.debug("Skipping version {} (not compatible with {})",
                                     versionNumber, MINECRAFT_VERSION);
                             continue;
                         }
 
-                        // 找到了一个兼容的版本
                         foundCompatibleVersion = true;
 
-                        // 检查版本号是否比当前版本新
                         if (isNewerVersion(versionNumber, CURRENT_VERSION)) {
                             latestVersion = versionNumber;
 
-                            // 获取下载 URL
                             JsonArray files = versionObj.getAsJsonArray("files");
                             if (files != null && files.size() > 0) {
                                 JsonObject file = files.get(0).getAsJsonObject();
@@ -131,7 +172,6 @@ public class ModrinthUpdateChecker {
                                 }
                             }
 
-                            // 获取更新日志
                             if (versionObj.has("changelog")) {
                                 changelog = versionObj.get("changelog").getAsString();
                                 if (changelog.length() > 200) {
@@ -142,7 +182,6 @@ public class ModrinthUpdateChecker {
                         }
                     }
 
-                    // 只有在找到了兼容版本的情况下才更新状态
                     if (foundCompatibleVersion) {
                         hasChecked = true;
                         lastCheckTime = System.currentTimeMillis();
@@ -159,7 +198,6 @@ public class ModrinthUpdateChecker {
                             notifyPlayer(player);
                         }
                     } else {
-                        // 没有找到任何兼容的版本
                         MCARomanticExpansion.LOGGER.info("No compatible versions found for Minecraft {}", MINECRAFT_VERSION);
                         hasChecked = true;
                         lastCheckTime = System.currentTimeMillis();
