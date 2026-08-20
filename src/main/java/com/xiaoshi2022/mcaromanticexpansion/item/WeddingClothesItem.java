@@ -61,9 +61,9 @@ public class WeddingClothesItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        String typeName = type == WeddingType.CHINESE ? "中式" : "西式";
-        String genderName = gender == Gender.MALE ? "新郎" : "新娘";
-        tooltip.add(Component.literal("§7" + typeName + genderName + "婚服"));
-        tooltip.add(Component.literal("§7可穿戴在饰品栏"));
+        tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.wedding_clothes.line1",
+                Component.translatable("tooltip.mcaromanticexpansion.wedding_clothes.type." + type.getName()),
+                Component.translatable("tooltip.mcaromanticexpansion.wedding_clothes.gender." + gender.getName())));
+        tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.wearable.curio"));
     }
 }

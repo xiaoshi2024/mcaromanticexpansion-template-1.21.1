@@ -17,7 +17,7 @@ public class HUDConfigScreen extends Screen {
     private boolean isEditing = false;
 
     public HUDConfigScreen(Screen parent) {
-        super(Component.literal("HUD 配置"));
+        super(Component.translatable("mcaromanticexpansion.gui.hud_config.title"));
         this.parent = parent;
     }
 
@@ -30,12 +30,12 @@ public class HUDConfigScreen extends Screen {
 
         // ========== 位置选择 ==========
         this.positionButton = CycleButton.<String>builder((value) ->
-                        Component.literal(formatDisplayName(value)))
+                        Component.translatable("mcaromanticexpansion.gui.hud_config.position." + value.toLowerCase()))
                 .withValues("TOP_LEFT", "TOP_CENTER", "TOP_RIGHT",
                         "BOTTOM_LEFT", "BOTTOM_CENTER", "BOTTOM_RIGHT", "CUSTOM")
                 .withInitialValue(getCurrentPosition())
                 .create(centerX - 100, centerY - 30, 120, 20,
-                        Component.literal("位置"), (button, value) -> {
+                        Component.translatable("mcaromanticexpansion.gui.hud_config.position"), (button, value) -> {
                             HUDConfig.setHudPosition(value);
                             try {
                                 AffectionHUD.HUDPosition position = AffectionHUD.HUDPosition.valueOf(value);
@@ -81,7 +81,7 @@ public class HUDConfigScreen extends Screen {
         }).bounds(centerX + 175, centerY - 30, 20, 20).build());
 
         // ========== 按钮 ==========
-        this.addRenderableWidget(Button.builder(Component.literal("应用"), (button) -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("mcaromanticexpansion.gui.hud_config.apply"), (button) -> {
             applyCustomPosition();
             HUDConfig.save();
             if (isEditing) {
@@ -97,7 +97,7 @@ public class HUDConfigScreen extends Screen {
             this.minecraft.setScreen(this.parent);
         }).bounds(centerX - 100, centerY + 20, 95, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("重置"), (button) -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("mcaromanticexpansion.gui.hud_config.reset"), (button) -> {
             HUDConfig.resetToDefault();
             this.positionButton.setValue("BOTTOM_CENTER");
             isEditing = false;
@@ -111,7 +111,7 @@ public class HUDConfigScreen extends Screen {
             });
         }).bounds(centerX + 5, centerY + 20, 95, 20).build());
 
-        this.addRenderableWidget(Button.builder(Component.literal("关闭"), (button) -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("mcaromanticexpansion.gui.hud_config.close"), (button) -> {
             this.minecraft.setScreen(this.parent);
         }).bounds(centerX - 100, centerY + 50, 200, 20).build());
 
@@ -195,16 +195,7 @@ public class HUDConfigScreen extends Screen {
     }
 
     private String formatDisplayName(String value) {
-        switch (value) {
-            case "TOP_LEFT": return "左上";
-            case "TOP_CENTER": return "中上";
-            case "TOP_RIGHT": return "右上";
-            case "BOTTOM_LEFT": return "左下";
-            case "BOTTOM_CENTER": return "中下";
-            case "BOTTOM_RIGHT": return "右下";
-            case "CUSTOM": return "自定义";
-            default: return value;
-        }
+        return value;
     }
 
     @Override
@@ -219,25 +210,27 @@ public class HUDConfigScreen extends Screen {
         String currentPos = getCurrentPosition();
 
         guiGraphics.drawString(this.font,
-                Component.literal("§7位置:"),
+                Component.translatable("mcaromanticexpansion.gui.hud_config.position_label"),
                 centerX - 145, centerY - 28, 0xAAAAAA);
 
         guiGraphics.drawString(this.font,
-                Component.literal("§7坐标:"),
+                Component.translatable("mcaromanticexpansion.gui.hud_config.coordinate_label"),
                 centerX - 5, centerY - 28, 0xAAAAAA);
 
         String coorddebug = getPositiondebug(currentPos);
         guiGraphics.drawString(this.font,
-                Component.literal("§8" + coorddebug),
+                Component.translatable(coorddebug),
                 centerX - 145, centerY + 10, 0x666666);
 
         if (currentPos.equals("CUSTOM")) {
             guiGraphics.drawString(this.font,
-                    Component.literal(isEditing ? "§e编辑中..." : "§7点击 ✏ 编辑"),
+                    Component.translatable(isEditing
+                            ? "mcaromanticexpansion.gui.hud_config.editing"
+                            : "mcaromanticexpansion.gui.hud_config.click_to_edit"),
                     centerX + 200, centerY - 28, isEditing ? 0xFFFF00 : 0x888888);
         } else {
             guiGraphics.drawString(this.font,
-                    Component.literal("§7选择位置自动显示坐标"),
+                    Component.translatable("mcaromanticexpansion.gui.hud_config.auto_coordinate"),
                     centerX + 200, centerY - 28, 0x666666);
         }
 
@@ -246,13 +239,13 @@ public class HUDConfigScreen extends Screen {
 
     private String getPositiondebug(String position) {
         switch (position) {
-            case "TOP_LEFT": return "左上角 (距左20px, 距顶20px)";
-            case "TOP_CENTER": return "顶部居中 (距顶20px)";
-            case "TOP_RIGHT": return "右上角 (距右20px, 距顶20px)";
-            case "BOTTOM_LEFT": return "左下角 (距左20px, 距底20px)";
-            case "BOTTOM_CENTER": return "底部居中 (距底20px)";
-            case "BOTTOM_RIGHT": return "右下角 (距右20px, 距底20px)";
-            case "CUSTOM": return "自定义位置 (可编辑)";
+            case "TOP_LEFT": return "mcaromanticexpansion.gui.hud_config.debug.top_left";
+            case "TOP_CENTER": return "mcaromanticexpansion.gui.hud_config.debug.top_center";
+            case "TOP_RIGHT": return "mcaromanticexpansion.gui.hud_config.debug.top_right";
+            case "BOTTOM_LEFT": return "mcaromanticexpansion.gui.hud_config.debug.bottom_left";
+            case "BOTTOM_CENTER": return "mcaromanticexpansion.gui.hud_config.debug.bottom_center";
+            case "BOTTOM_RIGHT": return "mcaromanticexpansion.gui.hud_config.debug.bottom_right";
+            case "CUSTOM": return "mcaromanticexpansion.gui.hud_config.debug.custom";
             default: return "";
         }
     }

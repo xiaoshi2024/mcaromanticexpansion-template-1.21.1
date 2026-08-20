@@ -4,7 +4,6 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import forge.net.mca.entity.ai.relationship.Gender;
 import forge.net.mca.server.world.data.PlayerSaveData;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -268,8 +267,8 @@ public class PregnancyAttemptHandler {
                 MCARomanticExpansion.LOGGER.debug("✅ Set gender for {} to {} (user preference)",
                         player.getName().getString(), gender);
 
-//                player.sendSystemMessage(Component.literal("§a[MCA] 你的性别已设置为: " +
-//                        (gender == Gender.MALE ? "男性" : "女性")));
+//                player.sendSystemMessage(Component.translatable(
+//                        gender == Gender.MALE ? "message.mcaromanticexpansion.gender.set.male" : "message.mcaromanticexpansion.gender.set.female"));
 
             } catch (Exception e) {
                 MCARomanticExpansion.LOGGER.error("Failed to set gender for {}: {}",
@@ -620,22 +619,16 @@ public class PregnancyAttemptHandler {
 
         if (gender1 == Gender.UNASSIGNED || gender2 == Gender.UNASSIGNED) {
             if (gender1 == Gender.UNASSIGNED) {
-                player1.sendSystemMessage(Component.literal("§c请使用 /mca editor 设置性别！")
-                        .withStyle(ChatFormatting.RED));
+                player1.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
             }
             if (gender2 == Gender.UNASSIGNED) {
-                player2.sendSystemMessage(Component.literal("§c请使用 /mca editor 设置性别！")
-                        .withStyle(ChatFormatting.RED));
+                player2.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
             }
             return;
         }
 
         if (gender1 == gender2) {
             MCARomanticExpansion.LOGGER.debug("Same gender, pregnancy check skipped");
-            player1.sendSystemMessage(Component.literal("§c需要异性才能怀孕！")
-                    .withStyle(ChatFormatting.RED));
-            player2.sendSystemMessage(Component.literal("§c需要异性才能怀孕！")
-                    .withStyle(ChatFormatting.RED));
             return;
         }
 

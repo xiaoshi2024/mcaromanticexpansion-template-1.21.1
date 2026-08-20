@@ -104,10 +104,10 @@ public class BirthdayCommand {
                             if (handItem.getItem() instanceof com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem) {
                                 com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem.setBirthdayGift(handItem);
                                 context.getSource().sendSuccess(() ->
-                                        Component.literal("§a已将手中的礼盒设置为生日礼盒！"), true);
+                                        Component.translatable("mcaromanticexpansion.command.birthday.setgift.success"), true);
                                 return 1;
                             } else {
-                                context.getSource().sendFailure(Component.literal("§c你需要手持一个礼盒！"));
+                                context.getSource().sendFailure(Component.translatable("mcaromanticexpansion.command.birthday.setgift.need_gift_box"));
                                 return 0;
                             }
                         })

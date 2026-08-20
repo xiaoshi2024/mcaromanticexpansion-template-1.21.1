@@ -18,7 +18,7 @@ public class HairPinItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(Component.literal("§7中式金发簪头饰"));
-        tooltip.add(Component.literal("§7可穿戴在头部饰品栏"));
+        tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.hairpin.line1"));
+        tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.wearable.head"));
     }
 }

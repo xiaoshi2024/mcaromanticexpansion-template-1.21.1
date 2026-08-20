@@ -32,11 +32,11 @@ import net.minecraft.server.level.ServerPlayer;
  *     }
  *
  *     @Override public Component getPlayerMessage() {
- *         return Component.literal("你与伴侣在星光下翩翩起舞！");
+ *         return Component.translatable("event.mymod.starlight_dance.player");
  *     }
  *
  *     @Override public Component getPartnerMessage() {
- *         return Component.literal("你与伴侣在星光下翩翩起舞！");
+ *         return Component.translatable("event.mymod.starlight_dance.partner");
  *     }
  * }
  *

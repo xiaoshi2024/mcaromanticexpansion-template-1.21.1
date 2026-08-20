@@ -161,7 +161,7 @@ public class LoveLetterReadScreen extends Screen {
 
         // "致 XXX"
         guiGraphics.drawString(this.font,
-                Component.literal("§d致: §f" + recipient), textX, currentY, 0xFFFFFFFF);
+                Component.translatable("mcaromanticexpansion.gui.love_letter.read.to", recipient), textX, currentY, 0xFFFFFFFF);
         currentY += 16;
         currentY += 4;
 
@@ -173,7 +173,7 @@ public class LoveLetterReadScreen extends Screen {
         currentY += 8;
 
         // "—— 来自 YYY"
-        Component fromLine = Component.literal("§7—— 来自 §f" + sender);
+        Component fromLine = Component.translatable("mcaromanticexpansion.gui.love_letter.read.from", sender);
         int fromWidth = this.font.width(fromLine);
         guiGraphics.drawString(this.font, fromLine,
                 boxX + BOX_WIDTH - 15 - fromWidth, currentY, 0xFFCCCCCC);
@@ -184,7 +184,7 @@ public class LoveLetterReadScreen extends Screen {
 
             // 回信分隔线
             guiGraphics.drawCenteredString(this.font,
-                    Component.literal("§b✦ 回信 ✦"), centerX, currentY, 0xFF69B4FF);
+                    Component.translatable("mcaromanticexpansion.gui.love_letter.read.reply_header"), centerX, currentY, 0xFF69B4FF);
             currentY += 14;
             guiGraphics.hLine(boxX + 40, boxX + BOX_WIDTH - 40, currentY, 0xAA69B4FF);
             currentY += 10;
@@ -197,7 +197,7 @@ public class LoveLetterReadScreen extends Screen {
             currentY += 6;
 
             // "—— 回信 ZZZ"
-            Component replyFromLine = Component.literal("§7—— 回信 §f" + replySender);
+            Component replyFromLine = Component.translatable("mcaromanticexpansion.gui.love_letter.read.reply_from", replySender);
             int replyFromWidth = this.font.width(replyFromLine);
             guiGraphics.drawString(this.font, replyFromLine,
                     boxX + BOX_WIDTH - 15 - replyFromWidth, currentY, 0xFFAACCFF);

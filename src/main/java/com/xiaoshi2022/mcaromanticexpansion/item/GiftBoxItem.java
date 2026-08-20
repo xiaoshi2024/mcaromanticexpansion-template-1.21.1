@@ -307,9 +307,9 @@ public class GiftBoxItem extends Item {
             boolean added = player.getInventory().add(giftItem);
             if (!added) {
                 player.drop(giftItem, false);
-                player.sendSystemMessage(Component.literal("§e背包已满，礼物掉落在了地上！"));
+                player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
             } else {
-                player.sendSystemMessage(Component.literal("§d§l生日快乐！§r §a你获得了 " + giftItem.getDisplayName().getString() + "！"));
+                player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.birthday_opened", giftItem.getDisplayName().getString()));
             }
 
             clearGift(giftBox);
@@ -363,13 +363,13 @@ public class GiftBoxItem extends Item {
         String message = getGiftMessage(stack);
 
         if (from != null) {
-            tooltip.add(Component.literal("§7来自: §f" + from));
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.from", from));
         }
         if (message != null && !message.isEmpty()) {
-            tooltip.add(Component.literal("§7留言: §o§f" + message));
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.message", message));
         }
         if (isBirthdayGift(stack)) {
-            tooltip.add(Component.literal("§d§l🎂 生日礼物！ 🎂"));
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.birthday"));
         }
         if (hasGift(stack)) {
             tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.contains_gift"));
@@ -393,13 +393,13 @@ public class GiftBoxItem extends Item {
         String message = getGiftMessage(stack);
 
         if (from != null) {
-            tooltip.add(Component.literal("§7来自: §f" + from));
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.from", from));
         }
         if (message != null && !message.isEmpty()) {
-            tooltip.add(Component.literal("§7留言: §o§f" + message));
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.message", message));
         }
         if (isBirthdayGift(stack)) {
-            tooltip.add(Component.literal("§d§l🎂 生日礼物！ 🎂"));
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.gift_box.birthday"));
         }
     }
 }

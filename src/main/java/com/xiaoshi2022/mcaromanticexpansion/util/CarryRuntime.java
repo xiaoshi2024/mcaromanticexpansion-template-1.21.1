@@ -61,45 +61,45 @@ public final class CarryRuntime {
         ServerLevel level = requester.serverLevel();
         Entity targetEntity = level.getEntity(packet.getTargetUUID());
         if (!(targetEntity instanceof ServerPlayer target)) {
-            requester.sendSystemMessage(Component.literal("§c目标玩家不在线！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.target_offline"));
             return;
         }
 
         // 不能抱自己
         if (target == requester) {
-            requester.sendSystemMessage(Component.literal("§c你不能抱自己！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.no_self"));
             return;
         }
 
         // 检查双方是否空闲
         if (isCarrier(requester.getUUID()) || isCarried(requester.getUUID())) {
-            requester.sendSystemMessage(Component.literal("§c你正在公主抱或被公主抱中！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.busy_self"));
             return;
         }
         if (isCarrier(target.getUUID()) || isCarried(target.getUUID())) {
-            requester.sendSystemMessage(Component.literal("§c对方正在公主抱或被公主抱中！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.busy_other"));
             return;
         }
 
         // 检查距离
         double dist = requester.distanceTo(target);
         if (dist > MAX_REQUEST_DISTANCE) {
-            requester.sendSystemMessage(Component.literal("§c目标太远了！距离：" + String.format("%.1f", dist) + " 米"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.request_too_far",
+                    String.format("%.1f", dist)));
             return;
         }
 
-        // ✅ 修复：使用 Component.literal 而不是 translatable（如果没有语言文件）
         // 发送邀请给目标玩家
         CarryInvitePacket invitePacket = new CarryInvitePacket(
                 requester.getUUID(),
                 requester.getGameProfile().getName()
         );
 
-        // ✅ 修复：使用 sendTo 或 PacketDistributor.PLAYER
         ModNetwork.CHANNEL.sendTo(invitePacket, target.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 
         // 通知请求者
-        requester.sendSystemMessage(Component.literal("§a你向 " + target.getGameProfile().getName() + " 发起了公主抱请求！"));
+        requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.request_sent",
+                target.getGameProfile().getName()));
 
         MCARomanticExpansion.LOGGER.debug("Carry request: {} -> {}",
                 requester.getName().getString(), target.getName().getString());
@@ -110,33 +110,39 @@ public final class CarryRuntime {
         ServerLevel level = responder.serverLevel();
         Entity requesterEntity = level.getEntity(packet.getRequesterUUID());
         if (!(requesterEntity instanceof ServerPlayer requester)) {
-            responder.sendSystemMessage(Component.literal("§c请求者已离线！"));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.requester_offline"));
             return;
         }
 
         if (!packet.isAccepted()) {
-            requester.sendSystemMessage(Component.literal("§c" + responder.getGameProfile().getName() + " 拒绝了你的公主抱！"));
-            responder.sendSystemMessage(Component.literal("§c你拒绝了 " + requester.getGameProfile().getName() + " 的公主抱！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.rejected_by_other",
+                    responder.getGameProfile().getName()));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.you_rejected",
+                    requester.getGameProfile().getName()));
             return;
         }
 
         // 再次检查双方状态
         if (isCarrier(requester.getUUID()) || isCarried(requester.getUUID())) {
-            requester.sendSystemMessage(Component.literal("§c你正在公主抱或被公主抱中！"));
-            responder.sendSystemMessage(Component.literal("§c" + requester.getGameProfile().getName() + " 正在公主抱或被公主抱中！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.busy_self"));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.other_busy",
+                    requester.getGameProfile().getName()));
             return;
         }
         if (isCarrier(responder.getUUID()) || isCarried(responder.getUUID())) {
-            requester.sendSystemMessage(Component.literal("§c" + responder.getGameProfile().getName() + " 正在公主抱或被公主抱中！"));
-            responder.sendSystemMessage(Component.literal("§c你正在公主抱或被公主抱中！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.other_busy",
+                    responder.getGameProfile().getName()));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.busy_self"));
             return;
         }
 
         // 检查距离
         double dist = requester.distanceTo(responder);
         if (dist > MAX_RESPONSE_DISTANCE) {
-            requester.sendSystemMessage(Component.literal("§c" + responder.getGameProfile().getName() + " 接受了，但你太远了！"));
-            responder.sendSystemMessage(Component.literal("§c" + requester.getGameProfile().getName() + " 太远了！"));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.accepted_but_far",
+                    responder.getGameProfile().getName()));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.too_far_name",
+                    requester.getGameProfile().getName()));
             return;
         }
 
@@ -153,7 +159,7 @@ public final class CarryRuntime {
 
         boolean success = passenger.startRiding(carrier, true);
         if (!success) {
-            carrier.sendSystemMessage(Component.literal("§c公主抱失败！"));
+            carrier.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.start_failed"));
             MCARomanticExpansion.LOGGER.warn("Failed to start carry: {} -> {}",
                     carrier.getName().getString(), passenger.getName().getString());
             return;
@@ -167,8 +173,10 @@ public final class CarryRuntime {
         broadcastCarryState(carrier.serverLevel(), carrier.getUUID(), passenger.getUUID(), true);
 
         // 发送消息
-        carrier.sendSystemMessage(Component.literal("§a你抱起了 " + passenger.getName().getString() + "！"));
-        passenger.sendSystemMessage(Component.literal("§a" + carrier.getName().getString() + " 抱起了你！"));
+        carrier.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.started_by_you",
+                passenger.getName()));
+        passenger.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.started_by_other",
+                carrier.getName()));
 
         MCARomanticExpansion.LOGGER.info("Princess carry started: {} -> {}",
                 carrier.getName().getString(), passenger.getName().getString());
@@ -244,6 +252,6 @@ public final class CarryRuntime {
     // ========== 处理停止请求 ==========
     public static void handleStopRequest(ServerPlayer player) {
         stopCarryFor(player.serverLevel(), player.getUUID());
-        player.sendSystemMessage(Component.literal("§e你停止了公主抱！"));
+        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.carry.stopped_self"));
     }
 }

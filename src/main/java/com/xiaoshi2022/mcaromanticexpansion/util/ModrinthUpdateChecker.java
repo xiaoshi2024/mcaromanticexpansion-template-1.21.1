@@ -166,19 +166,19 @@
 //
 //        player.sendSystemMessage(Component.literal("")
 //                .append(Component.literal("§6[§a" + MOD_NAME + "§6]"))
-//                .append(Component.literal(" §e🎉 发现新版本更新！")));
+//                .append(Component.translatable("message.mcaromanticexpansion.update.found")));
 //
 //        player.sendSystemMessage(Component.literal("")
-//                .append(Component.literal("§7当前版本: §c" + CURRENT_VERSION))
+//                .append(Component.translatable("message.mcaromanticexpansion.update.current_version", CURRENT_VERSION))
 //                .append(Component.literal("  §7→  "))
 //                .append(Component.literal("§a" + latestVersion)));
 //
 //        if (changelog != null && !changelog.isEmpty()) {
 //            player.sendSystemMessage(Component.literal("")
-//                    .append(Component.literal("§7更新内容: §f" + changelog)));
+//                    .append(Component.translatable("message.mcaromanticexpansion.update.changelog", changelog)));
 //        }
 //
-//        Component downloadLink = Component.literal("§b§n[📥 点击下载更新]")
+//        Component downloadLink = Component.translatable("message.mcaromanticexpansion.update.download")
 //                .withStyle(Style.EMPTY
 //                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 //                                latestVersionUrl != null ? latestVersionUrl :
@@ -190,7 +190,7 @@
 //                .append(Component.literal("  "))
 //                .append(Component.literal("§7(Modrinth)")));
 //
-//        Component projectLink = Component.literal("§b§n[📖 查看项目]")
+//        Component projectLink = Component.translatable("message.mcaromanticexpansion.update.view_project")
 //                .withStyle(Style.EMPTY
 //                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 //                                "https://modrinth.com/mod/" + MODRINTH_SLUG))
@@ -200,7 +200,7 @@
 //                .append(projectLink));
 //
 //        player.sendSystemMessage(Component.literal("")
-//                .append(Component.literal("§a💡 请及时更新以获得最新功能和修复！"))
+//                .append(Component.translatable("message.mcaromanticexpansion.update.reminder"))
 //                .withStyle(ChatFormatting.GREEN));
 //
 //        player.sendSystemMessage(Component.literal(divider).withStyle(ChatFormatting.GOLD));
@@ -214,7 +214,7 @@
 //        latestVersionUrl = null;
 //        changelog = null;
 //
-//        player.sendSystemMessage(Component.literal("§a🔍 正在检查 Modrinth 更新..."));
+//        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.update.checking"));
 //        checkForUpdatesAsync(player);
 //    }
 //

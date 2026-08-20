@@ -54,13 +54,14 @@ public class MarriageResponsePacket {
             ServerPlayer partner = responder.getServer().getPlayerList().getPlayer(packet.getPartnerUUID());
             if (partner == null) {
                 MCARomanticExpansion.LOGGER.warn("MarriageResponsePacket: partner not found: {}", packet.getPartnerUUID());
-                responder.sendSystemMessage(Component.literal("§c对方已离线！"));
+                responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.marriage.partner_offline"));
                 return;
             }
 
             if (!packet.isConfirmed()) {
                 responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.declined"));
-                partner.sendSystemMessage(Component.literal("§c" + responder.getName().getString() + " 拒绝了你的结婚请求！"));
+                partner.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.marriage.rejected_by",
+                        responder.getName()));
                 return;
             }
 
@@ -72,7 +73,7 @@ public class MarriageResponsePacket {
             );
             if (MinecraftForge.EVENT_BUS.post(event)) {
                 MCARomanticExpansion.LOGGER.debug("Marriage event canceled");
-                responder.sendSystemMessage(Component.literal("§c结婚被取消！"));
+                responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.declined"));
                 return;
             }
 
@@ -83,8 +84,8 @@ public class MarriageResponsePacket {
             if (responderRing.isEmpty() || partnerRing.isEmpty()) {
                 if (!responderRing.isEmpty()) responder.getInventory().add(responderRing);
                 if (!partnerRing.isEmpty()) partner.getInventory().add(partnerRing);
-                responder.sendSystemMessage(Component.literal("§c双方都需要持有结婚戒指！"));
-                partner.sendSystemMessage(Component.literal("§c双方都需要持有结婚戒指！"));
+                responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.missing_ring"));
+                partner.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.missing_ring"));
                 return;
             }
 
@@ -104,8 +105,10 @@ public class MarriageResponsePacket {
                 partner.getInventory().add(customPartnerRing);
 
                 // 5. 发送成功消息
-                responder.sendSystemMessage(Component.literal("§a§l🎉 你与 " + partner.getName().getString() + " 结婚了！"));
-                partner.sendSystemMessage(Component.literal("§a§l🎉 你与 " + responder.getName().getString() + " 结婚了！"));
+                responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success",
+                        partner.getName()));
+                partner.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.success",
+                        responder.getName()));
 
                 // 6. 添加好感度
                 AffectionManager.handleInteraction(AffectionManager.InteractionType.MARRIAGE, responder, partner);
@@ -117,8 +120,8 @@ public class MarriageResponsePacket {
                 MCARomanticExpansion.LOGGER.error("Failed to marry players", e);
                 responder.getInventory().add(responderRing);
                 partner.getInventory().add(partnerRing);
-                responder.sendSystemMessage(Component.literal("§c结婚失败，请重试！"));
-                partner.sendSystemMessage(Component.literal("§c结婚失败，请重试！"));
+                responder.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.failed"));
+                partner.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.failed"));
             }
         });
         context.setPacketHandled(true);
