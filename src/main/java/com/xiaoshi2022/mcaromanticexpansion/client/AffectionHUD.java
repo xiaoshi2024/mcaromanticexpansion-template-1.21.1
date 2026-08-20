@@ -220,7 +220,7 @@ public class AffectionHUD {
 
         // 标题
         String targetName = targetPlayer.getName().getString();
-        Component title = Component.literal("♥ 与 " + targetName + " 的心动值").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE);
+        Component title = Component.translatable("hud.mcaromanticexpansion.affection.title", targetName).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE);
         int titleWidth = minecraft.font.width(title);
         guiGraphics.drawString(minecraft.font, title, baseX + (HUD_WIDTH - titleWidth) / 2, baseY, 0xFFFFFF);
 
@@ -253,9 +253,9 @@ public class AffectionHUD {
         guiGraphics.drawString(minecraft.font, valueText, baseX + (HUD_WIDTH - valueWidth) / 2, barY + barHeight + 4, 0xFFFFFF);
 
         // 好感度等级标签
-        String levelText = getAffectionLevelText(affection);
-        if (!levelText.isEmpty()) {
-            Component levelComponent = Component.literal(levelText).withStyle(net.minecraft.ChatFormatting.WHITE);
+        String levelKey = getAffectionLevelKey(affection);
+        if (levelKey != null) {
+            Component levelComponent = Component.translatable(levelKey).withStyle(net.minecraft.ChatFormatting.WHITE);
             int levelWidth = minecraft.font.width(levelComponent);
             guiGraphics.drawString(minecraft.font, levelComponent, baseX + (HUD_WIDTH - levelWidth) / 2, barY + barHeight + 18, 0x888888);
         }
@@ -304,17 +304,17 @@ public class AffectionHUD {
         }
     }
 
-    private static String getAffectionLevelText(int affection) {
+    private static String getAffectionLevelKey(int affection) {
         if (affection >= 80) {
-            return "❤ 热恋中";
+            return "hud.mcaromanticexpansion.affection.level.passionate";
         } else if (affection >= 60) {
-            return "♥ 心动中";
+            return "hud.mcaromanticexpansion.affection.level.crush";
         } else if (affection >= 40) {
-            return "♡ 有好感";
+            return "hud.mcaromanticexpansion.affection.level.favorable";
         } else if (affection >= 20) {
-            return "♢ 刚认识";
+            return "hud.mcaromanticexpansion.affection.level.acquainted";
         } else {
-            return "";
+            return null;
         }
     }
 }

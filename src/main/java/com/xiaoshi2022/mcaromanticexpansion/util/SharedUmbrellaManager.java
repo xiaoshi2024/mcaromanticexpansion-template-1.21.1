@@ -9,7 +9,6 @@ import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaRequestPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.SharedUmbrellaResponsePacket;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -51,17 +50,17 @@ public class SharedUmbrellaManager {
     public static boolean sendRequest(ServerPlayer initiator, ServerPlayer target) {
         if (initiator == target) return false;
         if (isInSharedUmbrella(initiator) || isInSharedUmbrella(target)) {
-            initiator.sendSystemMessage(Component.literal("§c对方已经在共伞状态中！").withStyle(ChatFormatting.RED));
+            initiator.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.already_sharing"));
             return false;
         }
         if (hasPendingRequest(initiator) || hasPendingRequest(target)) {
-            initiator.sendSystemMessage(Component.literal("§c有未处理的共伞请求！").withStyle(ChatFormatting.RED));
+            initiator.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.pending_request"));
             return false;
         }
 
         // 检查发起者是否有打开的伞
         if (!hasOpenUmbrella(initiator)) {
-            initiator.sendSystemMessage(Component.literal("§c请先将伞完全撑开！").withStyle(ChatFormatting.RED));
+            initiator.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.need_open"));
             return false;
         }
         
@@ -72,7 +71,7 @@ public class SharedUmbrellaManager {
                 mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
 
         if (initiator.distanceTo(target) > MAX_DISTANCE) {
-            initiator.sendSystemMessage(Component.literal("§c请靠近对方再使用！").withStyle(ChatFormatting.RED));
+            initiator.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.too_far"));
             return false;
         }
 
@@ -85,7 +84,7 @@ public class SharedUmbrellaManager {
         );
         PacketDistributor.sendToPlayer(target, packet);
 
-        initiator.sendSystemMessage(Component.literal("§a已发送共伞邀请，请等待对方回应...").withStyle(ChatFormatting.GREEN));
+        initiator.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.request_sent"));
         return true;
     }
 
@@ -104,7 +103,7 @@ public class SharedUmbrellaManager {
             if (requesterUUID != null) {
                 pendingRequests.remove(requesterUUID);
             }
-            responder.sendSystemMessage(Component.literal("§c对方已离线！").withStyle(ChatFormatting.RED));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.offline"));
             return;
         }
 
@@ -118,8 +117,8 @@ public class SharedUmbrellaManager {
             
             // 首先检查是否持有伞
             if (!mainHand.is(ModItems.UMBRELLA.get()) && !offHand.is(ModItems.UMBRELLA.get())) {
-                requester.sendSystemMessage(Component.literal("§c你手里的伞不见了！").withStyle(ChatFormatting.RED));
-                responder.sendSystemMessage(Component.literal("§c对方手里的伞不见了！").withStyle(ChatFormatting.RED));
+                requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.lost_self"));
+                responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.lost_other"));
                 return;
             }
 
@@ -133,15 +132,15 @@ public class SharedUmbrellaManager {
                 }
 
                 if (!hasOpenUmbrella(requester)) {
-                    requester.sendSystemMessage(Component.literal("§c你的伞已经合上了！").withStyle(ChatFormatting.RED));
-                    responder.sendSystemMessage(Component.literal("§c对方的伞已经合上了！").withStyle(ChatFormatting.RED));
+                    requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.closed_self"));
+                    responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.closed_other"));
                     return;
                 }
             }
 
             if (requester.distanceTo(responder) > MAX_DISTANCE) {
-                requester.sendSystemMessage(Component.literal("§c距离太远，无法共伞！").withStyle(ChatFormatting.RED));
-                responder.sendSystemMessage(Component.literal("§c距离太远，无法共伞！").withStyle(ChatFormatting.RED));
+                requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.too_far_share"));
+                responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.too_far_share"));
                 return;
             }
 
@@ -168,8 +167,8 @@ public class SharedUmbrellaManager {
                     mainHand.is(ModItems.UMBRELLA.get()) ? "umbrella (main)" : (offHand.is(ModItems.UMBRELLA.get()) ? "umbrella (off)" : "no umbrella"),
                     mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
 
-            requester.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
-            responder.sendSystemMessage(Component.literal("§a☂ 你们共撑一把伞！").withStyle(ChatFormatting.GREEN));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.established"));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.established"));
 
             // 【成就触发】首次送伞给玩家
             CriterionTriggerRegister.FIRST_UMBRELLA_GIFT.get().trigger(requester);
@@ -194,20 +193,20 @@ public class SharedUmbrellaManager {
             // 触发共伞浪漫事件
             RomanticEventManager.onSharedUmbrellaEstablished(requester, responder);
         } else {
-            requester.sendSystemMessage(Component.literal("§c对方拒绝了你的共伞邀请").withStyle(ChatFormatting.RED));
-            responder.sendSystemMessage(Component.literal("§a已拒绝共伞邀请").withStyle(ChatFormatting.GREEN));
+            requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.rejected"));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.rejected_self"));
         }
     }
 
     public static void endSharedUmbrella(Player player) {
-        endSharedUmbrella(player, "对方离开了，共伞结束");
+        endSharedUmbrella(player, "message.mcaromanticexpansion.umbrella.end_partner_left");
     }
 
-    public static void endSharedUmbrella(Player player, String message) {
+    public static void endSharedUmbrella(Player player, String messageKey) {
         SharedUmbrellaState state = sharedUmbrellaStates.remove(player.getUUID());
         if (state != null && state.partner != null) {
             sharedUmbrellaStates.remove(state.partner.getUUID());
-            state.partner.sendSystemMessage(Component.literal("§c" + message).withStyle(ChatFormatting.RED));
+            state.partner.sendSystemMessage(Component.translatable(messageKey));
         }
     }
 
@@ -257,7 +256,7 @@ public class SharedUmbrellaManager {
 
         double distance = player.distanceTo(state.partner);
         if (distance > MAX_DISTANCE) {
-            endSharedUmbrella(player, "距离太远，共伞结束");
+            endSharedUmbrella(player, "message.mcaromanticexpansion.umbrella.end_too_far");
             return;
         }
 
@@ -274,7 +273,7 @@ public class SharedUmbrellaManager {
             if (!playerHasUmbrella && !partnerHasUmbrella) {
                 MCARomanticExpansion.LOGGER.debug("Both players {} and {} no longer holding umbrella",
                         player.getName().getString(), state.partner.getName().getString());
-                endSharedUmbrella(player, "伞已丢失，共伞结束");
+                endSharedUmbrella(player, "message.mcaromanticexpansion.umbrella.end_lost");
             } else {
                 // 尝试强制打开双方的伞
                 ItemStack playerMain = player.getMainHandItem();
@@ -299,7 +298,7 @@ public class SharedUmbrellaManager {
                 if (!hasOpen) {
                     MCARomanticExpansion.LOGGER.debug("Umbrella still closed after forcing for {} and {}",
                             player.getName().getString(), state.partner.getName().getString());
-                    endSharedUmbrella(player, "伞已合上，共伞结束");
+                    endSharedUmbrella(player, "message.mcaromanticexpansion.umbrella.end_closed");
                 }
             }
         }

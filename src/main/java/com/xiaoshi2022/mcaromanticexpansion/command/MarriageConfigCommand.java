@@ -22,8 +22,10 @@ public class MarriageConfigCommand {
                                     boolean allow = BoolArgumentType.getBool(context, "allow");
                                     MarriageConfig.setGlobalAllowSameGenderMarriage(allow);
 
-                                    String message = allow ? "§a已启用同性结婚（全局）" : "§c已禁用同性结婚（全局）";
-                                    context.getSource().sendSuccess(() -> Component.literal(message), true);
+                                    String key = allow
+                                            ? "command.mcaromanticexpansion.marriageconfig.enabled"
+                                            : "command.mcaromanticexpansion.marriageconfig.disabled";
+                                    context.getSource().sendSuccess(() -> Component.translatable(key), true);
                                     return 1;
                                 })
                         )
@@ -33,7 +35,7 @@ public class MarriageConfigCommand {
                         .executes(context -> {
                             MarriageConfig.reload();
                             context.getSource().sendSuccess(() ->
-                                    Component.literal("§a已重新加载同性结婚配置！"), true);
+                                    Component.translatable("command.mcaromanticexpansion.marriageconfig.reloaded"), true);
                             return 1;
                         })
                 )
@@ -46,9 +48,11 @@ public class MarriageConfigCommand {
                                                     boolean allow = BoolArgumentType.getBool(context, "allow");
                                                     MarriageConfig.setPlayerAllowSameGenderMarriage(target.getName().getString(), allow);
 
-                                                    String message = allow ? "§a已允许 " + target.getName().getString() + " 同性结婚（覆盖全局）"
-                                                            : "§c已禁止 " + target.getName().getString() + " 同性结婚（覆盖全局）";
-                                                    context.getSource().sendSuccess(() -> Component.literal(message), true);
+                                                    String key = allow
+                                                            ? "command.mcaromanticexpansion.marriageconfig.player.allowed"
+                                                            : "command.mcaromanticexpansion.marriageconfig.player.denied";
+                                                    context.getSource().sendSuccess(() ->
+                                                            Component.translatable(key, target.getName().getString()), true);
                                                     return 1;
                                                 })
                                         )
@@ -59,7 +63,8 @@ public class MarriageConfigCommand {
                                             MarriageConfig.setPlayerAllowSameGenderMarriage(target.getName().getString(), null);
 
                                             context.getSource().sendSuccess(() ->
-                                                    Component.literal("§a已重置 " + target.getName().getString() + " 的同性结婚权限，现在遵循全局设置"), true);
+                                                    Component.translatable("command.mcaromanticexpansion.marriageconfig.player.reset",
+                                                            target.getName().getString()), true);
                                             return 1;
                                         })
                                 )
@@ -69,20 +74,25 @@ public class MarriageConfigCommand {
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
 
-                            source.sendSuccess(() -> Component.literal("§6=== 同性结婚配置状态 ==="), false);
+                            source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.status.title"), false);
 
                             boolean global = MarriageConfig.isGlobalAllowSameGenderMarriage();
-                            source.sendSuccess(() -> Component.literal("§e全局设置: " + (global ? "§a启用" : "§c禁用")), false);
+                            String globalKey = global
+                                    ? "command.mcaromanticexpansion.marriageconfig.status.global.enabled"
+                                    : "command.mcaromanticexpansion.marriageconfig.status.global.disabled";
+                            source.sendSuccess(() -> Component.translatable(globalKey), false);
 
                             var overrides = MarriageConfig.getAllPlayerOverrides();
                             if (!overrides.isEmpty()) {
-                                source.sendSuccess(() -> Component.literal("§e玩家覆盖设置:"), false);
+                                source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.status.overrides"), false);
                                 for (var entry : overrides.entrySet()) {
-                                    source.sendSuccess(() -> Component.literal("  §7- " + entry.getKey() + ": " +
-                                            (entry.getValue() ? "§a允许" : "§c禁止")), false);
+                                    String entryKey = entry.getValue()
+                                            ? "command.mcaromanticexpansion.marriageconfig.status.override_entry.allowed"
+                                            : "command.mcaromanticexpansion.marriageconfig.status.override_entry.denied";
+                                    source.sendSuccess(() -> Component.translatable(entryKey, entry.getKey()), false);
                                 }
                             } else {
-                                source.sendSuccess(() -> Component.literal("§7暂无玩家覆盖设置"), false);
+                                source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.status.no_overrides"), false);
                             }
                             return 1;
                         })
@@ -90,11 +100,11 @@ public class MarriageConfigCommand {
                 .then(Commands.literal("help")
                         .executes(context -> {
                             CommandSourceStack source = context.getSource();
-                            source.sendSuccess(() -> Component.literal("§6=== 同性结婚配置指令帮助 ==="), false);
-                            source.sendSuccess(() -> Component.literal("§7/marriageconfig allowSameGender <true/false> - 设置全局同性结婚权限"), false);
-                            source.sendSuccess(() -> Component.literal("§7/marriageconfig player <玩家> allowSameGender <true/false> - 设置玩家覆盖"), false);
-                            source.sendSuccess(() -> Component.literal("§7/marriageconfig player <玩家> reset - 重置玩家覆盖（使用全局设置）"), false);
-                            source.sendSuccess(() -> Component.literal("§7/marriageconfig status - 查看当前配置状态"), false);
+                            source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.help.title"), false);
+                            source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.help.allow_same_gender"), false);
+                            source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.help.player_allow"), false);
+                            source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.help.player_reset"), false);
+                            source.sendSuccess(() -> Component.translatable("command.mcaromanticexpansion.marriageconfig.help.status"), false);
                             return 1;
                         })
                 )

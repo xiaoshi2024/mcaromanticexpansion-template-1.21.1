@@ -97,8 +97,8 @@ public class RomanticAdvancementListener {
         RomanticEventManager.triggerEventById(player, partner, eventId);
 
         player.sendSystemMessage(
-                net.minecraft.network.chat.Component.literal(
-                        "§d§l💕 通过成就解锁了浪漫事件: " + eventId + "!"
+                net.minecraft.network.chat.Component.translatable(
+                        "message.mcaromanticexpansion.advancement.unlocked_event", eventId
                 )
         );
     }

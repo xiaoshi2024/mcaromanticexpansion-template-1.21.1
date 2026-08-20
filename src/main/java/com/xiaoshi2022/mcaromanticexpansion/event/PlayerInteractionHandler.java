@@ -25,7 +25,6 @@ import net.conczin.mca.item.WeddingRingItem;
 import net.conczin.mca.registry.ItemsMCA;
 import net.conczin.mca.server.ServerInteractionManager;
 import net.conczin.mca.server.world.data.PlayerSaveData;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -54,7 +53,7 @@ public class PlayerInteractionHandler {
         }
 
         if (player == targetPlayer) {
-            player.sendSystemMessage(Component.literal("§c你不能对自己使用！").withStyle(ChatFormatting.RED));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.interact.self"));
             event.setCanceled(true);
             return;
         }
@@ -117,7 +116,7 @@ public class PlayerInteractionHandler {
     private static void handleGiftBox(ServerPlayer giver, ServerPlayer receiver, ItemStack giftBoxStack) {
         // 检查礼盒是否有礼物
         if (!GiftBoxItem.hasGift(giftBoxStack)) {
-            giver.sendSystemMessage(Component.literal("§c礼盒是空的！请先放入物品。").withStyle(ChatFormatting.RED));
+            giver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.empty"));
             return;
         }
 
@@ -128,10 +127,10 @@ public class PlayerInteractionHandler {
         boolean added = receiver.getInventory().add(giftItem);
         if (!added) {
             receiver.drop(giftItem, false);
-            receiver.sendSystemMessage(Component.literal("§c背包已满，礼物掉落在了地上！").withStyle(ChatFormatting.RED));
+            receiver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
         } else {
-            receiver.sendSystemMessage(Component.literal("§a你收到了 " + giver.getName().getString() + " 的礼物！").withStyle(ChatFormatting.GREEN));
-            giver.sendSystemMessage(Component.literal("§a你成功赠送了礼物给 " + receiver.getName().getString() + "！").withStyle(ChatFormatting.GREEN));
+            receiver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift.received", giver.getName().getString()));
+            giver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift.sent", receiver.getName().getString()));
             
             // 清空礼盒
             GiftBoxItem.clearGift(giftBoxStack);
@@ -165,8 +164,7 @@ public class PlayerInteractionHandler {
         if (item instanceof GiftBoxItem && player.isShiftKeyDown()) {
             // ========== 修复：检查礼盒是否已经有礼物 ==========
             if (GiftBoxItem.hasGift(stack)) {
-                serverPlayer.sendSystemMessage(Component.literal("§c礼盒中已经有礼物了！不能重复放入！")
-                        .withStyle(ChatFormatting.RED));
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.has_gift"));
                 event.setCanceled(true);
                 return;
             }
@@ -179,8 +177,7 @@ public class PlayerInteractionHandler {
             if (!otherHandItem.isEmpty()) {
                 // ========== 额外检查：不能放入另一个礼盒 ==========
                 if (otherHandItem.getItem() instanceof GiftBoxItem) {
-                    serverPlayer.sendSystemMessage(Component.literal("§c不能将礼盒放入另一个礼盒中！")
-                            .withStyle(ChatFormatting.RED));
+                    serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.nested"));
                     event.setCanceled(true);
                     return;
                 }
@@ -194,10 +191,10 @@ public class PlayerInteractionHandler {
                     serverPlayer.getInventory().items.set(serverPlayer.getInventory().selected, ItemStack.EMPTY);
                 }
 
-                serverPlayer.sendSystemMessage(Component.literal("§a已将物品放入礼盒！").withStyle(ChatFormatting.GREEN));
+                serverPlayer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.gift_placed"));
                 event.setCanceled(true);
             } else {
-                serverPlayer.sendSystemMessage(Component.literal("§c另一只手需要持有物品！").withStyle(ChatFormatting.RED));
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.need_other_hand"));
             }
         }
     }
@@ -223,8 +220,7 @@ public class PlayerInteractionHandler {
         if (item instanceof GiftBoxItem) {
             // 检查是否有礼物
             if (!GiftBoxItem.hasGift(stack)) {
-                serverPlayer.sendSystemMessage(Component.literal("§c礼盒是空的！请先放入物品。")
-                        .withStyle(ChatFormatting.RED));
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.empty"));
                 event.setCanceled(true);
                 return;
             }
@@ -242,11 +238,9 @@ public class PlayerInteractionHandler {
                 boolean added = serverPlayer.getInventory().add(giftItem);
                 if (!added) {
                     serverPlayer.drop(giftItem, false);
-                    serverPlayer.sendSystemMessage(Component.literal("§c背包已满，礼物掉落在了地上！")
-                            .withStyle(ChatFormatting.RED));
+                    serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
                 } else {
-                    serverPlayer.sendSystemMessage(Component.literal("§a打开礼盒获得了物品！")
-                            .withStyle(ChatFormatting.GREEN));
+                    serverPlayer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.gift_opened"));
                 }
                 GiftBoxItem.clearGift(stack);
                 event.setCanceled(true);
@@ -282,11 +276,9 @@ public class PlayerInteractionHandler {
             boolean added = serverPlayer.getInventory().add(letter);
             if (!added) {
                 serverPlayer.drop(letter, false);
-                serverPlayer.sendSystemMessage(Component.literal("§c背包已满，情书掉落在了地上！")
-                        .withStyle(ChatFormatting.RED));
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.letter"));
             } else {
-                serverPlayer.sendSystemMessage(Component.literal("§d§l你发现了一封情书！§r§d快打开看看吧~")
-                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.discovered"));
             }
             serverPlayer.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.2f);
             serverPlayer.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 0.6f, 1.5f);
@@ -301,8 +293,7 @@ public class PlayerInteractionHandler {
     private static void handleBouquet(ServerPlayer sender, ServerPlayer receiver) {
         if (CooldownManager.isOnCooldown(sender.getUUID(), "bouquet")) {
             long remaining = CooldownManager.getRemainingCooldown(sender.getUUID(), "bouquet");
-            sender.sendSystemMessage(Component.literal("§c请等待 " + (remaining / 1000) + " 秒后再送花束！")
-                    .withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.cooldown.bouquet", remaining / 1000));
             return;
         }
 
@@ -313,8 +304,7 @@ public class PlayerInteractionHandler {
     private static void handleProposal(ServerPlayer proposer, ServerPlayer target) {
         if (CooldownManager.isOnCooldown(proposer.getUUID(), "proposal")) {
             long remaining = CooldownManager.getRemainingCooldown(proposer.getUUID(), "proposal");
-            proposer.sendSystemMessage(Component.literal("§c请等待 " + (remaining / 1000) + " 秒后再求婚！")
-                    .withStyle(ChatFormatting.RED));
+            proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.cooldown.proposal", remaining / 1000));
             return;
         }
 
@@ -323,8 +313,7 @@ public class PlayerInteractionHandler {
         Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
 
         if (proposerGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
-            proposer.sendSystemMessage(Component.literal("§c请双方都使用 /mca editor 设置性别后再求婚！")
-                    .withStyle(ChatFormatting.RED));
+            proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.need_gender"));
             return;
         }
 
@@ -333,8 +322,7 @@ public class PlayerInteractionHandler {
             boolean targetAllowed = MarriageConfig.isSameGenderMarriageAllowed(target);
 
             if (!proposerAllowed || !targetAllowed) {
-                proposer.sendSystemMessage(Component.literal("§c同性求婚已被禁止！如需启用请联系管理员使用 /marriageconfig allowSameGender true")
-                        .withStyle(ChatFormatting.RED));
+                proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.same_gender_blocked"));
                 return;
             }
         }
@@ -349,7 +337,7 @@ public class PlayerInteractionHandler {
         }
 
         if (ringCount == 0) {
-            proposer.sendSystemMessage(Component.literal("§c你需要一个订婚戒指！").withStyle(ChatFormatting.RED));
+            proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.need_ring"));
             return;
         }
 
@@ -363,14 +351,13 @@ public class PlayerInteractionHandler {
 
         sendProposalRequest(proposer, target);
         CooldownManager.setCooldown(proposer.getUUID(), "proposal");
-        proposer.sendSystemMessage(Component.literal("§a已向 " + target.getName().getString() + " 发送求婚请求！").withStyle(ChatFormatting.GREEN));
+        proposer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.proposal_sent", target.getName().getString()));
     }
 
     private static void handleMarriage(ServerPlayer sender, ServerPlayer target) {
         if (CooldownManager.isOnCooldown(sender.getUUID(), "marriage")) {
             long remaining = CooldownManager.getRemainingCooldown(sender.getUUID(), "marriage");
-            sender.sendSystemMessage(Component.literal("§c请等待 " + (remaining / 1000) + " 秒后再举行婚礼！")
-                    .withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.cooldown.marriage", remaining / 1000));
             return;
         }
 
@@ -379,8 +366,7 @@ public class PlayerInteractionHandler {
         Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
 
         if (senderGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
-            sender.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别后再结婚！")
-                    .withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.marriage.need_gender"));
             return;
         }
 
@@ -390,8 +376,7 @@ public class PlayerInteractionHandler {
             boolean targetAllowed = MarriageConfig.isSameGenderMarriageAllowed(target);
 
             if (!senderAllowed || !targetAllowed) {
-                sender.sendSystemMessage(Component.literal("§c同性结婚已被禁止！如需启用请联系管理员使用 /marriageconfig allowSameGender true")
-                        .withStyle(ChatFormatting.RED));
+                sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.marriage.same_gender_blocked"));
                 return;
             }
         }
@@ -416,13 +401,13 @@ public class PlayerInteractionHandler {
         }
 
         if (!senderHasRing || !targetHasRing) {
-            sender.sendSystemMessage(Component.literal("§c双方都需要拥有结婚戒指！").withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("mcaromanticexpansion.marriage.missing_ring"));
             return;
         }
 
         sendMarriageRequest(sender, target);
         CooldownManager.setCooldown(sender.getUUID(), "marriage");
-        sender.sendSystemMessage(Component.literal("§a已向 " + target.getName().getString() + " 发送婚礼请求！").withStyle(ChatFormatting.GREEN));
+        sender.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.marriage_sent", target.getName().getString()));
     }
 
     private static void handleDivorcePapers(ServerPlayer sender, ServerPlayer target) {
@@ -435,7 +420,7 @@ public class PlayerInteractionHandler {
                 senderData.getPartnerUUID().get().equals(target.getUUID());
 
         if (!senderIsMarried || !targetIsSpouse) {
-            sender.sendSystemMessage(Component.literal("§c只有已婚玩家才能向配偶递交离婚协议书！").withStyle(ChatFormatting.RED));
+            sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.divorce.not_married"));
             return;
         }
 
@@ -461,8 +446,8 @@ public class PlayerInteractionHandler {
             }
         }
 
-        sender.sendSystemMessage(Component.literal("§c你与 " + target.getName().getString() + " 的婚姻已结束。").withStyle(ChatFormatting.RED));
-        target.sendSystemMessage(Component.literal("§c" + sender.getName().getString() + " 已递交离婚协议书，你们的婚姻已结束。").withStyle(ChatFormatting.RED));
+        sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.divorce.sender", target.getName().getString()));
+        target.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.divorce.target", sender.getName().getString()));
     }
 
     private static void sendProposalRequest(ServerPlayer sender, ServerPlayer receiver) {
@@ -534,10 +519,10 @@ public class PlayerInteractionHandler {
 
                     if (!player.getInventory().add(veilStack)) {
                         target.drop(veilStack, false);
-                        player.sendSystemMessage(Component.literal("§c背包已满，红盖头掉落在地上！").withStyle(ChatFormatting.RED));
+                        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.veil"));
                     } else {
-                        player.sendSystemMessage(Component.literal("§a你轻轻摘下了 " + target.getName().getString() + " 的红盖头！").withStyle(ChatFormatting.GREEN));
-                        target.sendSystemMessage(Component.literal("§a" + player.getName().getString() + " 轻轻摘下了你的红盖头！").withStyle(ChatFormatting.GREEN));
+                        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.unveil_veil.player", target.getName().getString()));
+                        target.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.unveil_veil.target", player.getName().getString()));
 
                         // 触发成就：红妆揭面
                         try {

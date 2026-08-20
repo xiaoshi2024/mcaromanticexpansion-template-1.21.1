@@ -4,7 +4,6 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.server.world.data.PlayerSaveData;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -160,8 +159,10 @@ public class PregnancyAttemptHandler {
                 MCARomanticExpansion.LOGGER.debug("Set gender for {} to {} (both fields)",
                         player.getName().getString(), gender);
 
-                player.sendSystemMessage(Component.literal("§a[MCA] 你的性别已设置为: " +
-                        (gender == Gender.MALE ? "男性" : "女性")));
+                player.sendSystemMessage(Component.translatable(
+                        gender == Gender.MALE
+                                ? "message.mcaromanticexpansion.gender.set.male"
+                                : "message.mcaromanticexpansion.gender.set.female"));
 
             } catch (Exception e) {
                 MCARomanticExpansion.LOGGER.error("Failed to set gender for {}: {}",
@@ -263,12 +264,11 @@ public class PregnancyAttemptHandler {
                 MCARomanticExpansion.LOGGER.debug("One or both players have UNASSIGNED gender, pregnancy check skipped");
                 // 提示玩家设置性别
                 if (gender1 == Gender.UNASSIGNED) {
-                    player1.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别！")
-                            .withStyle(ChatFormatting.RED));
+                    player1.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
                 }
                 if (gender2 == Gender.UNASSIGNED) {
-                    player2.sendSystemMessage(Component.literal("§c请使用 /mca editor 打开编辑器设置性别！")
-                            .withStyle(ChatFormatting.RED));                }
+                    player2.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
+                }
             }
             return;
         }

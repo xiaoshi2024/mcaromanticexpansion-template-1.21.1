@@ -9,7 +9,6 @@ import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
 import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.item.EngagementRingItem;
 import net.conczin.mca.server.ServerInteractionManager;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -64,7 +63,7 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
             Gender proposerGender = PregnancyAttemptHandler.getGenderFromNBT(proposer);
 
             if (responderGender == Gender.UNASSIGNED || proposerGender == Gender.UNASSIGNED) {
-                responder.sendSystemMessage(Component.literal("§c请双方都设置性别后再求婚！").withStyle(ChatFormatting.RED));
+                responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.need_gender"));
                 return;
             }
 
@@ -73,8 +72,8 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
                 boolean proposerAllowed = MarriageConfig.isSameGenderMarriageAllowed(proposer);
 
                 if (!responderAllowed || !proposerAllowed) {
-                    responder.sendSystemMessage(Component.literal("§c同性求婚已被禁止！").withStyle(ChatFormatting.RED));
-                    proposer.sendSystemMessage(Component.literal("§c" + responder.getName().getString() + " 拒绝了你的求婚（同性求婚被禁止）").withStyle(ChatFormatting.RED));
+                    responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.same_gender_blocked_short"));
+                    proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.rejected_same_gender", responder.getName()));
                     return;
                 }
             }
@@ -111,8 +110,8 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
             }
 
             // 发送成功消息 - 使用不同的格式避免与 MCA 冲突
-            responder.sendSystemMessage(Component.literal("§d§o" + proposer.getName().getString() + " 向你求婚了！你接受了！"));
-            proposer.sendSystemMessage(Component.literal("§a§o" + responder.getName().getString() + " 接受了你的求婚！"));
+            responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.received", proposer.getName()));
+            proposer.sendSystemMessage(Component.translatable("mcaromanticexpansion.proposal.accepted", responder.getName()));
 
             // ========== 添加好感度：接受求婚 ==========
             AffectionManager.handleInteraction(AffectionManager.InteractionType.PROPOSAL_ACCEPT, proposer, responder);

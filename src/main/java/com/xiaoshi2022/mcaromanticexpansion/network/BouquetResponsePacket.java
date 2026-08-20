@@ -57,11 +57,11 @@ public record BouquetResponsePacket(UUID giverUUID, boolean accepted) implements
             AffectionManager.handleInteraction(AffectionManager.InteractionType.BOUQUET, giver, receiver);
             
             // 发送成功消息
-            giver.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                    "§a" + receiver.getName().getString() + " 接受了你的花束！")
+            giver.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
+                    "message.mcaromanticexpansion.bouquet.accepted_by", receiver.getName())
                     .withStyle(net.minecraft.ChatFormatting.GREEN));
-            receiver.sendSystemMessage(net.minecraft.network.chat.Component.literal(
-                    "§a你接受了 " + giver.getName().getString() + " 的花束！")
+            receiver.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
+                    "message.mcaromanticexpansion.bouquet.you_accepted", giver.getName())
                     .withStyle(net.minecraft.ChatFormatting.GREEN));
         }
     }

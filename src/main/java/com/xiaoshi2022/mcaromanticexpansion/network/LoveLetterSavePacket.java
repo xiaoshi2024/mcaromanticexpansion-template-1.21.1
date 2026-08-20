@@ -51,7 +51,7 @@ public record LoveLetterSavePacket(InteractionHand hand, String recipient, Strin
         }
 
         if (message.isBlank()) {
-            player.sendSystemMessage(Component.literal("§c正文不能为空！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.empty_message"));
             return;
         }
 
@@ -65,11 +65,11 @@ public record LoveLetterSavePacket(InteractionHand hand, String recipient, Strin
     /** 写信 */
     private void handleWriteLetter(ItemStack stack, ServerPlayer player) {
         if (recipient.isBlank()) {
-            player.sendSystemMessage(Component.literal("§c收信人不能为空！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.empty_recipient"));
             return;
         }
         LoveLetterItem.writeLetter(stack, player, recipient, message);
-        player.sendSystemMessage(Component.literal("§a情书已写好！"));
+        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.written"));
         player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.2f);
         MCARomanticExpansion.LOGGER.debug("Love letter saved by {} to {}",
                 player.getName().getString(), recipient);
@@ -84,22 +84,22 @@ public record LoveLetterSavePacket(InteractionHand hand, String recipient, Strin
      */
     private void handleReply(ItemStack stack, ServerPlayer player) {
         if (!LoveLetterItem.isWritten(stack)) {
-            player.sendSystemMessage(Component.literal("§c这封情书还没有内容，无法回信！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.reply_not_written"));
             return;
         }
         if (LoveLetterItem.hasReply(stack)) {
-            player.sendSystemMessage(Component.literal("§c这封情书已经回过信了！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.already_replied"));
             return;
         }
 
         // 不能给自己回信
         String senderUUIDStr = LoveLetterItem.getSenderUUID(stack);
         if (senderUUIDStr.isEmpty()) {
-            player.sendSystemMessage(Component.literal("§c找不到发信人信息，无法回信！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.no_sender_info"));
             return;
         }
         if (senderUUIDStr.equals(player.getUUID().toString())) {
-            player.sendSystemMessage(Component.literal("§c不能给自己回信！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.cannot_reply_self"));
             return;
         }
 
@@ -107,7 +107,7 @@ public record LoveLetterSavePacket(InteractionHand hand, String recipient, Strin
         try {
             senderUUID = UUID.fromString(senderUUIDStr);
         } catch (IllegalArgumentException e) {
-            player.sendSystemMessage(Component.literal("§c发信人UUID无效，无法回信！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.invalid_sender_uuid"));
             return;
         }
 
@@ -122,17 +122,16 @@ public record LoveLetterSavePacket(InteractionHand hand, String recipient, Strin
         if (sender != null) {
             AffectionManager.addAffection(player, sender, 3);
             AffectionManager.addAffection(sender, player, 3);
-            sender.sendSystemMessage(Component.literal("§d" + player.getName().getString()
-                    + " 回了你的情书！心动值 +3"));
+            sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.replied_notification", player.getName()));
             sender.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f, 1.5f);
         }
 
         // 通知回信人
-        player.sendSystemMessage(Component.literal("§d回信已写好！"));
+        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.reply_written"));
         if (sender != null) {
-            player.sendSystemMessage(Component.literal("§d双方心动值 +3！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.affection_increased"));
         } else {
-            player.sendSystemMessage(Component.literal("§e" + senderName + " 目前不在线，心动值需对方在线才能增加。"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.sender_offline", senderName));
         }
         player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.8f, 1.2f);
 

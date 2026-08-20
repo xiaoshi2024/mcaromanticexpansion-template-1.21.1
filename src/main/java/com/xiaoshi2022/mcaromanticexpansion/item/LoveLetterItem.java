@@ -136,16 +136,16 @@ public class LoveLetterItem extends Item {
     public static boolean concealInItem(ItemStack letter, ItemStack container, Player player) {
         if (!(letter.getItem() instanceof LoveLetterItem)) return false;
         if (!isWritten(letter)) {
-            player.sendSystemMessage(Component.literal("§c情书还没有写内容，无法夹藏！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.conceal.not_written"));
             return false;
         }
         if (container.isEmpty()) return false;
         if (container.getItem() instanceof LoveLetterItem) {
-            player.sendSystemMessage(Component.literal("§c不能把情书夹藏在另一封情书里！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.conceal.self"));
             return false;
         }
         if (hasConcealedLetter(container)) {
-            player.sendSystemMessage(Component.literal("§c该物品里已经夹藏了一封情书！"));
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.conceal.already_has"));
             return false;
         }
 
@@ -168,7 +168,7 @@ public class LoveLetterItem extends Item {
         // 消耗情书
         letter.shrink(1);
 
-        player.sendSystemMessage(Component.literal("§a你悄悄将情书夹藏在了 " + container.getDisplayName().getString() + " 里！"));
+        player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.love_letter.conceal.success", container.getDisplayName().getString()));
         player.playSound(SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, 0.8f, 1.2f);
         return true;
     }
@@ -316,23 +316,23 @@ public class LoveLetterItem extends Item {
             String recipient = getRecipient(stack);
             String sender = getSender(stack);
             if (!recipient.isEmpty()) {
-                tooltip.add(Component.literal("§d致: §f" + recipient)
+                tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.love_letter.to", recipient)
                         .withStyle(ChatFormatting.ITALIC));
             }
             if (!sender.isEmpty()) {
-                tooltip.add(Component.literal("§7来自: §f" + sender));
+                tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.love_letter.from", sender));
             }
             if (hasReply(stack)) {
                 String replySender = getReplySender(stack);
-                tooltip.add(Component.literal("§b↩ 已回信: §f" + replySender)
+                tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.love_letter.replied", replySender)
                         .withStyle(ChatFormatting.ITALIC));
             }
-            tooltip.add(Component.literal("§8右键阅读 · 潜行右键编辑")
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.love_letter.usage")
                     .withStyle(ChatFormatting.DARK_GRAY));
         } else {
-            tooltip.add(Component.literal("§7一封空白的情书")
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.love_letter.blank")
                     .withStyle(ChatFormatting.ITALIC));
-            tooltip.add(Component.literal("§8潜行右键写下你的情话")
+            tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.love_letter.write_hint")
                     .withStyle(ChatFormatting.DARK_GRAY));
         }
     }

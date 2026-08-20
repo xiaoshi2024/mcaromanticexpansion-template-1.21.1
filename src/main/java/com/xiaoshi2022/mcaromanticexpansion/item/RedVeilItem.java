@@ -16,7 +16,7 @@ public class RedVeilItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        tooltip.add(Component.literal("§7中式新娘红盖头"));
-        tooltip.add(Component.literal("§7可穿戴在头部饰品栏"));
+        tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.red_veil.line1"));
+        tooltip.add(Component.translatable("tooltip.mcaromanticexpansion.wearable.head"));
     }
 }

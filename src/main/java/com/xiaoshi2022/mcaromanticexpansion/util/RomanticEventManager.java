@@ -516,8 +516,8 @@ public class RomanticEventManager {
                 double radius = 8 + random.nextDouble() * 4; // 8-12格距离
 
                 // 显示警告
-                player.sendSystemMessage(Component.literal("§c⚠️ 危险！僵尸正在靠近！"));
-                partner.sendSystemMessage(Component.literal("§c⚠️ 危险！僵尸正在靠近！"));
+                player.sendSystemMessage(Component.translatable("event.mcaromanticexpansion.hero_resque.player"));
+                partner.sendSystemMessage(Component.translatable("event.mcaromanticexpansion.hero_resque.partner"));
 
                 // 播放警告音效
                 level.playSound(null, player.blockPosition(),

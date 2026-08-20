@@ -19,7 +19,7 @@ public class UpdateCommand {
                         ModrinthUpdateChecker.checkNow(player);
                     } else {
                         source.sendSuccess(() ->
-                                Component.literal("§c该命令只能由玩家执行！"), false);
+                                Component.translatable("message.mcaromanticexpansion.update.player_only"), false);
                     }
                     return 1;
                 })
@@ -36,18 +36,15 @@ public class UpdateCommand {
                             if (context.getSource().getEntity() instanceof ServerPlayer player) {
                                 String latest = ModrinthUpdateChecker.getLatestVersion();
                                 if (latest != null && !latest.equals(MCARomanticExpansion.MOD_VERSION)) {
-                                    player.sendSystemMessage(Component.literal(
-                                            "§a有新版本可用！当前: §c" + MCARomanticExpansion.MOD_VERSION +
-                                                    " §a→ §e" + latest
-                                    ));
+                                    player.sendSystemMessage(Component.translatable(
+                                            "message.mcaromanticexpansion.update.available",
+                                            MCARomanticExpansion.MOD_VERSION, latest));
                                 } else if (latest != null) {
-                                    player.sendSystemMessage(Component.literal(
-                                            "§a你已经是最新版本！(v" + latest + ")"
-                                    ));
+                                    player.sendSystemMessage(Component.translatable(
+                                            "message.mcaromanticexpansion.update.latest", latest));
                                 } else {
-                                    player.sendSystemMessage(Component.literal(
-                                            "§e尚未检查更新，请使用 §6/mcaupdate check §e检查"
-                                    ));
+                                    player.sendSystemMessage(Component.translatable(
+                                            "message.mcaromanticexpansion.update.not_checked"));
                                 }
                             }
                             return 1;
