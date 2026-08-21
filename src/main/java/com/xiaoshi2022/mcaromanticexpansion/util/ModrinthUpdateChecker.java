@@ -80,6 +80,12 @@ public class ModrinthUpdateChecker {
                 return;
             }
 
+            // 玩家通过 /mcaupdate notify false 关闭了登录更新提醒，则跳过自动检查和提醒
+            if (!UpdateConfig.isNotificationEnabled(player.getName().getString())) {
+                MCARomanticExpansion.LOGGER.debug("Update notification disabled by player {}", player.getName().getString());
+                return;
+            }
+
             // 客户端或内置服务端：正常执行更新检查
             long currentTime = System.currentTimeMillis();
 

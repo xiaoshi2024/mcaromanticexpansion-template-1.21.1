@@ -1,9 +1,10 @@
 package com.xiaoshi2022.mcaromanticexpansion.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.ModrinthUpdateChecker;
+import com.xiaoshi2022.mcaromanticexpansion.util.UpdateConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -49,6 +50,37 @@ public class UpdateCommand {
                             }
                             return 1;
                         })
+                )
+                .then(Commands.literal("notify")
+                        .executes(context -> {
+                            if (context.getSource().getEntity() instanceof ServerPlayer player) {
+                                boolean enabled = UpdateConfig.isNotificationEnabled(player.getName().getString());
+                                String key = enabled
+                                        ? "message.mcaromanticexpansion.update.notify.status.enabled"
+                                        : "message.mcaromanticexpansion.update.notify.status.disabled";
+                                player.sendSystemMessage(Component.translatable(key));
+                            } else {
+                                context.getSource().sendSuccess(() ->
+                                        Component.translatable("message.mcaromanticexpansion.update.player_only"), false);
+                            }
+                            return 1;
+                        })
+                        .then(Commands.argument("enabled", BoolArgumentType.bool())
+                                .executes(context -> {
+                                    if (context.getSource().getEntity() instanceof ServerPlayer player) {
+                                        boolean enabled = BoolArgumentType.getBool(context, "enabled");
+                                        UpdateConfig.setNotificationEnabled(player.getName().getString(), enabled);
+                                        String key = enabled
+                                                ? "message.mcaromanticexpansion.update.notify.enabled"
+                                                : "message.mcaromanticexpansion.update.notify.disabled";
+                                        player.sendSystemMessage(Component.translatable(key));
+                                    } else {
+                                        context.getSource().sendSuccess(() ->
+                                                Component.translatable("message.mcaromanticexpansion.update.player_only"), false);
+                                    }
+                                    return 1;
+                                })
+                        )
                 )
         );
     }

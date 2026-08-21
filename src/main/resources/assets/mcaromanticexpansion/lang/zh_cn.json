@@ -374,6 +374,10 @@
   "message.mcaromanticexpansion.update.available": "§a有新版本可用！当前: §c%s §a→ §e%s",
   "message.mcaromanticexpansion.update.latest": "§a你已经是最新版本！(v%s)",
   "message.mcaromanticexpansion.update.not_checked": "§e尚未检查更新，请使用 §6/mcaupdate check §e检查",
+  "message.mcaromanticexpansion.update.notify.enabled": "§a已开启登录更新提醒。",
+  "message.mcaromanticexpansion.update.notify.disabled": "§7已关闭登录更新提醒。使用 §6/mcaupdate notify true §7可重新开启。",
+  "message.mcaromanticexpansion.update.notify.status.enabled": "§7登录更新提醒：§a已开启",
+  "message.mcaromanticexpansion.update.notify.status.disabled": "§7登录更新提醒：§c已关闭",
 
   "message.mcaromanticexpansion.advancement.unlocked_event": "§d§l💕 通过成就解锁了浪漫事件: %s!",
   "message.mcaromanticexpansion.bouquet.accepted_by": "§a%s 接受了你的花束！",

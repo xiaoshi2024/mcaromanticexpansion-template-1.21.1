@@ -374,6 +374,10 @@
   "message.mcaromanticexpansion.update.available": "§aA new version is available! Current: §c%s §a→ §e%s",
   "message.mcaromanticexpansion.update.latest": "§aYou are on the latest version! (v%s)",
   "message.mcaromanticexpansion.update.not_checked": "§eNo update check has been performed yet, use §6/mcaupdate check §eto check",
+  "message.mcaromanticexpansion.update.notify.enabled": "§aLogin update notifications enabled.",
+  "message.mcaromanticexpansion.update.notify.disabled": "§7Login update notifications disabled. Use §6/mcaupdate notify true §7to re-enable.",
+  "message.mcaromanticexpansion.update.notify.status.enabled": "§7Login update notifications: §aEnabled",
+  "message.mcaromanticexpansion.update.notify.status.disabled": "§7Login update notifications: §cDisabled",
 
   "message.mcaromanticexpansion.advancement.unlocked_event": "§d§l💕 Unlocked a romantic event via advancement: %s!",
   "message.mcaromanticexpansion.bouquet.accepted_by": "§a%s accepted your bouquet!",
