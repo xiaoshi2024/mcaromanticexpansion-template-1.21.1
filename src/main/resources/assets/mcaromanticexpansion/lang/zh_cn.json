@@ -26,6 +26,21 @@
   "item.mcaromanticexpansion.western_wedding_male": "西式新郎西装",
   "item.mcaromanticexpansion.western_wedding_female": "西式新娘婚纱",
 
+  "item.mcaromanticexpansion.east_african_wedding_male": "东非新郎婚服",
+  "item.mcaromanticexpansion.east_african_wedding_female": "东非新娘婚服",
+  "item.mcaromanticexpansion.west_african_wedding_male": "西非新郎婚服",
+  "item.mcaromanticexpansion.west_african_wedding_female": "西非新娘婚服",
+  "item.mcaromanticexpansion.ancient_greek_wedding_male": "古希腊新郎婚服",
+  "item.mcaromanticexpansion.ancient_greek_wedding_female": "古希腊新娘婚服",
+  "item.mcaromanticexpansion.japanese_wedding_male": "日本新郎婚服",
+  "item.mcaromanticexpansion.japanese_wedding_female": "日本新娘婚服",
+  "item.mcaromanticexpansion.german_wedding_male": "德国新郎婚服",
+  "item.mcaromanticexpansion.german_wedding_female": "德国新娘婚服",
+  "item.mcaromanticexpansion.scottish_wedding_male": "苏格兰新郎婚服",
+  "item.mcaromanticexpansion.scottish_wedding_female": "苏格兰新娘婚服",
+  "item.mcaromanticexpansion.slavic_wedding_male": "斯拉夫新郎婚服",
+  "item.mcaromanticexpansion.slavic_wedding_female": "斯拉夫新娘婚服",
+
   "item.mcaromanticexpansion.red_veil": "红盖头",
   "item.mcaromanticexpansion.golden_hairpin": "金发簪",
   "item.mcaromanticexpansion.umbrella": "伞",
@@ -280,6 +295,20 @@
   "tooltip.mcaromanticexpansion.wedding_clothes.type.western": "西式",
   "tooltip.mcaromanticexpansion.wedding_clothes.gender.male": "新郎",
   "tooltip.mcaromanticexpansion.wedding_clothes.gender.female": "新娘",
+
+  "culture.mcaromanticexpansion.chinese": "中式",
+  "culture.mcaromanticexpansion.western": "西式",
+  "culture.mcaromanticexpansion.east_african": "东非",
+  "culture.mcaromanticexpansion.west_african": "西非",
+  "culture.mcaromanticexpansion.ancient_greek": "古希腊",
+  "culture.mcaromanticexpansion.japanese": "日本",
+  "culture.mcaromanticexpansion.german": "德国",
+  "culture.mcaromanticexpansion.scottish": "苏格兰",
+  "culture.mcaromanticexpansion.slavic": "斯拉夫",
+
+  "gender.mcaromanticexpansion.male": "男",
+  "gender.mcaromanticexpansion.female": "女",
+
   "tooltip.mcaromanticexpansion.wearable.head": "§7可穿戴在头部饰品栏",
   "tooltip.mcaromanticexpansion.wearable.curio": "§7可穿戴在饰品栏",
 

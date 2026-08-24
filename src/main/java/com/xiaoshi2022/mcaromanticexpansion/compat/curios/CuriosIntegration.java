@@ -129,6 +129,22 @@ public class CuriosIntegration {
         registerRingRendererCached(weddingProxy, "mcaromanticexpansion:western_wedding_male");
         registerRingRendererCached(weddingProxy, "mcaromanticexpansion:western_wedding_female");
 
+        // 新增14套
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:east_african_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:east_african_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:west_african_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:west_african_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:ancient_greek_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:ancient_greek_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:japanese_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:japanese_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:german_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:german_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:scottish_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:scottish_wedding_female");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:slavic_wedding_male");
+        registerRingRendererCached(weddingProxy, "mcaromanticexpansion:slavic_wedding_female");
+
         // 头饰渲染器
         HeadAdornmentRenderer headRenderer = new HeadAdornmentRenderer();
         Object headProxy = createRenderProxy(headRenderer, "head");

@@ -14,8 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WeddingClothesRenderer {
 
+    // ========== 纹理常量（保留原有4个） ==========
     private static final ResourceLocation TEXTURE_CHINESE_MALE = ResourceLocation.fromNamespaceAndPath(
             MCARomanticExpansion.MODID, "textures/armor/chinese_male.png");
     private static final ResourceLocation TEXTURE_CHINESE_FEMALE = ResourceLocation.fromNamespaceAndPath(
@@ -24,6 +28,9 @@ public class WeddingClothesRenderer {
             MCARomanticExpansion.MODID, "textures/armor/western_male.png");
     private static final ResourceLocation TEXTURE_WESTERN_FEMALE = ResourceLocation.fromNamespaceAndPath(
             MCARomanticExpansion.MODID, "textures/armor/western_female.png");
+
+    // ========== 新增文化纹理缓存 ==========
+    private static final Map<String, ResourceLocation> CULTURE_TEXTURE_CACHE = new HashMap<>();
 
     private WeddingClothesModel<LivingEntity> model;
 
@@ -55,8 +62,10 @@ public class WeddingClothesRenderer {
             return;
         }
 
+        WeddingClothesItem item = (WeddingClothesItem) stack.getItem();
         WeddingClothesModel<LivingEntity> clothesModel = getModel();
-        ResourceLocation texture = getTexture(stack, entity);
+        ResourceLocation texture = getTextureForItem(item);
+
         RenderType renderType = RenderType.entityCutoutNoCull(texture);
         VertexConsumer consumer = buffer.getBuffer(renderType);
         int color = 0xFFFFFFFF;
@@ -105,16 +114,36 @@ public class WeddingClothesRenderer {
         poseStack.popPose();
     }
 
-    private ResourceLocation getTexture(ItemStack stack, LivingEntity entity) {
-        if (stack.getItem() instanceof WeddingClothesItem weddingClothes) {
-            WeddingClothesItem.WeddingType type = weddingClothes.getType();
-            WeddingClothesItem.Gender gender = weddingClothes.getGender();
+    /**
+     * 根据物品获取纹理（兼容新旧两种枚举）
+     */
+    private ResourceLocation getTextureForItem(WeddingClothesItem item) {
+        WeddingClothesItem.WeddingCulture culture = item.getCulture();
+        WeddingClothesItem.Gender gender = item.getGender();
 
-            if (type == WeddingClothesItem.WeddingType.CHINESE) {
-                return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_CHINESE_MALE : TEXTURE_CHINESE_FEMALE;
-            } else {
-                return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_WESTERN_MALE : TEXTURE_WESTERN_FEMALE;
-            }
+        // 如果是 CHINESE 或 WESTERN，使用原有常量（保证向后兼容）
+        if (culture == WeddingClothesItem.WeddingCulture.CHINESE) {
+            return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_CHINESE_MALE : TEXTURE_CHINESE_FEMALE;
+        }
+        if (culture == WeddingClothesItem.WeddingCulture.WESTERN) {
+            return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_WESTERN_MALE : TEXTURE_WESTERN_FEMALE;
+        }
+
+        // 新文化：从缓存或动态构建
+        String key = culture.getName() + "_" + gender.getName();
+        return CULTURE_TEXTURE_CACHE.computeIfAbsent(key, k ->
+                ResourceLocation.fromNamespaceAndPath(
+                        MCARomanticExpansion.MODID,
+                        "textures/armor/" + culture.getName() + "_" + gender.getName() + ".png"
+                )
+        );
+    }
+
+    // 保留旧的 getTexture 方法（以防其他地方调用）
+    @Deprecated
+    private ResourceLocation getTexture(ItemStack stack, LivingEntity entity) {
+        if (stack.getItem() instanceof WeddingClothesItem item) {
+            return getTextureForItem(item);
         }
         return TEXTURE_CHINESE_MALE;
     }
