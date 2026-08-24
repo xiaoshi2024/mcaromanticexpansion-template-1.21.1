@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WKW",
+    "GAG",
+    "WKW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "K": { "item": "minecraft:pink_dye" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "A": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "id": "mcaromanticexpansion:japanese_wedding_female",
+    "count": 1
+  }
+}
