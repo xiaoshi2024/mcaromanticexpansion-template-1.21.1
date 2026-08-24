@@ -1,0 +1,19 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WYW",
+    "GAG",
+    "WYW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "Y": { "item": "minecraft:yellow_dye" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "A": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:west_african_wedding_female",
+    "count": 1
+  }
+}

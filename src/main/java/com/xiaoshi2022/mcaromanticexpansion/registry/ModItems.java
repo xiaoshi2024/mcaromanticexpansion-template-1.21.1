@@ -54,6 +54,77 @@ public class ModItems {
                     WeddingClothesItem.WeddingType.WESTERN,
                     WeddingClothesItem.Gender.FEMALE));
 
+    // ========== 新增14套婚服（使用新枚举） ==========
+    public static final RegistryObject<WeddingClothesItem> EAST_AFRICAN_WEDDING_MALE = ITEMS.register("east_african_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.EAST_AFRICAN,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> EAST_AFRICAN_WEDDING_FEMALE = ITEMS.register("east_african_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.EAST_AFRICAN,
+                    WeddingClothesItem.Gender.FEMALE));
+
+    public static final RegistryObject<WeddingClothesItem> WEST_AFRICAN_WEDDING_MALE = ITEMS.register("west_african_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.WEST_AFRICAN,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> WEST_AFRICAN_WEDDING_FEMALE = ITEMS.register("west_african_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.WEST_AFRICAN,
+                    WeddingClothesItem.Gender.FEMALE));
+
+    public static final RegistryObject<WeddingClothesItem> ANCIENT_GREEK_WEDDING_MALE = ITEMS.register("ancient_greek_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.ANCIENT_GREEK,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> ANCIENT_GREEK_WEDDING_FEMALE = ITEMS.register("ancient_greek_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.ANCIENT_GREEK,
+                    WeddingClothesItem.Gender.FEMALE));
+
+    public static final RegistryObject<WeddingClothesItem> JAPANESE_WEDDING_MALE = ITEMS.register("japanese_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.JAPANESE,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> JAPANESE_WEDDING_FEMALE = ITEMS.register("japanese_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.JAPANESE,
+                    WeddingClothesItem.Gender.FEMALE));
+
+    public static final RegistryObject<WeddingClothesItem> GERMAN_WEDDING_MALE = ITEMS.register("german_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.GERMAN,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> GERMAN_WEDDING_FEMALE = ITEMS.register("german_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.GERMAN,
+                    WeddingClothesItem.Gender.FEMALE));
+
+    public static final RegistryObject<WeddingClothesItem> SCOTTISH_WEDDING_MALE = ITEMS.register("scottish_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.SCOTTISH,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> SCOTTISH_WEDDING_FEMALE = ITEMS.register("scottish_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.SCOTTISH,
+                    WeddingClothesItem.Gender.FEMALE));
+
+    public static final RegistryObject<WeddingClothesItem> SLAVIC_WEDDING_MALE = ITEMS.register("slavic_wedding_male",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.SLAVIC,
+                    WeddingClothesItem.Gender.MALE));
+
+    public static final RegistryObject<WeddingClothesItem> SLAVIC_WEDDING_FEMALE = ITEMS.register("slavic_wedding_female",
+            () -> new WeddingClothesItem(new Item.Properties().stacksTo(1),
+                    WeddingClothesItem.WeddingCulture.SLAVIC,
+                    WeddingClothesItem.Gender.FEMALE));
+
     // 头饰
     public static final RegistryObject<RedVeilItem> RED_VEIL = ITEMS.register("red_veil",
             () -> new RedVeilItem(new Item.Properties().stacksTo(1)));
@@ -84,6 +155,23 @@ public class ModItems {
                         output.accept(CHINESE_WEDDING_FEMALE.get());
                         output.accept(WESTERN_WEDDING_MALE.get());
                         output.accept(WESTERN_WEDDING_FEMALE.get());
+
+                        // 新增14套
+                        output.accept(EAST_AFRICAN_WEDDING_MALE.get());
+                        output.accept(EAST_AFRICAN_WEDDING_FEMALE.get());
+                        output.accept(WEST_AFRICAN_WEDDING_MALE.get());
+                        output.accept(WEST_AFRICAN_WEDDING_FEMALE.get());
+                        output.accept(ANCIENT_GREEK_WEDDING_MALE.get());
+                        output.accept(ANCIENT_GREEK_WEDDING_FEMALE.get());
+                        output.accept(JAPANESE_WEDDING_MALE.get());
+                        output.accept(JAPANESE_WEDDING_FEMALE.get());
+                        output.accept(GERMAN_WEDDING_MALE.get());
+                        output.accept(GERMAN_WEDDING_FEMALE.get());
+                        output.accept(SCOTTISH_WEDDING_MALE.get());
+                        output.accept(SCOTTISH_WEDDING_FEMALE.get());
+                        output.accept(SLAVIC_WEDDING_MALE.get());
+                        output.accept(SLAVIC_WEDDING_FEMALE.get());
+
                         output.accept(RED_VEIL.get());
                         output.accept(GOLDEN_HAIRPIN.get());
                         output.accept(UMBRELLA.get());

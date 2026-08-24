@@ -2,7 +2,7 @@ package com.xiaoshi2022.mcaromanticexpansion.network;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
-import forge.net.mca.item.BouquetItem;
+import forge.net.conczin.mca.item.BouquetItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

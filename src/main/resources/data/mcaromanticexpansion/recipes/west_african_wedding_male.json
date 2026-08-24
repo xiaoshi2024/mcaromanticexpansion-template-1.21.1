@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "YGY",
+    "W W"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "Y": { "item": "minecraft:yellow_dye" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:west_african_wedding_male",
+    "count": 1
+  }
+}

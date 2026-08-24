@@ -22,7 +22,7 @@ public class ClientEventHandler {
             ItemStack stack = player.getInventory().getItem(i);
             // 在 1.20.1 中，FamilyTreeItem 可能在不同的包中
             // 需要根据实际情况调整
-            if (stack.getItem() instanceof forge.net.mca.item.FamilyTreeItem) {
+            if (stack.getItem() instanceof forge.net.conczin.mca.item.FamilyTreeItem) {
                 return true;
             }
         }

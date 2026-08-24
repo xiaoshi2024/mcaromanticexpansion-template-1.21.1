@@ -101,8 +101,8 @@ public final class RomanticExpansionAPI {
                 @Override
                 public boolean isMarried(Player player) {
                     if (player instanceof ServerPlayer sp) {
-                        var data = forge.net.mca.server.world.data.PlayerSaveData.get(sp);
-                        return data.getRelationshipState() == forge.net.mca.entity.ai.relationship.RelationshipState.MARRIED_TO_PLAYER;
+                        var data = forge.net.conczin.mca.server.world.data.PlayerSaveData.get(sp);
+                        return data.getRelationshipState() == forge.net.conczin.mca.entity.ai.relationship.RelationshipState.MARRIED_TO_PLAYER;
                     }
                     return false;
                 }
@@ -110,9 +110,9 @@ public final class RomanticExpansionAPI {
                 @Override
                 public boolean isEngaged(Player player) {
                     if (player instanceof ServerPlayer sp) {
-                        var data = forge.net.mca.server.world.data.PlayerSaveData.get(sp);
+                        var data = forge.net.conczin.mca.server.world.data.PlayerSaveData.get(sp);
                         boolean hasPartner = data.getPartnerUUID().isPresent();
-                        boolean isMarried = data.getRelationshipState() == forge.net.mca.entity.ai.relationship.RelationshipState.MARRIED_TO_PLAYER;
+                        boolean isMarried = data.getRelationshipState() == forge.net.conczin.mca.entity.ai.relationship.RelationshipState.MARRIED_TO_PLAYER;
                         return hasPartner && !isMarried;
                     }
                     return false;
@@ -121,7 +121,7 @@ public final class RomanticExpansionAPI {
                 @Override
                 public Optional<UUID> getPartnerUUID(Player player) {
                     if (player instanceof ServerPlayer sp) {
-                        var data = forge.net.mca.server.world.data.PlayerSaveData.get(sp);
+                        var data = forge.net.conczin.mca.server.world.data.PlayerSaveData.get(sp);
                         return data.getPartnerUUID();
                     }
                     return Optional.empty();
@@ -361,7 +361,7 @@ public final class RomanticExpansionAPI {
     private static boolean hasEngagementRing(ServerPlayer player) {
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             var s = player.getInventory().getItem(i);
-            if (!s.isEmpty() && s.getItem() instanceof forge.net.mca.item.EngagementRingItem) {
+            if (!s.isEmpty() && s.getItem() instanceof forge.net.conczin.mca.item.EngagementRingItem) {
                 return true;
             }
         }

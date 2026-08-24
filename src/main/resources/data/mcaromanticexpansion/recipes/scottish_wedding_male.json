@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "UGU",
+    "W W"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "U": { "item": "minecraft:blue_dye" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:scottish_wedding_male",
+    "count": 1
+  }
+}

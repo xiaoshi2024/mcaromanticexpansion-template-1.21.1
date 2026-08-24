@@ -2,8 +2,8 @@ package com.xiaoshi2022.mcaromanticexpansion.event;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
-import forge.net.mca.entity.ai.relationship.Gender;
-import forge.net.mca.server.world.data.PlayerSaveData;
+import forge.net.conczin.mca.entity.ai.relationship.Gender;
+import forge.net.conczin.mca.server.world.data.PlayerSaveData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -679,7 +679,7 @@ public class PregnancyAttemptHandler {
         }
 
         try {
-            Class<?> babyItemClass = Class.forName("forge.net.mca.item.BabyItem");
+            Class<?> babyItemClass = Class.forName("forge.net.conczin.mca.item.BabyItem");
             java.lang.reflect.Method createItemMethod = babyItemClass.getDeclaredMethod("createItem",
                     net.minecraft.world.entity.Entity.class,
                     net.minecraft.world.entity.Entity.class,

@@ -26,6 +26,21 @@
   "item.mcaromanticexpansion.western_wedding_male": "Western Wedding Groom Suit",
   "item.mcaromanticexpansion.western_wedding_female": "Western Wedding Bride Dress",
 
+  "item.mcaromanticexpansion.east_african_wedding_male": "East African Wedding Groom Outfit",
+  "item.mcaromanticexpansion.east_african_wedding_female": "East African Wedding Bride Outfit",
+  "item.mcaromanticexpansion.west_african_wedding_male": "West African Wedding Groom Outfit",
+  "item.mcaromanticexpansion.west_african_wedding_female": "West African Wedding Bride Outfit",
+  "item.mcaromanticexpansion.ancient_greek_wedding_male": "Ancient Greek Wedding Groom Outfit",
+  "item.mcaromanticexpansion.ancient_greek_wedding_female": "Ancient Greek Wedding Bride Outfit",
+  "item.mcaromanticexpansion.japanese_wedding_male": "Japanese Wedding Groom Outfit",
+  "item.mcaromanticexpansion.japanese_wedding_female": "Japanese Wedding Bride Outfit",
+  "item.mcaromanticexpansion.german_wedding_male": "German Wedding Groom Outfit",
+  "item.mcaromanticexpansion.german_wedding_female": "German Wedding Bride Outfit",
+  "item.mcaromanticexpansion.scottish_wedding_male": "Scottish Wedding Groom Outfit",
+  "item.mcaromanticexpansion.scottish_wedding_female": "Scottish Wedding Bride Outfit",
+  "item.mcaromanticexpansion.slavic_wedding_male": "Slavic Wedding Groom Outfit",
+  "item.mcaromanticexpansion.slavic_wedding_female": "Slavic Wedding Bride Outfit",
+
   "advancements.mcaromanticexpansion.root.title": "MC Romantic Expansion",
   "advancements.mcaromanticexpansion.root.description": "A romantic journey begins",
 
@@ -316,11 +331,25 @@
   "tooltip.mcaromanticexpansion.love_letter.write_hint": "§8Shift+right-click to write your love message",
   "tooltip.mcaromanticexpansion.hairpin.line1": "§7Chinese golden hairpin headwear",
   "tooltip.mcaromanticexpansion.red_veil.line1": "§7Chinese bride's red veil",
-  "tooltip.mcaromanticexpansion.wedding_clothes.line1": "§7%s%s wedding outfit",
+  "tooltip.mcaromanticexpansion.wedding_clothes.line1": "§7%s %s Outfit",
   "tooltip.mcaromanticexpansion.wedding_clothes.type.chinese": "Chinese ",
   "tooltip.mcaromanticexpansion.wedding_clothes.type.western": "Western ",
   "tooltip.mcaromanticexpansion.wedding_clothes.gender.male": "Groom",
   "tooltip.mcaromanticexpansion.wedding_clothes.gender.female": "Bride",
+
+  "culture.mcaromanticexpansion.chinese": "Chinese",
+  "culture.mcaromanticexpansion.western": "Western",
+  "culture.mcaromanticexpansion.east_african": "East African",
+  "culture.mcaromanticexpansion.west_african": "West African",
+  "culture.mcaromanticexpansion.ancient_greek": "Ancient Greek",
+  "culture.mcaromanticexpansion.japanese": "Japanese",
+  "culture.mcaromanticexpansion.german": "German",
+  "culture.mcaromanticexpansion.scottish": "Scottish",
+  "culture.mcaromanticexpansion.slavic": "Slavic",
+
+  "gender.mcaromanticexpansion.male": "Male",
+  "gender.mcaromanticexpansion.female": "Female",
+
   "tooltip.mcaromanticexpansion.wearable.head": "§7Can be worn in the head curio slot",
   "tooltip.mcaromanticexpansion.wearable.curio": "§7Can be worn in a curio slot",
 

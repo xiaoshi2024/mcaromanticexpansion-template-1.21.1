@@ -2,8 +2,8 @@ package com.xiaoshi2022.mcaromanticexpansion.client;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.util.RingNBTUtil;
-import forge.net.mca.item.EngagementRingItem;
-import forge.net.mca.item.WeddingRingItem;
+import forge.net.conczin.mca.item.EngagementRingItem;
+import forge.net.conczin.mca.item.WeddingRingItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

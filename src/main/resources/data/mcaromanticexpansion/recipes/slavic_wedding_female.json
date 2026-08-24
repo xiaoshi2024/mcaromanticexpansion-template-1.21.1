@@ -1,0 +1,19 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WMW",
+    "GAG",
+    "WMW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "M": { "item": "minecraft:magenta_dye" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "A": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:slavic_wedding_female",
+    "count": 1
+  }
+}

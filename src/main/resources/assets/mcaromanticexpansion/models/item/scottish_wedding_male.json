@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mcaromanticexpansion:item/scottish_wedding_male"
+  }
+}

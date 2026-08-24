@@ -1,0 +1,19 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WOW",
+    "GAG",
+    "WOW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "O": { "item": "minecraft:orange_dye" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "A": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:east_african_wedding_female",
+    "count": 1
+  }
+}

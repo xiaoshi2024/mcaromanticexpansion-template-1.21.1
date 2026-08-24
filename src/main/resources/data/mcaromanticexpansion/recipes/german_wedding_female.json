@@ -1,0 +1,19 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WNW",
+    "GAG",
+    "WNW"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "N": { "item": "minecraft:green_dye" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "A": { "item": "minecraft:diamond" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:german_wedding_female",
+    "count": 1
+  }
+}

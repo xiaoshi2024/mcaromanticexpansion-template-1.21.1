@@ -1,0 +1,18 @@
+﻿{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "PGP",
+    "W W"
+  ],
+  "key": {
+    "W": { "item": "minecraft:white_wool" },
+    "P": { "item": "minecraft:purple_dye" },
+    "G": { "item": "minecraft:gold_ingot" }
+  },
+  "result": {
+    "item": "mcaromanticexpansion:ancient_greek_wedding_male",
+    "count": 1
+  }
+}

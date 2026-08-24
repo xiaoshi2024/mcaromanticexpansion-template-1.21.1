@@ -1,7 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.client;
 
 import com.xiaoshi2022.mcaromanticexpansion.util.AffectionManager;
-import forge.net.mca.item.FamilyTreeItem;
+import forge.net.conczin.mca.item.FamilyTreeItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
