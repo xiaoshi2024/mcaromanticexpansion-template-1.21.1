@@ -25,6 +25,15 @@ sourceSets.main.resources {
     exclude("**/*.bbmodel") // BlockBench project files
 
     exclude("src/generated/**/.cache") // datagen cache files
+    exclude("**/*.bbmodel")
+    exclude("**/.cache")
+    exclude("**/.cache/**")
+    exclude("opencode.json")
+    exclude("INSTRUCTIONS.md")
+    exclude("mc-src/**")
+    exclude(".opencode/**")
+    exclude("base-mod-api/**")
+    exclude("base-mod-src/**")
 }
 
 repositories {
@@ -32,7 +41,7 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = 'mcaromanticexpansion'
 }
 
 // Mojang ships Java 25 to end users in 26.2, so mods should target Java 25.
@@ -181,4 +190,19 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+repositories {
+    maven { url "${projectDir}/.oss-basemod-repo" }
+    maven { url 'https://api.modrinth.com/maven' }
+}
+dependencies {
+    implementation 'maven.modrinth:curios:BI7D0sbK'
+    implementation 'maven.modrinth:minecraft-comes-alive-reborn:rFaWMUkA'
+    implementation fileTree(dir: 'base-mod-libs', include: ['*.jar'])
+    compileOnly fileTree(dir: 'base-mod-compile-libs', include: ['*.jar'])
 }
