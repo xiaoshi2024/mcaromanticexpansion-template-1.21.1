@@ -196,6 +196,24 @@ processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+// --- NeoForge Maven mirror (fix for blocked maven.neoforged.net) ---
+// On the local network, connections to https://maven.neoforged.net are reset
+// (GFW), which breaks ":createMinecraftArtifacts" while resolving artifacts
+// from both the /releases tree (neoform-runtime, neoforge, jst, ...) and the
+// /mojang-meta tree (net.neoforged:minecraft-dependencies). neoforged.forgecdn.net
+// is NeoForge's own CDN mirror of the whole maven.neoforged.net host and is
+// reachable here (verified: /releases and /mojang-meta artifacts return 200).
+// "repositories.all {}" is a persistent hook, so it also rewrites the
+// repositories that net.neoforged.moddev adds automatically on plugin apply.
+repositories.all {
+    if (it instanceof org.gradle.api.artifacts.repositories.MavenArtifactRepository) {
+        def u = it.url.toString()
+        if (u.startsWith('https://maven.neoforged.net/')) {
+            it.url = u.replace('https://maven.neoforged.net/', 'https://neoforged.forgecdn.net/')
+        }
+    }
+}
+
 repositories {
     maven { url "${projectDir}/.oss-basemod-repo" }
     maven { url 'https://api.modrinth.com/maven' }
@@ -205,4 +223,32 @@ dependencies {
     implementation 'maven.modrinth:minecraft-comes-alive-reborn:rFaWMUkA'
     implementation fileTree(dir: 'base-mod-libs', include: ['*.jar'])
     compileOnly fileTree(dir: 'base-mod-compile-libs', include: ['*.jar'])
+}
+
+// --- Bridge NFRT's own tool downloads onto the mirror (GFW) ---
+// NFRT (the spawned CLI) resolves its pipeline tools (binarypatcher, installertools,
+// vineflower, ...) from maven.neoforged.net ITSELF, so the "repositories.all" mirror
+// hook above does not catch those downloads and they fail with "Connection reset".
+// ModDevGradle 2.0.144 exposes no option to pass NFRT's --repository flag, so instead
+// we resolve the exact tool coordinates through Gradle (which DOES use the mirror) and
+// hand them to NFRT via its artifact manifest (task.addArtifactsToManifest). NFRT then
+// reuses those local files instead of downloading -- "warn-on-artifact-manifest-miss"
+// stays quiet for these coordinates. Tool coordinates come from
+// neoform-<ver>.zip:config.json (preProcessJar/decompile functions) and
+// neoforge-<ver>-moddev-config.json (binpatcher).
+configurations {
+    nfrtExternalTools {
+        description = 'NFRT pipeline tools resolved via the mirror for the artifact manifest'
+        canBeConsumed = false
+        canBeResolved = true
+    }
+}
+dependencies {
+    nfrtExternalTools 'net.neoforged.installertools:binarypatcher:4.0.17:fatjar'
+    nfrtExternalTools 'net.neoforged.installertools:installertools:4.0.16:fatjar'
+    nfrtExternalTools 'org.vineflower:vineflower:1.12.0'
+    nfrtExternalTools 'net.neoforged:vineflower-plugins:0.1.6'
+}
+tasks.named('createMinecraftArtifacts').configure {
+    addArtifactsToManifest configurations.nfrtExternalTools
 }
