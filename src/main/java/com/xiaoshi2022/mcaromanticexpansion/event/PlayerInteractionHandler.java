@@ -328,11 +328,21 @@ public class PlayerInteractionHandler {
             return;
         }
 
-        Gender proposerGender = PregnancyAttemptHandler.getGenderFromNBT(proposer);
-        Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
+        // ===== 使用强制读取，不使用缓存 =====
+        Gender proposerGender = PregnancyAttemptHandler.getGenderFromMCAForce(proposer);
+        Gender targetGender = PregnancyAttemptHandler.getGenderFromMCAForce(target);
+
+        MCARomanticExpansion.LOGGER.debug("Proposal gender check: {} is {}, {} is {}",
+                proposer.getName().getString(), proposerGender,
+                target.getName().getString(), targetGender);
 
         if (proposerGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
-            proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.need_gender"));
+            if (proposerGender == Gender.UNASSIGNED) {
+                proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
+            }
+            if (targetGender == Gender.UNASSIGNED) {
+                proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.target_no_gender"));
+            }
             return;
         }
 
@@ -344,27 +354,6 @@ public class PlayerInteractionHandler {
                 proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.same_gender_blocked"));
                 return;
             }
-        }
-
-        int ringCount = 0;
-        for (int i = 0; i < proposer.getInventory().getContainerSize(); i++) {
-            var stack = proposer.getInventory().getItem(i);
-            if (!stack.isEmpty() && stack.getItem() instanceof EngagementRingItem) {
-                ringCount += stack.getCount();
-            }
-        }
-
-        if (ringCount == 0) {
-            proposer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.need_ring"));
-            return;
-        }
-
-        ProposalSentEvent sentEvent = new ProposalSentEvent(proposer, target);
-        NeoForge.EVENT_BUS.post(sentEvent);
-        if (sentEvent.isCanceled()) {
-            MCARomanticExpansion.LOGGER.debug("Proposal canceled by event listener for {} -> {}",
-                    proposer.getName().getString(), target.getName().getString());
-            return;
         }
 
         sendProposalRequest(proposer, target);
@@ -379,8 +368,13 @@ public class PlayerInteractionHandler {
             return;
         }
 
-        Gender senderGender = PregnancyAttemptHandler.getGenderFromNBT(sender);
-        Gender targetGender = PregnancyAttemptHandler.getGenderFromNBT(target);
+        // ===== 使用强制读取，不使用缓存 =====
+        Gender senderGender = PregnancyAttemptHandler.getGenderFromMCAForce(sender);
+        Gender targetGender = PregnancyAttemptHandler.getGenderFromMCAForce(target);
+
+        MCARomanticExpansion.LOGGER.debug("Marriage gender check: {} is {}, {} is {}",
+                sender.getName().getString(), senderGender,
+                target.getName().getString(), targetGender);
 
         if (senderGender == Gender.UNASSIGNED || targetGender == Gender.UNASSIGNED) {
             sender.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.marriage.need_gender"));

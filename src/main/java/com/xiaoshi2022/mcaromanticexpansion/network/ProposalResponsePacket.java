@@ -65,9 +65,12 @@ public record ProposalResponsePacket(UUID proposerUUID, boolean accepted) implem
 
         if (accepted) {
 
-            // ========== 验证性别 ==========
-            Gender responderGender = PregnancyAttemptHandler.getGenderFromNBT(responder);
-            Gender proposerGender = PregnancyAttemptHandler.getGenderFromNBT(proposer);
+            // ===== 使用强制读取，不使用缓存 =====
+            Gender responderGender = PregnancyAttemptHandler.getGenderFromMCAForce(responder);
+            Gender proposerGender = PregnancyAttemptHandler.getGenderFromMCAForce(proposer);
+
+            MCARomanticExpansion.LOGGER.debug("Proposal response gender check: responder={}, proposer={}",
+                    responderGender, proposerGender);
 
             if (responderGender == Gender.UNASSIGNED || proposerGender == Gender.UNASSIGNED) {
                 responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.proposal.need_gender"));

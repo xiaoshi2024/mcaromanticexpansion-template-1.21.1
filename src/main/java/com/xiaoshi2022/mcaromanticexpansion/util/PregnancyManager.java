@@ -1,6 +1,8 @@
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
+import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.server.world.data.PlayerSaveData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -70,10 +72,8 @@ public class PregnancyManager {
             this.active = active;
         }
 
-        // 将数据写入 NBT - 修复: 使用 putString 存储 UUID
         public CompoundTag serialize() {
             CompoundTag tag = new CompoundTag();
-            // 修复: CompoundTag 没有 putUUID 方法，使用 putString 存储 UUID 的字符串形式
             tag.putString(TAG_PARTNER_UUID, partnerUUID.toString());
             tag.putLong(TAG_START_TIME, startTime);
             tag.putInt(TAG_DURATION_TICKS, durationTicks);
@@ -81,12 +81,10 @@ public class PregnancyManager {
             return tag;
         }
 
-        // 从 NBT 读取数据 - 修复: 使用 getString 读取 UUID
         public static PregnancyData deserialize(CompoundTag tag) {
             if (tag == null || tag.isEmpty()) {
                 return null;
             }
-            // 修复: CompoundTag 没有 getUUID 方法，使用 getString 读取 UUID 字符串
             String uuidStr = tag.getString(TAG_PARTNER_UUID).orElse(null);
             if (uuidStr == null) {
                 return null;
@@ -104,17 +102,10 @@ public class PregnancyManager {
 
     // ========== 持久化方法 ==========
 
-    /**
-     * 保存所有玩家的备孕期数据到持久化存储
-     * 建议在服务器关闭时调用
-     */
     public static void saveAllToPersistentData() {
         MCARomanticExpansion.LOGGER.debug("Saving all pregnancy data to persistent storage");
     }
 
-    /**
-     * 保存单个玩家的备孕期数据
-     */
     public static void saveToPersistentData(ServerPlayer player) {
         if (player == null) return;
 
@@ -126,16 +117,11 @@ public class PregnancyManager {
             persistentData.put(PREGNANCY_DATA_KEY, pregnancyData);
             MCARomanticExpansion.LOGGER.debug("Saved pregnancy data for player: {}", player.getName().getString());
         } else {
-            // 如果没有活跃的备孕期，清除旧数据
             persistentData.remove(PREGNANCY_DATA_KEY);
             MCARomanticExpansion.LOGGER.debug("Cleared pregnancy data for player: {}", player.getName().getString());
         }
     }
 
-    /**
-     * 从持久化存储加载玩家的备孕期数据
-     * 应在玩家登录时调用
-     */
     public static void loadFromPersistentData(ServerPlayer player) {
         if (player == null) return;
 
@@ -152,12 +138,8 @@ public class PregnancyManager {
         }
     }
 
-    /**
-     * 清除玩家的持久化备孕期数据
-     */
     public static void clearPersistentData(ServerPlayer player) {
         if (player == null) return;
-
         CompoundTag persistentData = player.getPersistentData();
         persistentData.remove(PREGNANCY_DATA_KEY);
         MCARomanticExpansion.LOGGER.debug("Cleared persistent pregnancy data for player: {}", player.getName().getString());
@@ -181,7 +163,6 @@ public class PregnancyManager {
         PregnancyData data = new PregnancyData(partnerId, worldTime, PREGNANCY_PERIOD_TICKS);
         playerPregnancyData.put(playerId, data);
 
-        // 保存到持久化数据
         saveToPersistentData(player);
 
         MCARomanticExpansion.LOGGER.debug("Player {} started pregnancy period with partner {}",
@@ -231,22 +212,31 @@ public class PregnancyManager {
         return player.getFoodData().getFoodLevel() >= 20 && player.getFoodData().getSaturationLevel() >= 5.0F;
     }
 
+    /**
+     * 计算怀孕概率 - 保留结婚加成，但不需要强制结婚
+     */
     public static double calculatePregnancyChance(ServerPlayer player, ServerPlayer partner) {
         double chance = BASE_PREGNANCY_CHANCE;
 
+        // 已婚加成（如果已婚则提升概率，但不是必须条件）
         if (isMarriedTo(player, partner)) {
             chance *= MARRIED_BONUS_MULTIPLIER;
+            MCARomanticExpansion.LOGGER.debug("Married bonus applied: {} x2", BASE_PREGNANCY_CHANCE);
         }
 
         if (hasChildren(player) || hasChildren(partner)) {
             chance *= HAS_CHILDREN_PENALTY;
+            MCARomanticExpansion.LOGGER.debug("Has children penalty applied: x0.5");
         }
 
         if (isFullSatiated(player) && isFullSatiated(partner)) {
             chance *= FULL_SATIATION_BONUS;
+            MCARomanticExpansion.LOGGER.debug("Full satiation bonus applied: x1.5");
         }
 
-        return Math.min(chance, 1.0);
+        double result = Math.min(chance, 1.0);
+        MCARomanticExpansion.LOGGER.debug("Final pregnancy chance: {}%", result * 100);
+        return result;
     }
 
     public static void onPlayerDeath(ServerPlayer player) {
@@ -262,7 +252,6 @@ public class PregnancyManager {
             for (Map.Entry<UUID, PregnancyData> entry : playerPregnancyData.entrySet()) {
                 if (entry.getValue().equals(partnerData)) {
                     removePregnancyPeriod(entry.getKey());
-                    // 修复: 通过 level() 获取 Server
                     if (player.level() instanceof ServerLevel serverLevel) {
                         ServerPlayer partner = serverLevel.getServer().getPlayerList().getPlayer(entry.getKey());
                         if (partner != null) {
@@ -275,5 +264,78 @@ public class PregnancyManager {
                 }
             }
         }
+    }
+
+    // ========== 强制读取方法（不使用缓存）==========
+
+    /**
+     * 强制检查怀孕条件 - 不需要结婚，只需要异性 + 在线存活
+     */
+    public static boolean canPlayerPregnancy(ServerPlayer player1, ServerPlayer player2) {
+        // 强制读取双方最新性别
+        Gender gender1 = PregnancyAttemptHandler.getGenderFromMCAForce(player1);
+        Gender gender2 = PregnancyAttemptHandler.getGenderFromMCAForce(player2);
+
+        MCARomanticExpansion.LOGGER.debug("canPlayerPregnancy: {} is {}, {} is {}",
+                player1.getName().getString(), gender1,
+                player2.getName().getString(), gender2);
+
+        // 性别检查 - 必须是异性
+        if (gender1 == Gender.UNASSIGNED || gender2 == Gender.UNASSIGNED) {
+            MCARomanticExpansion.LOGGER.debug("canPlayerPregnancy: UNASSIGNED gender detected, returning false");
+            return false;
+        }
+
+        if (gender1 == gender2) {
+            MCARomanticExpansion.LOGGER.debug("canPlayerPregnancy: Same gender ({}), returning false", gender1);
+            return false;
+        }
+
+        MCARomanticExpansion.LOGGER.debug("canPlayerPregnancy: All conditions met (heterosexual + alive)");
+        return true;
+    }
+
+    /**
+     * 强制获取最新怀孕数据 - 从 NBT 实时读取
+     */
+    public static PregnancyData getPregnancyDataForce(ServerPlayer player) {
+        if (player == null) return null;
+
+        UUID playerId = player.getUUID();
+
+        // 1. 检查内存缓存
+        PregnancyData data = playerPregnancyData.get(playerId);
+        if (data != null && data.isActive()) {
+            return data;
+        }
+
+        // 2. 从 NBT 读取
+        CompoundTag persistentData = player.getPersistentData();
+        if (persistentData.contains(PREGNANCY_DATA_KEY)) {
+            CompoundTag pregnancyTag = persistentData.getCompound(PREGNANCY_DATA_KEY).orElse(null);
+            if (pregnancyTag != null) {
+                PregnancyData nbtData = PregnancyData.deserialize(pregnancyTag);
+                if (nbtData != null && nbtData.isActive()) {
+                    // 同步到内存缓存
+                    playerPregnancyData.put(playerId, nbtData);
+                    MCARomanticExpansion.LOGGER.debug("Loaded pregnancy data from NBT for {}: partner={}",
+                            player.getName().getString(), nbtData.getPartnerUUID());
+                    return nbtData;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 强制检查玩家是否在怀孕期 - 从 NBT 实时读取
+     */
+    public static boolean isPlayerInPregnancyPeriodForce(ServerPlayer player) {
+        PregnancyData data = getPregnancyDataForce(player);
+        boolean result = data != null && data.isActive();
+        MCARomanticExpansion.LOGGER.debug("isPlayerInPregnancyPeriodForce for {}: {}",
+                player.getName().getString(), result);
+        return result;
     }
 }

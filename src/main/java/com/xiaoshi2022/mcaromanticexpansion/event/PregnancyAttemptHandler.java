@@ -16,21 +16,28 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
+// NeoForge 26.2 (1.21.1) - CompoundTag 方法返回 Optional
 public class PregnancyAttemptHandler {
-    // 使用线程安全的 ConcurrentHashMap
     private static final ConcurrentHashMap<UUID, BlockPos> sleepingPlayers = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Long> lastCheckTime = new ConcurrentHashMap<>();
     private static final long CHECK_INTERVAL = 100;
 
-    // 添加锁对象，用于保护性别相关的操作
     private static final Object genderCheckLock = new Object();
 
-    // 记录正在修改性别的玩家，避免怀孕检查干扰
     private static final ConcurrentHashMap<UUID, Long> genderChangingPlayers = new ConcurrentHashMap<>();
-    private static final long GENDER_CHANGE_DURATION = 5000; // 5秒保护时间
+    private static final long GENDER_CHANGE_DURATION = 5000;
+
+    private static final ConcurrentHashMap<UUID, Gender> lastKnownGender = new ConcurrentHashMap<>();
+
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -40,6 +47,7 @@ public class PregnancyAttemptHandler {
             return;
         }
 
+        checkGenderChange(serverPlayer);
         checkSleepingStatus(serverPlayer);
 
         long currentTime = System.currentTimeMillis();
@@ -54,24 +62,22 @@ public class PregnancyAttemptHandler {
 
         PregnancyManager.PregnancyData data = PregnancyManager.getPregnancyData(playerId);
         if (data != null && data.isActive()) {
-            // 修复: 使用 level() 获取 ServerLevel
             long worldTime = serverPlayer.level().getGameTime();
             int elapsedTicks = (int) (worldTime - data.getStartTime());
 
             if (elapsedTicks >= data.getDurationTicks()) {
                 attemptPregnancy(serverPlayer, data);
                 PregnancyManager.removePregnancyPeriod(playerId);
-                // 修复: 通过 level() 获取 Server
                 if (serverPlayer.level() instanceof ServerLevel serverLevel) {
                     serverLevel.getServer().getPlayerList().broadcastSystemMessage(
-                            Component.translatable("message.mcaromanticexpansion.pregnancy_success_partner", serverPlayer.getName().getString()), false);
+                            Component.translatable("message.mcaromanticexpansion.pregnancy_success_partner",
+                                    serverPlayer.getName().getString()), false);
                 }
             }
         }
 
         lastCheckTime.put(playerId, currentTime);
 
-        // 清理过期的性别修改标记
         if (genderChangingPlayers.containsKey(playerId)) {
             Long changeTime = genderChangingPlayers.get(playerId);
             if (currentTime - changeTime > GENDER_CHANGE_DURATION) {
@@ -80,78 +86,93 @@ public class PregnancyAttemptHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            // 登录时修复性别数据（修复MCA的大小写Bug）
-            fixGenderData(serverPlayer);
+    // ==================== 性别变化检测 ====================
+    private static void checkGenderChange(ServerPlayer player) {
+        UUID playerId = player.getUUID();
+        Gender currentGender = getGenderFromMCA(player);
+        Gender cachedGender = lastKnownGender.get(playerId);
+
+        if (cachedGender == null) {
+            if (currentGender != Gender.UNASSIGNED) {
+                lastKnownGender.put(playerId, currentGender);
+                MCARomanticExpansion.LOGGER.debug("Initial gender cached for {}: {}",
+                        player.getName().getString(), currentGender);
+            }
+            return;
+        }
+
+        if (currentGender != Gender.UNASSIGNED && currentGender != cachedGender) {
+            MCARomanticExpansion.LOGGER.debug("🔄 Gender updated for {}: {} -> {} (cache updated)",
+                    player.getName().getString(), cachedGender, currentGender);
+            lastKnownGender.put(playerId, currentGender);
         }
     }
 
-    /**
-     * 修复MCA的性别大小写Bug
-     */
-    private static void fixGenderData(ServerPlayer player) {
+    // ==================== 核心读取方法 ====================
+
+    public static Gender getGenderFromMCA(ServerPlayer player) {
+        if (player == null) return Gender.UNASSIGNED;
+
+        UUID playerId = player.getUUID();
+
+        Gender cached = lastKnownGender.get(playerId);
+        if (cached != null && cached != Gender.UNASSIGNED) {
+            return cached;
+        }
+
         try {
             PlayerSaveData data = PlayerSaveData.get(player);
-            CompoundTag entityData = data.getEntityData();
-
-            // 修复: getInt 返回 Optional<Integer>，需要使用 .orElse(0)
-            if (entityData.contains("Gender")) {
-                int genderId = entityData.getInt("Gender").orElse(0);
-                Gender gender = Gender.byId(genderId);
-
-                if (gender != Gender.UNASSIGNED) {
-                    MCARomanticExpansion.LOGGER.debug("Found Gender field for {}: {}",
+            if (data != null) {
+                Gender gender = data.getGender();
+                if (gender != null && gender != Gender.UNASSIGNED) {
+                    lastKnownGender.put(playerId, gender);
+                    MCARomanticExpansion.LOGGER.debug("✅ Read gender via MCA API for {}: {}",
                             player.getName().getString(), gender);
-
-                    // 修复: getInt 返回 Optional<Integer>，使用 .orElse(0)
-                    if (!entityData.contains("gender") || entityData.getInt("gender").orElse(0) != genderId) {
-                        entityData.putInt("gender", genderId);
-                        data.setDirty();
-                        MCARomanticExpansion.LOGGER.debug("Fixed gender for {}: copied from 'Gender' to 'gender'",
-                                player.getName().getString());
-                    }
-                    return;
+                    return gender;
                 }
             }
 
-            // 如果都没有，初始化默认性别
-            if (!data.isEntityDataSet()) {
-                data.setEntityDataSet(true);
-                // 默认设置为男性
-                setGenderData(player, Gender.MALE);
-            }
+            MCARomanticExpansion.LOGGER.debug("No gender found for {}, returning UNASSIGNED",
+                    player.getName().getString());
+            return Gender.UNASSIGNED;
 
         } catch (Exception e) {
-            MCARomanticExpansion.LOGGER.warn("Failed to fix gender data for {}: {}",
+            MCARomanticExpansion.LOGGER.warn("Failed to get gender via MCA API for {}: {}",
                     player.getName().getString(), e.getMessage());
+            return Gender.UNASSIGNED;
         }
     }
 
-    /**
-     * 正确设置性别数据（同时设置大写和小写，兼容MCA）
-     * 外部调用此方法来修改性别时使用
-     */
+    public static Gender getGenderFromNBT(ServerPlayer player) {
+        return getGenderFromMCA(player);
+    }
+
+    // ==================== 设置方法 ====================
+
     public static void setGenderData(ServerPlayer player, Gender gender) {
+        if (gender == Gender.UNASSIGNED) {
+            MCARomanticExpansion.LOGGER.warn("Attempted to set UNASSIGNED gender for {}, ignoring",
+                    player.getName().getString());
+            return;
+        }
+
         synchronized (genderCheckLock) {
             UUID playerId = player.getUUID();
-            // 标记性别正在修改，防止怀孕检查干扰
             genderChangingPlayers.put(playerId, System.currentTimeMillis());
 
             try {
                 PlayerSaveData data = PlayerSaveData.get(player);
                 CompoundTag entityData = data.getEntityData();
 
-                // 同时设置大写和小写，确保兼容性
-                entityData.putInt("gender", gender.getId());  // 小写 - 给MCA的getGender()用
-                entityData.putInt("Gender", gender.getId());  // 大写 - Genetics实际保存的位置
+                // 设置主数据
+                entityData.putInt("gender", gender.getId());
+                entityData.putInt("Gender", gender.getId());
 
-                // 同时更新Genetics标签
+                // 设置 Genetics
+                Optional<CompoundTag> geneticsOpt = entityData.getCompound("Genetics");
                 CompoundTag genetics;
-                if (entityData.contains("Genetics")) {
-                    // 修复: getCompound 返回 Optional<CompoundTag>
-                    genetics = entityData.getCompound("Genetics").orElse(new CompoundTag());
+                if (geneticsOpt.isPresent()) {
+                    genetics = geneticsOpt.get();
                 } else {
                     genetics = new CompoundTag();
                     entityData.put("Genetics", genetics);
@@ -159,10 +180,23 @@ public class PregnancyAttemptHandler {
                 genetics.putInt("Gender", gender.getId());
                 genetics.putInt("gender", gender.getId());
 
+                // 设置 persistentData
+                CompoundTag persistentData = player.getPersistentData();
+                persistentData.putInt("gender", gender.getId());
+                persistentData.putInt("Gender", gender.getId());
+
+                Optional<CompoundTag> mcaOpt = persistentData.getCompound("mca");
+                if (mcaOpt.isPresent()) {
+                    CompoundTag mcaData = mcaOpt.get();
+                    mcaData.putInt("gender", gender.getId());
+                }
+
                 data.setEntityDataSet(true);
                 data.setDirty();
 
-                MCARomanticExpansion.LOGGER.debug("Set gender for {} to {} (both fields)",
+                lastKnownGender.put(playerId, gender);
+
+                MCARomanticExpansion.LOGGER.info("✅ Set gender for {} to {}",
                         player.getName().getString(), gender);
 
                 player.sendSystemMessage(Component.translatable(
@@ -174,18 +208,279 @@ public class PregnancyAttemptHandler {
                 MCARomanticExpansion.LOGGER.error("Failed to set gender for {}: {}",
                         player.getName().getString(), e.getMessage());
             } finally {
-                // 延迟清除标记，给NBT保存一些时间
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(GENDER_CHANGE_DURATION);
-                        genderChangingPlayers.remove(playerId);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }).start();
+                scheduler.schedule(() -> {
+                    genderChangingPlayers.remove(playerId);
+                    MCARomanticExpansion.LOGGER.debug("Removed gender change protection for {}",
+                            player.getName().getString());
+                }, GENDER_CHANGE_DURATION, TimeUnit.MILLISECONDS);
             }
         }
     }
+
+    public static void forceSetGender(ServerPlayer player, Gender gender) {
+        if (gender == Gender.UNASSIGNED) return;
+
+        synchronized (genderCheckLock) {
+            try {
+                PlayerSaveData data = PlayerSaveData.get(player);
+                CompoundTag entityData = data.getEntityData();
+
+                entityData.putInt("gender", gender.getId());
+                entityData.putInt("Gender", gender.getId());
+
+                Optional<CompoundTag> geneticsOpt = entityData.getCompound("Genetics");
+                CompoundTag genetics;
+                if (geneticsOpt.isPresent()) {
+                    genetics = geneticsOpt.get();
+                } else {
+                    genetics = new CompoundTag();
+                    entityData.put("Genetics", genetics);
+                }
+                genetics.putInt("gender", gender.getId());
+                genetics.putInt("Gender", gender.getId());
+
+                CompoundTag persistentData = player.getPersistentData();
+                persistentData.putInt("gender", gender.getId());
+                persistentData.putInt("Gender", gender.getId());
+
+                Optional<CompoundTag> mcaOpt = persistentData.getCompound("mca");
+                if (mcaOpt.isPresent()) {
+                    CompoundTag mcaData = mcaOpt.get();
+                    mcaData.putInt("gender", gender.getId());
+                }
+
+                data.setEntityDataSet(true);
+                data.setDirty();
+
+                lastKnownGender.put(player.getUUID(), gender);
+
+                MCARomanticExpansion.LOGGER.debug("✅ Force set gender for {} to {}",
+                        player.getName().getString(), gender);
+
+            } catch (Exception e) {
+                MCARomanticExpansion.LOGGER.error("Failed to force set gender: {}", e.getMessage());
+            }
+        }
+    }
+
+    // ==================== 事件处理 ====================
+
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            fixGenderData(serverPlayer);
+
+            Gender gender = getGenderFromMCA(serverPlayer);
+            if (gender == Gender.UNASSIGNED) {
+                MCARomanticExpansion.LOGGER.info("Player {} has no gender data, please use MCA editor to set",
+                        serverPlayer.getName().getString());
+                serverPlayer.sendSystemMessage(
+                        Component.translatable("message.mcaromanticexpansion.need_set_gender"));
+            } else {
+                MCARomanticExpansion.LOGGER.debug("Player {} logged in with gender: {}",
+                        serverPlayer.getName().getString(), gender);
+                lastKnownGender.put(serverPlayer.getUUID(), gender);
+            }
+
+            diagnoseGenderData(serverPlayer);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            UUID playerId = serverPlayer.getUUID();
+
+            Gender currentGender = getGenderFromMCA(serverPlayer);
+            if (currentGender != Gender.UNASSIGNED) {
+                lastKnownGender.put(playerId, currentGender);
+                forceSetGender(serverPlayer, currentGender);
+
+                CompoundTag persistentData = serverPlayer.getPersistentData();
+                persistentData.putInt("gender", currentGender.getId());
+                persistentData.putInt("Gender", currentGender.getId());
+
+                MCARomanticExpansion.LOGGER.debug("💾 Saved gender on logout for {}: {}",
+                        serverPlayer.getName().getString(), currentGender);
+            }
+
+            sleepingPlayers.remove(playerId);
+            lastCheckTime.remove(playerId);
+            genderChangingPlayers.remove(playerId);
+        }
+    }
+
+    private static void fixGenderData(ServerPlayer player) {
+        try {
+            PlayerSaveData data = PlayerSaveData.get(player);
+            if (data == null) {
+                MCARomanticExpansion.LOGGER.warn("PlayerSaveData is null for {}", player.getName().getString());
+                return;
+            }
+
+            CompoundTag entityData = data.getEntityData();
+            boolean changed = false;
+            Gender finalGender = Gender.UNASSIGNED;
+
+            // 读取大写和小写 - 使用 Optional
+            Gender upperGender = Gender.UNASSIGNED;
+            Optional<Integer> upperOpt = entityData.getInt("Gender");
+            if (upperOpt.isPresent()) {
+                int id = upperOpt.get();
+                Gender g = Gender.byId(id);
+                if (g != null && g != Gender.UNASSIGNED) {
+                    upperGender = g;
+                }
+            }
+
+            Gender lowerGender = Gender.UNASSIGNED;
+            Optional<Integer> lowerOpt = entityData.getInt("gender");
+            if (lowerOpt.isPresent()) {
+                int id = lowerOpt.get();
+                Gender g = Gender.byId(id);
+                if (g != null && g != Gender.UNASSIGNED) {
+                    lowerGender = g;
+                }
+            }
+
+            if (upperGender == Gender.UNASSIGNED && lowerGender == Gender.UNASSIGNED) {
+                MCARomanticExpansion.LOGGER.info("No gender data found for {}, please use MCA editor to set gender",
+                        player.getName().getString());
+                return;
+            }
+
+            if (upperGender != Gender.UNASSIGNED && lowerGender == Gender.UNASSIGNED) {
+                entityData.putInt("gender", upperGender.getId());
+                finalGender = upperGender;
+                changed = true;
+            } else if (lowerGender != Gender.UNASSIGNED && upperGender == Gender.UNASSIGNED) {
+                entityData.putInt("Gender", lowerGender.getId());
+                finalGender = lowerGender;
+                changed = true;
+            } else if (upperGender != Gender.UNASSIGNED && lowerGender != Gender.UNASSIGNED) {
+                if (upperGender == lowerGender) {
+                    finalGender = upperGender;
+                } else {
+                    finalGender = lowerGender;
+                    entityData.putInt("Gender", lowerGender.getId());
+                    changed = true;
+                    MCARomanticExpansion.LOGGER.warn("⚠️ Gender mismatch for {}, using gender ({})",
+                            player.getName().getString(), lowerGender);
+                }
+            }
+
+            if (finalGender != Gender.UNASSIGNED) {
+                Optional<CompoundTag> geneticsOpt = entityData.getCompound("Genetics");
+                if (geneticsOpt.isPresent()) {
+                    CompoundTag genetics = geneticsOpt.get();
+                    if (genetics.contains("Gender") || genetics.contains("gender")) {
+                        genetics.putInt("gender", finalGender.getId());
+                        genetics.putInt("Gender", finalGender.getId());
+                        entityData.put("Genetics", genetics);
+                        changed = true;
+                    }
+                }
+
+                if (changed) {
+                    data.setDirty();
+                    MCARomanticExpansion.LOGGER.debug("✅ Fixed gender for {}: {}",
+                            player.getName().getString(), finalGender);
+                }
+                lastKnownGender.put(player.getUUID(), finalGender);
+            }
+
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.warn("Failed to fix gender data for {}: {}",
+                    player.getName().getString(), e.getMessage());
+        }
+    }
+
+    // ==================== 诊断方法 ====================
+
+    public static void diagnoseGenderData(ServerPlayer player) {
+        if (player == null) return;
+
+        MCARomanticExpansion.LOGGER.info("========== Gender Diagnosis for {} ==========",
+                player.getName().getString());
+
+        try {
+            CompoundTag persistentData = player.getPersistentData();
+            MCARomanticExpansion.LOGGER.info("persistentData keys: {}", persistentData.keySet());
+
+            // 使用 Optional
+            Optional<Integer> persistGenderOpt = persistentData.getInt("gender");
+            if (persistGenderOpt.isPresent()) {
+                int id = persistGenderOpt.get();
+                MCARomanticExpansion.LOGGER.info("  - persistent.gender = {} ({})", id, Gender.byId(id));
+            }
+
+            Optional<Integer> persistGenderUpperOpt = persistentData.getInt("Gender");
+            if (persistGenderUpperOpt.isPresent()) {
+                int id = persistGenderUpperOpt.get();
+                MCARomanticExpansion.LOGGER.info("  - persistent.Gender = {} ({})", id, Gender.byId(id));
+            }
+
+            Optional<CompoundTag> mcaPersistentOpt = persistentData.getCompound("mca");
+            if (mcaPersistentOpt.isPresent()) {
+                CompoundTag mcaData = mcaPersistentOpt.get();
+                Optional<Integer> mcaGenderOpt = mcaData.getInt("gender");
+                if (mcaGenderOpt.isPresent()) {
+                    int id = mcaGenderOpt.get();
+                    MCARomanticExpansion.LOGGER.info("  - mca.gender = {} ({})", id, Gender.byId(id));
+                }
+            }
+
+            PlayerSaveData data = PlayerSaveData.get(player);
+            if (data != null) {
+                CompoundTag entityData = data.getEntityData();
+                MCARomanticExpansion.LOGGER.info("entityData keys: {}", entityData.keySet());
+
+                Optional<Integer> entityGenderOpt = entityData.getInt("gender");
+                if (entityGenderOpt.isPresent()) {
+                    int id = entityGenderOpt.get();
+                    MCARomanticExpansion.LOGGER.info("  - entityData.gender = {} ({})", id, Gender.byId(id));
+                }
+
+                Optional<Integer> entityGenderUpperOpt = entityData.getInt("Gender");
+                if (entityGenderUpperOpt.isPresent()) {
+                    int id = entityGenderUpperOpt.get();
+                    MCARomanticExpansion.LOGGER.info("  - entityData.Gender = {} ({})", id, Gender.byId(id));
+                }
+
+                Optional<CompoundTag> geneticsOpt = entityData.getCompound("Genetics");
+                if (geneticsOpt.isPresent()) {
+                    CompoundTag genetics = geneticsOpt.get();
+                    Optional<Integer> genLowerOpt = genetics.getInt("gender");
+                    if (genLowerOpt.isPresent()) {
+                        int id = genLowerOpt.get();
+                        MCARomanticExpansion.LOGGER.info("  - Genetics.gender = {} ({})", id, Gender.byId(id));
+                    }
+                    Optional<Integer> genUpperOpt = genetics.getInt("Gender");
+                    if (genUpperOpt.isPresent()) {
+                        int id = genUpperOpt.get();
+                        MCARomanticExpansion.LOGGER.info("  - Genetics.Gender = {} ({})", id, Gender.byId(id));
+                    }
+                }
+
+                try {
+                    Gender apiGender = data.getGender();
+                    MCARomanticExpansion.LOGGER.info("  - MCA API getGender() = {}", apiGender);
+                } catch (Exception e) {
+                    MCARomanticExpansion.LOGGER.warn("  - MCA API getGender() failed: {}", e.getMessage());
+                }
+            }
+
+            Gender cached = lastKnownGender.get(player.getUUID());
+            MCARomanticExpansion.LOGGER.info("  - cached gender: {}", cached);
+
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.error("Diagnosis failed: {}", e.getMessage());
+        }
+
+        MCARomanticExpansion.LOGGER.info("================================================");
+    }
+
+    // ==================== 怀孕相关方法 ====================
 
     private static void checkSleepingStatus(ServerPlayer player) {
         UUID playerId = player.getUUID();
@@ -196,7 +491,6 @@ public class PregnancyAttemptHandler {
                 sleepingPlayers.put(playerId, bedPos);
                 MCARomanticExpansion.LOGGER.debug("Player {} is sleeping at position {}",
                         player.getName().getString(), bedPos);
-                // 修复: 使用 player.level() 获取 ServerLevel
                 if (player.level() instanceof ServerLevel serverLevel) {
                     checkNearbySleepingPlayers(player, bedPos, serverLevel);
                 }
@@ -210,8 +504,7 @@ public class PregnancyAttemptHandler {
     private static void checkNearbySleepingPlayers(ServerPlayer player, BlockPos bedPos, ServerLevel level) {
         UUID playerId = player.getUUID();
 
-        // 使用 keySet 的快照遍历，避免 ConcurrentModificationException
-        for (UUID otherPlayerId : sleepingPlayers.keySet()) {
+        for (UUID otherPlayerId : new ArrayList<>(sleepingPlayers.keySet())) {
             if (otherPlayerId.equals(playerId)) continue;
 
             BlockPos otherBedPos = sleepingPlayers.get(otherPlayerId);
@@ -221,26 +514,15 @@ public class PregnancyAttemptHandler {
             if (otherPlayer == null || !otherPlayer.isSleeping()) continue;
 
             if (areBedsAdjacent(bedPos, otherBedPos)) {
-                // 添加同步块，确保性别检查期间不被修改
                 synchronized (genderCheckLock) {
-                    // 重新验证两个玩家都还在睡觉
-                    if (!player.isSleeping() || !otherPlayer.isSleeping()) {
-                        continue;
-                    }
-                    // 检查是否有玩家正在修改性别
-                    if (isGenderChanging(player) || isGenderChanging(otherPlayer)) {
-                        MCARomanticExpansion.LOGGER.debug("Gender changing in progress, skipping pregnancy check");
-                        continue;
-                    }
+                    if (!player.isSleeping() || !otherPlayer.isSleeping()) continue;
+                    if (isGenderChanging(player) || isGenderChanging(otherPlayer)) continue;
                     checkPregnancyConditions(player, otherPlayer);
                 }
             }
         }
     }
 
-    /**
-     * 检查玩家是否正在修改性别
-     */
     private static boolean isGenderChanging(ServerPlayer player) {
         Long changeTime = genderChangingPlayers.get(player.getUUID());
         if (changeTime == null) return false;
@@ -254,65 +536,56 @@ public class PregnancyAttemptHandler {
         return dx <= 1 && dy <= 1 && dz <= 1;
     }
 
+    // PregnancyAttemptHandler.java - checkPregnancyConditions 方法
     private static void checkPregnancyConditions(ServerPlayer player1, ServerPlayer player2) {
+        MCARomanticExpansion.LOGGER.debug("=== Pregnancy Check Started ===");
         MCARomanticExpansion.LOGGER.debug("Checking pregnancy conditions for {} and {}",
                 player1.getName().getString(), player2.getName().getString());
 
-        // 直接从 NBT 读取大写 Gender 字段（绕过MCA的getGender() Bug）
-        Gender gender1 = getGenderFromNBT(player1);
-        Gender gender2 = getGenderFromNBT(player2);
-
-        MCARomanticExpansion.LOGGER.debug("Player {} gender: {}, Player {} gender: {}",
-                player1.getName().getString(), gender1, player2.getName().getString(), gender2);
-
-        if (gender1 == gender2 || gender1 == Gender.UNASSIGNED || gender2 == Gender.UNASSIGNED) {
-            if (gender1 == gender2) {
-                MCARomanticExpansion.LOGGER.debug("Same gender players ({} and {}), pregnancy check skipped",
-                        player1.getName().getString(), player2.getName().getString());
-            } else {
-                MCARomanticExpansion.LOGGER.debug("One or both players have UNASSIGNED gender, pregnancy check skipped");
-                // 提示玩家设置性别
-                if (gender1 == Gender.UNASSIGNED) {
-                    player1.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
-                }
-                if (gender2 == Gender.UNASSIGNED) {
-                    player2.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
-                }
-            }
+        // ===== 1. 检查基本条件（性别 + 存活）=====
+        if (!PregnancyManager.canPlayerPregnancy(player1, player2)) {
+            MCARomanticExpansion.LOGGER.debug("Basic pregnancy conditions not met, check skipped");
             return;
         }
 
-        if (PregnancyManager.isPlayerInPregnancyPeriod(player1.getUUID()) ||
-                PregnancyManager.isPlayerInPregnancyPeriod(player2.getUUID())) {
-            MCARomanticExpansion.LOGGER.debug("One of the players is already in pregnancy period");
+        // ===== 2. 强制检查是否已在怀孕期（从 NBT 读取）=====
+        if (PregnancyManager.isPlayerInPregnancyPeriodForce(player1) ||
+                PregnancyManager.isPlayerInPregnancyPeriodForce(player2)) {
+            MCARomanticExpansion.LOGGER.debug("One player already in pregnancy period, check skipped");
             return;
         }
 
+        // ===== 3. 饱食度检查 =====
         boolean player1Satiated = PregnancyManager.isFullSatiated(player1);
         boolean player2Satiated = PregnancyManager.isFullSatiated(player2);
-        MCARomanticExpansion.LOGGER.debug("Player {} satiated: {}, Player {} satiated: {}",
-                player1.getName().getString(), player1Satiated, player2.getName().getString(), player2Satiated);
+
+        MCARomanticExpansion.LOGGER.debug("{} satiated: {}, {} satiated: {}",
+                player1.getName().getString(), player1Satiated,
+                player2.getName().getString(), player2Satiated);
 
         if (!player1Satiated || !player2Satiated) {
-            MCARomanticExpansion.LOGGER.debug("Players are not fully satiated, pregnancy check skipped");
+            MCARomanticExpansion.LOGGER.debug("Not both players are satiated, check skipped");
             return;
         }
 
+        // ===== 4. 计算怀孕概率 =====
         double chance = PregnancyManager.calculatePregnancyChance(player1, player2);
-        MCARomanticExpansion.LOGGER.debug("Pregnancy chance between {} and {}: {}%",
-                player1.getName().getString(), player2.getName().getString(), chance * 100);
-
         double random = player1.getRandom().nextDouble();
-        MCARomanticExpansion.LOGGER.debug("Random roll: {}, required: {}", random, chance);
 
+        MCARomanticExpansion.LOGGER.debug("Pregnancy chance: {}%, random roll: {}",
+                String.format("%.2f", chance * 100), String.format("%.4f", random));
+
+        // ===== 5. 判定是否怀孕 =====
         if (random < chance) {
+            Gender gender1 = PregnancyAttemptHandler.getGenderFromMCAForce(player1);
+            Gender gender2 = PregnancyAttemptHandler.getGenderFromMCAForce(player2);
+
             ServerPlayer femalePlayer = gender1 == Gender.FEMALE ? player1 : player2;
             ServerPlayer malePlayer = gender1 == Gender.MALE ? player1 : player2;
 
-            MCARomanticExpansion.LOGGER.debug("Pregnancy triggered! Female: {}, Male: {}",
+            MCARomanticExpansion.LOGGER.info("🎉 PREGNANCY TRIGGERED! {} (female) and {} (male)",
                     femalePlayer.getName().getString(), malePlayer.getName().getString());
 
-            // 修复: 使用 femalePlayer.level() 获取 ServerLevel
             long gameTime = femalePlayer.level() instanceof ServerLevel serverLevel ? serverLevel.getGameTime() : 0;
             PregnancyManager.startPregnancyPeriod(femalePlayer, malePlayer, gameTime);
 
@@ -322,83 +595,16 @@ public class PregnancyAttemptHandler {
             malePlayer.sendSystemMessage(Component.translatable(
                     "message.mcaromanticexpansion.pregnancy_start_partner",
                     femalePlayer.getName().getString()));
+
+            MCARomanticExpansion.LOGGER.debug("=== Pregnancy Check Completed (SUCCESS) ===");
         } else {
-            MCARomanticExpansion.LOGGER.debug("Pregnancy not triggered this time");
-        }
-    }
-
-    /**
-     * 直接从 NBT 读取性别 - 绕过 MCA 的 getGender() Bug
-     * 优先读取大写 "Gender" 字段（Genetics实际保存的位置）
-     */
-    public static Gender getGenderFromNBT(ServerPlayer player) {
-        synchronized (genderCheckLock) {
-            try {
-                PlayerSaveData data = PlayerSaveData.get(player);
-                CompoundTag entityData = data.getEntityData();
-
-                // 确保数据已初始化
-                if (!data.isEntityDataSet()) {
-                    MCARomanticExpansion.LOGGER.debug("Initializing MCA data for {}", player.getName().getString());
-                    data.setEntityDataSet(true);
-                    setGenderData(player, Gender.MALE); // 默认男性
-                    return Gender.MALE;
-                }
-
-                // 1. 优先读取大写 Gender 字段（Genetics 保存的位置）
-                // 修复: getInt 返回 Optional<Integer>
-                if (entityData.contains("Gender")) {
-                    int genderId = entityData.getInt("Gender").orElse(0);
-                    Gender gender = Gender.byId(genderId);
-                    if (gender != Gender.UNASSIGNED) {
-                        MCARomanticExpansion.LOGGER.debug("Gender from 'Gender' field for {}: {}",
-                                player.getName().getString(), gender);
-                        return gender;
-                    }
-                }
-
-                // 2. 从 Genetics 标签读取
-                // 修复: getCompound 返回 Optional<CompoundTag>
-                if (entityData.contains("Genetics")) {
-                    CompoundTag genetics = entityData.getCompound("Genetics").orElse(new CompoundTag());
-                    if (genetics.contains("Gender")) {
-                        int genderId = genetics.getInt("Gender").orElse(0);
-                        Gender gender = Gender.byId(genderId);
-                        if (gender != Gender.UNASSIGNED) {
-                            MCARomanticExpansion.LOGGER.debug("Gender from Genetics.Gender for {}: {}",
-                                    player.getName().getString(), gender);
-                            return gender;
-                        }
-                    }
-                }
-
-                // 3. 后备：尝试小写 gender（MCA的getGender()读取的位置）
-                if (entityData.contains("gender")) {
-                    int genderId = entityData.getInt("gender").orElse(0);
-                    Gender gender = Gender.byId(genderId);
-                    if (gender != Gender.UNASSIGNED) {
-                        MCARomanticExpansion.LOGGER.debug("Gender from 'gender' field for {}: {}",
-                                player.getName().getString(), gender);
-                        return gender;
-                    }
-                }
-
-                // 4. 还是没有，初始化默认性别
-                MCARomanticExpansion.LOGGER.warn("No gender data found for {}, initializing to MALE",
-                        player.getName().getString());
-                setGenderData(player, Gender.MALE);
-                return Gender.MALE;
-
-            } catch (Exception e) {
-                MCARomanticExpansion.LOGGER.error("Failed to get gender for {}: {}",
-                        player.getName().getString(), e.getMessage());
-                return Gender.UNASSIGNED;
-            }
+            MCARomanticExpansion.LOGGER.debug("Pregnancy not triggered this time (random {} >= chance {})",
+                    String.format("%.4f", random), String.format("%.2f", chance));
+            MCARomanticExpansion.LOGGER.debug("=== Pregnancy Check Completed (FAILED) ===");
         }
     }
 
     public static void attemptPregnancy(ServerPlayer player, PregnancyManager.PregnancyData data) {
-        // 修复: 通过 level() 获取 Server
         ServerPlayer partner = null;
         if (player.level() instanceof ServerLevel serverLevel) {
             partner = serverLevel.getServer().getPlayerList().getPlayer(data.getPartnerUUID());
@@ -425,23 +631,61 @@ public class PregnancyAttemptHandler {
                 player.drop(babyItem, false);
             }
 
-            player.sendSystemMessage(Component.translatable(
-                    "message.mcaromanticexpansion.pregnancy_success"));
-            partner.sendSystemMessage(Component.translatable(
-                    "message.mcaromanticexpansion.pregnancy_success_partner",
+            player.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy_success"));
+            partner.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy_success_partner",
                     player.getName().getString()));
 
-            MCARomanticExpansion.LOGGER.debug("Pregnancy successful for player {}", player.getName().getString());
+            MCARomanticExpansion.LOGGER.debug("👶 Pregnancy completed: {} and {}",
+                    player.getName().getString(), partner.getName().getString());
+
         } catch (Exception e) {
             MCARomanticExpansion.LOGGER.error("Failed to trigger procreation: {}", e.getMessage());
             e.printStackTrace();
         }
     }
 
+    // ==================== 添加强制读取方法 ====================
+
     /**
-     * 获取正在修改性别的玩家列表（用于调试）
+     * 强制从 MCA API 读取性别（不使用缓存）
+     * 用于求婚、结婚等关键操作
      */
+    public static Gender getGenderFromMCAForce(ServerPlayer player) {
+        if (player == null) return Gender.UNASSIGNED;
+
+        try {
+            PlayerSaveData data = PlayerSaveData.get(player);
+            if (data != null) {
+                Gender gender = data.getGender();
+                if (gender != null && gender != Gender.UNASSIGNED) {
+                    // 更新缓存
+                    lastKnownGender.put(player.getUUID(), gender);
+                    MCARomanticExpansion.LOGGER.debug("✅ Force read gender for {}: {}",
+                            player.getName().getString(), gender);
+                    return gender;
+                }
+            }
+            return Gender.UNASSIGNED;
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.warn("Force read gender failed for {}: {}",
+                    player.getName().getString(), e.getMessage());
+            return Gender.UNASSIGNED;
+        }
+    }
+
     public static ConcurrentHashMap<UUID, Long> getGenderChangingPlayers() {
         return genderChangingPlayers;
+    }
+
+    public static void shutdown() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }
