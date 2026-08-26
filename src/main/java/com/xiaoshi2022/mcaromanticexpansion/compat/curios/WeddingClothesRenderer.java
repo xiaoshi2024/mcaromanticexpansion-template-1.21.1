@@ -5,56 +5,50 @@ import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
 import com.xiaoshi2022.mcaromanticexpansion.item.WeddingClothesItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class WeddingClothesRenderer {
+public class WeddingClothesRenderer implements ICurioRenderer {
 
-    // 纹理常量
-    private static final Identifier TEXTURE_CHINESE_MALE = Identifier.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/chinese_male.png");
-    private static final Identifier TEXTURE_CHINESE_FEMALE = Identifier.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/chinese_female.png");
-    private static final Identifier TEXTURE_WESTERN_MALE = Identifier.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/western_male.png");
-    private static final Identifier TEXTURE_WESTERN_FEMALE = Identifier.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/western_female.png");
-
-    private static final Map<String, Identifier> CULTURE_TEXTURE_CACHE = new HashMap<>();
-
+    private static final Map<String, Identifier> TEXTURE_CACHE = new HashMap<>();
     private WeddingClothesModel model;
 
     private WeddingClothesModel getModel() {
         if (model == null) {
             model = new WeddingClothesModel(
-                    Minecraft.getInstance().getEntityModels().bakeLayer(WeddingClothesModel.LAYER_LOCATION)
+                    Minecraft.getInstance().getEntityModels()
+                            .bakeLayer(WeddingClothesModel.LAYER_LOCATION)
             );
         }
         return model;
     }
 
-    public void render(
+    @Override
+    public <S extends LivingEntityRenderState, M extends EntityModel<? super S>> void render(
             ItemStack stack,
-            LivingEntity entity,
-            HumanoidModel playerModel,
+            SlotContext slotContext,
             PoseStack poseStack,
             SubmitNodeCollector submitNodeCollector,
-            int light,
-            float limbSwing,
-            float limbSwingAmount,
-            float partialTicks,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch) {
+            int packedLight,
+            S renderState,
+            RenderLayerParent<S, M> renderLayerParent,
+            EntityRendererProvider.Context context,
+            float yRotation,
+            float xRotation) {
 
         if (!(stack.getItem() instanceof WeddingClothesItem)) {
             return;
@@ -62,126 +56,59 @@ public class WeddingClothesRenderer {
 
         WeddingClothesItem item = (WeddingClothesItem) stack.getItem();
         WeddingClothesModel clothesModel = getModel();
-        Identifier texture = getTextureForItem(item);
+        Identifier texture = getTexture(item);
 
+        RenderType renderType = RenderTypes.entityCutout(texture, true);
         int overlay = OverlayTexture.NO_OVERLAY;
 
-        // 获取 OrderedSubmitNodeCollector
-        OrderedSubmitNodeCollector orderedCollector = submitNodeCollector.order(0);
+        M baseModel = renderLayerParent.getModel();
+        if (baseModel instanceof HumanoidModel<?> playerModel) {
+            // 渲染各部分
+            renderPart(submitNodeCollector, playerModel.head, clothesModel.getHead(),
+                    poseStack, renderType, packedLight, 0.0F, 0.75F, 0.0F);
+            renderPart(submitNodeCollector, playerModel.body, clothesModel.getBody(),
+                    poseStack, renderType, packedLight, 0.0F, 0.74F, 0.0F);
+            renderPart(submitNodeCollector, playerModel.rightArm, clothesModel.getRightArm(),
+                    poseStack, renderType, packedLight, 0.32F, 0.6F, 0.0F);
+            renderPart(submitNodeCollector, playerModel.leftArm, clothesModel.getLeftArm(),
+                    poseStack, renderType, packedLight, -0.32F, 0.6F, 0.0F);
+            renderPart(submitNodeCollector, playerModel.rightLeg, clothesModel.getRightLeg(),
+                    poseStack, renderType, packedLight, 0.12F, -0.8F, 0.0F);
+            renderPart(submitNodeCollector, playerModel.leftLeg, clothesModel.getLeftLeg(),
+                    poseStack, renderType, packedLight, -0.12F, -0.8F, 0.0F);
+        }
+    }
 
-        // 使用 entityCutout 替代 entityCutoutNoCull
-        var renderType = RenderTypes.entityCutout(texture, true);
+    private void renderPart(
+            SubmitNodeCollector collector,
+            net.minecraft.client.model.geom.ModelPart sourcePart,
+            net.minecraft.client.model.geom.ModelPart targetPart,
+            PoseStack poseStack,
+            RenderType renderType,
+            int light,
+            float x, float y, float z) {
 
-        // ========== 1. 渲染头部 ==========
         poseStack.pushPose();
-        playerModel.head.translateAndRotate(poseStack);
-        poseStack.translate(0.0F, 0.75F, 0.0F);
-        orderedCollector.submitModelPart(
-                clothesModel.getHead(),
+        sourcePart.translateAndRotate(poseStack);
+        poseStack.translate(x, y, z);
+        collector.submitModelPart(
+                targetPart,
                 poseStack,
                 renderType,
                 light,
-                overlay,
-                null  // sprite
-        );
-        poseStack.popPose();
-
-        // ========== 2. 渲染身体 ==========
-        poseStack.pushPose();
-        playerModel.body.translateAndRotate(poseStack);
-        poseStack.translate(0.0F, 0.74F, 0.0F);
-        orderedCollector.submitModelPart(
-                clothesModel.getBody(),
-                poseStack,
-                renderType,
-                light,
-                overlay,
-                null
-        );
-        poseStack.popPose();
-
-        // ========== 3. 渲染右臂 ==========
-        poseStack.pushPose();
-        playerModel.rightArm.translateAndRotate(poseStack);
-        poseStack.translate(0.32F, 0.6F, 0.0F);
-        orderedCollector.submitModelPart(
-                clothesModel.getRightArm(),
-                poseStack,
-                renderType,
-                light,
-                overlay,
-                null
-        );
-        poseStack.popPose();
-
-        // ========== 4. 渲染左臂 ==========
-        poseStack.pushPose();
-        playerModel.leftArm.translateAndRotate(poseStack);
-        poseStack.translate(-0.32F, 0.6F, 0.0F);
-        orderedCollector.submitModelPart(
-                clothesModel.getLeftArm(),
-                poseStack,
-                renderType,
-                light,
-                overlay,
-                null
-        );
-        poseStack.popPose();
-
-        // ========== 5. 渲染右腿 ==========
-        poseStack.pushPose();
-        playerModel.rightLeg.translateAndRotate(poseStack);
-        poseStack.translate(0.12F, -0.8F, 0.0F);
-        orderedCollector.submitModelPart(
-                clothesModel.getRightLeg(),
-                poseStack,
-                renderType,
-                light,
-                overlay,
-                null
-        );
-        poseStack.popPose();
-
-        // ========== 6. 渲染左腿 ==========
-        poseStack.pushPose();
-        playerModel.leftLeg.translateAndRotate(poseStack);
-        poseStack.translate(-0.12F, -0.8F, 0.0F);
-        orderedCollector.submitModelPart(
-                clothesModel.getLeftLeg(),
-                poseStack,
-                renderType,
-                light,
-                overlay,
+                OverlayTexture.NO_OVERLAY,
                 null
         );
         poseStack.popPose();
     }
 
-    private Identifier getTextureForItem(WeddingClothesItem item) {
-        WeddingClothesItem.WeddingCulture culture = item.getCulture();
-        WeddingClothesItem.Gender gender = item.getGender();
-
-        if (culture == WeddingClothesItem.WeddingCulture.CHINESE) {
-            return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_CHINESE_MALE : TEXTURE_CHINESE_FEMALE;
-        }
-        if (culture == WeddingClothesItem.WeddingCulture.WESTERN) {
-            return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_WESTERN_MALE : TEXTURE_WESTERN_FEMALE;
-        }
-
-        String key = culture.getName() + "_" + gender.getName();
-        return CULTURE_TEXTURE_CACHE.computeIfAbsent(key, k ->
+    private Identifier getTexture(WeddingClothesItem item) {
+        String key = item.getCulture().getName() + "_" + item.getGender().getName();
+        return TEXTURE_CACHE.computeIfAbsent(key, k ->
                 Identifier.fromNamespaceAndPath(
                         MCARomanticExpansion.MODID,
-                        "textures/armor/" + culture.getName() + "_" + gender.getName() + ".png"
+                        "textures/armor/" + k + ".png"
                 )
         );
-    }
-
-    @Deprecated
-    private Identifier getTexture(ItemStack stack, LivingEntity entity) {
-        if (stack.getItem() instanceof WeddingClothesItem item) {
-            return getTextureForItem(item);
-        }
-        return TEXTURE_CHINESE_MALE;
     }
 }

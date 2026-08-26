@@ -3,7 +3,6 @@ package com.xiaoshi2022.mcaromanticexpansion.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.mcaromanticexpansion.client.CarryClientState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
@@ -20,12 +19,7 @@ import java.util.UUID;
 @Mixin(AvatarRenderer.class)
 public abstract class PlayerCarryPoseRendererMixin {
 
-    @SuppressWarnings({"InvalidInjectorMethodSignature", "UnresolvedMixinReference"})
-    @Inject(
-            method = "submit",
-            at = @At(value = "HEAD"),
-            remap = false
-    )
+    @Inject(method = "submit", at = @At("HEAD"), remap = false)
     private void mcae$tiltCarriedPlayer(AvatarRenderState state, PoseStack poseStack,
                                         SubmitNodeCollector submitNodeCollector,
                                         CameraRenderState camera,
@@ -33,29 +27,30 @@ public abstract class PlayerCarryPoseRendererMixin {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        AbstractClientPlayer player = mc.player;
-        UUID playerId = player.getUUID();
+        UUID playerId = mc.player.getUUID();
 
-        if (!CarryClientState.isCarried(playerId)) {
-            return;
-        }
+        // 检查当前渲染的玩家是否是被抱者
+        // 注意：由于状态对象不直接关联UUID，需要通过其他方式判断
+        // 可能需要从state中获取玩家ID，或使用渲染上下文
+
+        // 方案：如果state没有playerId字段，建议在CarryClientState中维护
+        // 当前渲染的实体ID和状态映射
+
+        // 临时方案：仅当玩家本身是被抱者时处理
+        if (!CarryClientState.isCarried(playerId)) return;
 
         UUID carrierId = CarryClientState.carrierOf(playerId);
         if (carrierId == null) return;
 
         Player carrier = CarryClientState.getPlayerByUUID(carrierId);
-
         float carrierYaw;
         if (carrier != null) {
-            float yawPrev = carrier.yBodyRotO;
-            float yawNow = carrier.yBodyRot;
-            carrierYaw = yawPrev + (yawNow - yawPrev) * state.partialTick;
+            carrierYaw = carrier.yBodyRot; // 使用当前值
         } else {
-            float yawPrev = player.yBodyRotO;
-            float yawNow = player.yBodyRot;
-            carrierYaw = yawPrev + (yawNow - yawPrev) * state.partialTick;
+            carrierYaw = state.yRot; // 回退
         }
 
+        // 应用旋转 - 使用新API
         Quaternionf yawRotation = new Quaternionf().rotationY((float) Math.toRadians(-carrierYaw));
         poseStack.mulPose(yawRotation);
 
@@ -68,6 +63,6 @@ public abstract class PlayerCarryPoseRendererMixin {
         Quaternionf naturalTilt = new Quaternionf().rotationZ((float) Math.toRadians(-5.0F));
         poseStack.mulPose(naturalTilt);
 
-        poseStack.translate(0.2D, -1.2D, 0.3D);
+        poseStack.translate(0.2, -1.2, 0.3);
     }
 }

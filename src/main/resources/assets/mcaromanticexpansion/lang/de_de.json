@@ -134,6 +134,7 @@
   "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§a%ss Empfängnisbereitschaft wurde abgebrochen",
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s ist aktuell nicht in der Empfängnisbereitschaft!",
   "block.mcaromanticexpansion.umbrella_stand": "Schirmständer",
+  "item.mcaromanticexpansion.umbrella_stand": "Schirmständer",
   "event.mcaromanticexpansion.share_story.player": "§dDu hast eine interessante Geschichte geteilt...",
   "event.mcaromanticexpansion.share_story.partner": "§dJemand hat eine interessante Geschichte mit dir geteilt...",
   "event.mcaromanticexpansion.hold_hands.player": "§dEure Hände berührten sich versehentlich, das Herz schlägt schneller...",

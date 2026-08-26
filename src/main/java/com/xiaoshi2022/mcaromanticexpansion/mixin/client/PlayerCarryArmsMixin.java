@@ -1,70 +1,42 @@
 package com.xiaoshi2022.mcaromanticexpansion.mixin.client;
 
 import com.xiaoshi2022.mcaromanticexpansion.client.CarryClientState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.UUID;
+
 @Mixin(HumanoidModel.class)
-public abstract class PlayerCarryArmsMixin<T extends LivingEntity> {
+public abstract class PlayerCarryArmsMixin<T extends HumanoidRenderState> {
 
-    @Shadow
-    @Final
-    public ModelPart rightArm;
+    @Inject(method = "setupAnim", at = @At("TAIL"), remap = false)
+    private void mcae$applyCarryArmsPose(T state, CallbackInfo ci) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return;
 
-    @Shadow
-    @Final
-    public ModelPart leftArm;
+        UUID playerId = mc.player.getUUID();
+        if (!CarryClientState.isCarrier(playerId)) return;
 
-    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
-            at = @At("HEAD"),
-            cancellable = false)
-    private void mcae$raiseCarryArmsPre(T entity, float limbSwing, float limbSwingAmount,
-                                        float ageInTicks, float netHeadYaw, float headPitch,
-                                        CallbackInfo ci) {
-        if (!(entity instanceof Player player)) {
-            return;
-        }
-        if (!CarryClientState.isCarrier(player.getUUID())) {
-            return;
-        }
+        // 将 this 转换为 HumanoidModel 以访问 public final 字段
+        HumanoidModel<T> model = (HumanoidModel<T>) (Object) this;
 
-        // 手臂角度：-40度，略微内收（30度）
-        this.rightArm.xRot = (float) Math.toRadians(-40.0d);
-        this.rightArm.yRot = (float) Math.toRadians(29.0d);   // 右臂略微内收
-        this.rightArm.zRot = (float) Math.toRadians(0.0d);
+        // 直接访问公开字段 - 不需要 @Shadow
+        ModelPart rightArm = model.rightArm;
+        ModelPart leftArm = model.leftArm;
 
-        this.leftArm.xRot = (float) Math.toRadians(-40.0d);
-        this.leftArm.yRot = (float) Math.toRadians(-22.0d);  // 左臂略微内收
-        this.leftArm.zRot = (float) Math.toRadians(0.0d);
-    }
+        // 应用自定义手臂角度
+        rightArm.xRot = (float) Math.toRadians(-40.0);
+        rightArm.yRot = (float) Math.toRadians(29.0);
+        rightArm.zRot = 0.0F;
 
-    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V",
-            at = @At("TAIL"))
-    private void mcae$raiseCarryArmsPost(T entity, float limbSwing, float limbSwingAmount,
-                                         float ageInTicks, float netHeadYaw, float headPitch,
-                                         CallbackInfo ci) {
-        if (!(entity instanceof Player player)) {
-            return;
-        }
-        if (!CarryClientState.isCarrier(player.getUUID())) {
-            return;
-        }
-
-        // 再次确认
-        this.rightArm.xRot = (float) Math.toRadians(-40.0d);
-        this.rightArm.yRot = (float) Math.toRadians(29.0d);
-        this.rightArm.zRot = (float) Math.toRadians(0.0d);
-
-        this.leftArm.xRot = (float) Math.toRadians(-40.0d);
-        this.leftArm.yRot = (float) Math.toRadians(-22.0d);
-        this.leftArm.zRot = (float) Math.toRadians(0.0d);
+        leftArm.xRot = (float) Math.toRadians(-40.0);
+        leftArm.yRot = (float) Math.toRadians(-22.0);
+        leftArm.zRot = 0.0F;
     }
 }

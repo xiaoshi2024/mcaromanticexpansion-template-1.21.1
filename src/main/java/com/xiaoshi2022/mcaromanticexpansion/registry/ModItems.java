@@ -18,10 +18,17 @@ public class ModItems {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MCARomanticExpansion.MODID);
 
-    // ========== 方块物品 - 暂时注释 ==========
-    // public static final DeferredHolder<Item, BlockItem> UMBRELLA_STAND_ITEM =
-    //         ITEMS.register("umbrella_stand",
-    //                 () -> new BlockItem(ModBlocks.UMBRELLA_STAND.get(), new Item.Properties()));
+    // ========== 方块物品 - 修复 ==========
+    public static final DeferredHolder<Item, BlockItem> UMBRELLA_STAND_ITEM =
+            ITEMS.registerItem("umbrella_stand",
+                    props -> new BlockItem(ModBlocks.UMBRELLA_STAND.get(), props),
+                    p -> p);
+
+    // 注册默认礼盒（default 变种）- 修复
+    public static final DeferredHolder<Item, GiftBoxItem> GIFT_BOX =
+            ITEMS.registerItem("gift_box",
+                    props -> new GiftBoxItem(props.stacksTo(1), "default"),
+                    p -> p);
 
     // ========== 普通物品 ==========
     // 关键修复：MC 26.2 / NeoForge 26.2.0.59 的 Item 构造函数会调用 properties.itemIdOrThrow()，
@@ -184,11 +191,31 @@ public class ModItems {
                     HairPinItem::new,
                     p -> p.stacksTo(1));
 
-    // 伞
+    // ========== 伞 - 四个状态 ==========
+// 基础伞（默认关闭状态）
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA =
             ITEMS.registerItem("umbrella",
                     UmbrellaItem::new,
                     p -> p.stacksTo(1));
+
+    // 关闭状态的伞（独立物品）
+    public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA_CLOSED =
+            ITEMS.registerItem("umbrella_closed",
+                    UmbrellaItem::new,
+                    p -> p.stacksTo(1));
+
+    // 半开状态的伞（独立物品）
+    public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA_HALF =
+            ITEMS.registerItem("umbrella_half",
+                    UmbrellaItem::new,
+                    p -> p.stacksTo(1));
+
+    // 全开状态的伞（独立物品）
+    public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA_OPEN =
+            ITEMS.registerItem("umbrella_open",
+                    UmbrellaItem::new,
+                    p -> p.stacksTo(1));
+
 
     // 情书
     public static final DeferredHolder<Item, LoveLetterItem> LOVE_LETTER =
@@ -203,8 +230,8 @@ public class ModItems {
                             .title(Component.translatable("itemGroup.mcaromanticexpansion"))
                             .icon(() -> new ItemStack(ROSE_BROOCH_RED.get()))
                             .displayItems((parameters, output) -> {
-                                // output.accept(UMBRELLA_STAND_ITEM.get());
-                                // output.accept(GIFT_BOX.get());
+                                output.accept(UMBRELLA_STAND_ITEM.get());
+                                output.accept(GIFT_BOX.get());
                                 output.accept(ROSE_BROOCH_RED.get());
                                 output.accept(ROSE_BROOCH_PINK.get());
                                 output.accept(ROSE_BROOCH_WHITE.get());

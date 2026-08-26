@@ -5,6 +5,7 @@ import com.xiaoshi2022.mcaromanticexpansion.advancement.CriterionTriggerRegister
 import com.xiaoshi2022.mcaromanticexpansion.api.event.MarriageChangedEvent;
 import com.xiaoshi2022.mcaromanticexpansion.api.event.ProposalSentEvent;
 import com.xiaoshi2022.mcaromanticexpansion.api.event.SharedUmbrellaRequestEvent;
+import com.xiaoshi2022.mcaromanticexpansion.item.GiftBoxItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.LoveLetterItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.RedVeilItem;
 import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
@@ -28,6 +29,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -64,9 +66,9 @@ public class PlayerInteractionHandler {
         if (item instanceof BouquetItem) {
             handleBouquet(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
-//        } else if (item instanceof GiftBoxItem) {
-//            handleGiftBox(serverPlayer, targetServerPlayer, stack);
-//            event.setCanceled(true);
+        } else if (item instanceof GiftBoxItem) {
+            handleGiftBox(serverPlayer, targetServerPlayer, stack);
+            event.setCanceled(true);
         } else if (item instanceof EngagementRingItem) {
             handleProposal(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
@@ -76,7 +78,7 @@ public class PlayerInteractionHandler {
         } else if (item == ItemsMCA.DIVORCE_PAPERS) {
             handleDivorcePapers(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
-        } else if (stack.is(ModItems.UMBRELLA.get())) {
+        } else if (UmbrellaItem.isUmbrella(stack)) {  // 修复：使用 isUmbrella 检查
             handleSharedUmbrella(serverPlayer, targetServerPlayer);
             event.setCanceled(true);
         } else if (stack.isEmpty()) {
@@ -89,14 +91,34 @@ public class PlayerInteractionHandler {
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
 
-        if (mainHand.is(ModItems.UMBRELLA.get())) {
+        // 检查主手是否是伞（任意状态）
+        if (UmbrellaItem.isUmbrella(mainHand)) {
             if (UmbrellaItem.getState(mainHand) != UmbrellaItem.State.FULL_OPEN) {
-                UmbrellaItem.setUmbrellaState(mainHand, UmbrellaItem.State.FULL_OPEN);
+                // 如果是基础伞（NBT存储方式），使用 setUmbrellaState
+                if (mainHand.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(mainHand, UmbrellaItem.State.FULL_OPEN);
+                } else {
+                    // 如果是独立状态物品，替换为全开状态
+                    ItemStack newStack = UmbrellaItem.getStackForState(UmbrellaItem.State.FULL_OPEN);
+                    newStack.setCount(1);
+                    player.setItemInHand(InteractionHand.MAIN_HAND, newStack);
+                }
             }
-        } else if (offHand.is(ModItems.UMBRELLA.get())) {
+        }
+        // 检查副手是否是伞（任意状态）
+        else if (UmbrellaItem.isUmbrella(offHand)) {
             if (UmbrellaItem.getState(offHand) != UmbrellaItem.State.FULL_OPEN) {
-                UmbrellaItem.setUmbrellaState(offHand, UmbrellaItem.State.FULL_OPEN);
+                if (offHand.is(ModItems.UMBRELLA.get())) {
+                    UmbrellaItem.setUmbrellaState(offHand, UmbrellaItem.State.FULL_OPEN);
+                } else {
+                    ItemStack newStack = UmbrellaItem.getStackForState(UmbrellaItem.State.FULL_OPEN);
+                    newStack.setCount(1);
+                    player.setItemInHand(InteractionHand.OFF_HAND, newStack);
+                }
             }
+        } else {
+            // 没有伞，不处理
+            return;
         }
 
         SharedUmbrellaRequestEvent requestEvent = new SharedUmbrellaRequestEvent(player, target);
@@ -110,34 +132,34 @@ public class PlayerInteractionHandler {
         SharedUmbrellaManager.sendRequest(player, target);
     }
 
-//    private static void handleGiftBox(ServerPlayer giver, ServerPlayer receiver, ItemStack giftBoxStack) {
-//        // 检查礼盒是否有礼物
-//        if (!GiftBoxItem.hasGift(giftBoxStack)) {
-//            giver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.empty"));
-//            return;
-//        }
-//
-//        // 修复: loadGiftItem 需要 Provider 参数，使用 receiver 的 registryAccess
-//        ItemStack giftItem = GiftBoxItem.loadGiftItem(giftBoxStack, receiver.registryAccess());
-//
-//        // 尝试将礼物放入接收者背包
-//        boolean added = receiver.getInventory().add(giftItem);
-//        if (!added) {
-//            receiver.drop(giftItem, false);
-//            receiver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
-//        } else {
-//            receiver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift.received", giver.getName().getString()));
-//            giver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift.sent", receiver.getName().getString()));
-//
-//            // 清空礼盒
-//            GiftBoxItem.clearGift(giftBoxStack);
-//
-//            // 添加好感度：赠送礼物
-//            AffectionManager.handleInteraction(AffectionManager.InteractionType.GIFT, giver, receiver);
-//            MCARomanticExpansion.LOGGER.debug("Added GIFT affection for {} -> {}",
-//                    giver.getName().getString(), receiver.getName().getString());
-//        }
-//    }
+    private static void handleGiftBox(ServerPlayer giver, ServerPlayer receiver, ItemStack giftBoxStack) {
+        // 检查礼盒是否有礼物
+        if (!GiftBoxItem.hasGift(giftBoxStack)) {
+            giver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.empty"));
+            return;
+        }
+
+        // 修复: loadGiftItem 需要 Provider 参数，使用 receiver 的 registryAccess
+        ItemStack giftItem = GiftBoxItem.loadGiftItem(giftBoxStack, receiver.registryAccess());
+
+        // 尝试将礼物放入接收者背包
+        boolean added = receiver.getInventory().add(giftItem);
+        if (!added) {
+            receiver.drop(giftItem, false);
+            receiver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
+        } else {
+            receiver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift.received", giver.getName().getString()));
+            giver.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift.sent", receiver.getName().getString()));
+
+            // 清空礼盒
+            GiftBoxItem.clearGift(giftBoxStack);
+
+            // 添加好感度：赠送礼物
+            AffectionManager.handleInteraction(AffectionManager.InteractionType.GIFT, giver, receiver);
+            MCARomanticExpansion.LOGGER.debug("Added GIFT affection for {} -> {}",
+                    giver.getName().getString(), receiver.getName().getString());
+        }
+    }
 
     @SubscribeEvent
     public static void onPlayerRightClick(PlayerInteractEvent.RightClickItem event) {
@@ -158,43 +180,43 @@ public class PlayerInteractionHandler {
         var hand = event.getHand();
 
         // 礼盒操作：Shift+右键放入物品
-//        if (item instanceof GiftBoxItem && player.isShiftKeyDown()) {
-//            if (GiftBoxItem.hasGift(stack)) {
-//                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.has_gift"));
-//                event.setCanceled(true);
-//                return;
-//            }
-//
-//            // 获取另一只手的物品
-//            ItemStack otherHandItem = hand == net.minecraft.world.InteractionHand.MAIN_HAND
-//                    ? serverPlayer.getOffhandItem()
-//                    : serverPlayer.getMainHandItem();
-//
-//            if (!otherHandItem.isEmpty()) {
-//                if (otherHandItem.getItem() instanceof GiftBoxItem) {
-//                    serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.nested"));
-//                    event.setCanceled(true);
-//                    return;
-//                }
-//
-//                GiftBoxItem.saveGiftItem(stack, otherHandItem);
-//
-//                // 修复: 使用正确的方法清空另一只手的物品
-//                if (hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
-//                    // 清空副手 (副手槽位索引是 40)
-//                    serverPlayer.getInventory().setItem(40, ItemStack.EMPTY);
-//                } else {
-//                    // 清空主手 - 使用 getSelectedSlot() 获取当前选中的槽位
-//                    int selectedSlot = serverPlayer.getInventory().getSelectedSlot();
-//                    serverPlayer.getInventory().setItem(selectedSlot, ItemStack.EMPTY);
-//                }
-//
-//                serverPlayer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.gift_placed"));
-//                event.setCanceled(true);
-//            } else {
-//                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.need_other_hand"));
-//            }
-//        }
+        if (item instanceof GiftBoxItem && player.isShiftKeyDown()) {
+            if (GiftBoxItem.hasGift(stack)) {
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.has_gift"));
+                event.setCanceled(true);
+                return;
+            }
+
+            // 获取另一只手的物品
+            ItemStack otherHandItem = hand == net.minecraft.world.InteractionHand.MAIN_HAND
+                    ? serverPlayer.getOffhandItem()
+                    : serverPlayer.getMainHandItem();
+
+            if (!otherHandItem.isEmpty()) {
+                if (otherHandItem.getItem() instanceof GiftBoxItem) {
+                    serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.nested"));
+                    event.setCanceled(true);
+                    return;
+                }
+
+                GiftBoxItem.saveGiftItem(stack, otherHandItem);
+
+                // 修复: 使用正确的方法清空另一只手的物品
+                if (hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
+                    // 清空副手 (副手槽位索引是 40)
+                    serverPlayer.getInventory().setItem(40, ItemStack.EMPTY);
+                } else {
+                    // 清空主手 - 使用 getSelectedSlot() 获取当前选中的槽位
+                    int selectedSlot = serverPlayer.getInventory().getSelectedSlot();
+                    serverPlayer.getInventory().setItem(selectedSlot, ItemStack.EMPTY);
+                }
+
+                serverPlayer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.gift_placed"));
+                event.setCanceled(true);
+            } else {
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.need_other_hand"));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -215,35 +237,35 @@ public class PlayerInteractionHandler {
         var item = stack.getItem();
 
         // 右键方块打开礼盒
-//        if (item instanceof GiftBoxItem) {
-//            // 检查是否有礼物
-//            if (!GiftBoxItem.hasGift(stack)) {
-//                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.empty"));
-//                event.setCanceled(true);
-//                return;
-//            }
-//
-//            // 检查是否是生日礼盒
-//            if (GiftBoxItem.isBirthdayGift(stack)) {
-//                GiftBoxItem.openBirthdayGift(serverPlayer, stack);
-//                event.setCanceled(true);
-//                return;
-//            }
-//
-//            // 修复: loadGiftItem 需要 Provider 参数
-//            ItemStack giftItem = GiftBoxItem.loadGiftItem(stack, serverPlayer.registryAccess());
-//            if (!giftItem.isEmpty()) {
-//                boolean added = serverPlayer.getInventory().add(giftItem);
-//                if (!added) {
-//                    serverPlayer.drop(giftItem, false);
-//                    serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
-//                } else {
-//                    serverPlayer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.gift_opened"));
-//                }
-//                GiftBoxItem.clearGift(stack);
-//                event.setCanceled(true);
-//            }
-//        }
+        if (item instanceof GiftBoxItem) {
+            // 检查是否有礼物
+            if (!GiftBoxItem.hasGift(stack)) {
+                serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.gift_box.empty"));
+                event.setCanceled(true);
+                return;
+            }
+
+            // 检查是否是生日礼盒
+            if (GiftBoxItem.isBirthdayGift(stack)) {
+                GiftBoxItem.openBirthdayGift(serverPlayer, stack);
+                event.setCanceled(true);
+                return;
+            }
+
+            // 修复: loadGiftItem 需要 Provider 参数
+            ItemStack giftItem = GiftBoxItem.loadGiftItem(stack, serverPlayer.registryAccess());
+            if (!giftItem.isEmpty()) {
+                boolean added = serverPlayer.getInventory().add(giftItem);
+                if (!added) {
+                    serverPlayer.drop(giftItem, false);
+                    serverPlayer.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.inventory.full.gift"));
+                } else {
+                    serverPlayer.sendSystemMessage(Component.translatable("mcaromanticexpansion.message.gift_opened"));
+                }
+                GiftBoxItem.clearGift(stack);
+                event.setCanceled(true);
+            }
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion.item;
 
+import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -47,12 +48,19 @@ public class UmbrellaItem extends Item {
         super(properties.stacksTo(1));
     }
 
+    // ========== 原有方法（保持不变） ==========
+
     public static float getUmbrellaState(ItemStack stack) {
+        // 新增：如果物品是独立的伞状态物品，直接返回对应值
+        if (stack.is(ModItems.UMBRELLA_CLOSED.get())) return State.CLOSED.getValue();
+        if (stack.is(ModItems.UMBRELLA_HALF.get())) return State.HALF_OPEN.getValue();
+        if (stack.is(ModItems.UMBRELLA_OPEN.get())) return State.FULL_OPEN.getValue();
+
+        // 原有的 NBT 读取逻辑
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if (customData != null) {
             CompoundTag tag = customData.copyTag();
             if (tag.contains(STATE_TAG)) {
-                // CompoundTag.getFloat() 返回 Optional<Float>
                 return tag.getFloat(STATE_TAG).orElse(State.CLOSED.getValue());
             }
         }
@@ -66,18 +74,50 @@ public class UmbrellaItem extends Item {
     }
 
     public static State getState(ItemStack stack) {
+        // 新增：如果物品是独立的伞状态物品，直接返回对应状态
+        if (stack.is(ModItems.UMBRELLA_CLOSED.get())) return State.CLOSED;
+        if (stack.is(ModItems.UMBRELLA_HALF.get())) return State.HALF_OPEN;
+        if (stack.is(ModItems.UMBRELLA_OPEN.get())) return State.FULL_OPEN;
+
+        // 原有的 fromValue 逻辑
         return State.fromValue(getUmbrellaState(stack));
     }
 
+    // ========== 新增方法 ==========
+
+    /**
+     * 检查是否是伞（任意状态）
+     */
+    public static boolean isUmbrella(ItemStack stack) {
+        return stack.is(ModItems.UMBRELLA.get()) ||
+                stack.is(ModItems.UMBRELLA_CLOSED.get()) ||
+                stack.is(ModItems.UMBRELLA_HALF.get()) ||
+                stack.is(ModItems.UMBRELLA_OPEN.get());
+    }
+
+    /**
+     * 根据状态获取对应的物品实例
+     */
+    public static ItemStack getStackForState(State state) {
+        return switch (state) {
+            case CLOSED -> new ItemStack(ModItems.UMBRELLA_CLOSED.get());
+            case HALF_OPEN -> new ItemStack(ModItems.UMBRELLA_HALF.get());
+            case FULL_OPEN -> new ItemStack(ModItems.UMBRELLA_OPEN.get());
+        };
+    }
+
+    // ========== 原有的 use 方法（修改为支持物品切换） ==========
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         // 检查是否正在看向其他玩家
         if (isLookingAtPlayer(player)) {
-            // 确保伞是打开状态（只在服务端修改）
             if (!level.isClientSide()) {
-                setUmbrellaState(stack, State.FULL_OPEN);
+                // 直接切换到全开独立物品
+                ItemStack newStack = getStackForState(State.FULL_OPEN);
+                newStack.setCount(1);
+                player.setItemInHand(hand, newStack);
             }
             return InteractionResult.SUCCESS;
         }
@@ -86,7 +126,13 @@ public class UmbrellaItem extends Item {
         if (!level.isClientSide()) {
             State currentState = getState(stack);
             State nextState = currentState.next();
-            setUmbrellaState(stack, nextState);
+
+            // 所有情况都切换到独立物品实例
+            ItemStack newStack = getStackForState(nextState);
+            newStack.setCount(1);
+            player.setItemInHand(hand, newStack);
+
+//            System.out.println("Umbrella state: " + currentState + " -> " + nextState);
         }
         return InteractionResult.SUCCESS;
     }

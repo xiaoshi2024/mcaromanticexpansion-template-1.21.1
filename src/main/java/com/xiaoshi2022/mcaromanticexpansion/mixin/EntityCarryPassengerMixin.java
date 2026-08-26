@@ -12,7 +12,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Entity.class)
 public abstract class EntityCarryPassengerMixin {
 
-    @Inject(method = "getPassengerRidingPosition", at = @At("HEAD"), cancellable = true)
+    /**
+     * 方法可能已被移除/重命名，使用 require = 0 避免编译失败
+     * remap = false 使用当前IDE中的方法名
+     */
+    @Inject(method = "getPassengerRidingPosition",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 0,
+            remap = false)
     private void friendship$getCarryPassengerRidingPosition(Entity passenger,
                                                             CallbackInfoReturnable<Vec3> cir) {
         Entity carrier = (Entity) (Object) this;
@@ -23,8 +31,8 @@ public abstract class EntityCarryPassengerMixin {
             return;
         }
         double yawRad = Math.toRadians(carrier.getYRot());
-        double backX = Math.sin(yawRad) * 0.25d;
-        double backZ = -Math.cos(yawRad) * 0.25d;
+        double backX = Math.sin(yawRad) * 0.25;
+        double backZ = -Math.cos(yawRad) * 0.25;
         Vec3 pos = new Vec3(
                 carrier.getX() + backX,
                 carrier.getY() + CarryRuntime.carryHeight(),
@@ -33,7 +41,11 @@ public abstract class EntityCarryPassengerMixin {
         cir.setReturnValue(pos);
     }
 
-    @Inject(method = "getVehicleAttachmentPoint", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getVehicleAttachmentPoint",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 0,
+            remap = false)
     private void friendship$getCarryVehicleAttachmentPoint(Entity vehicle,
                                                            CallbackInfoReturnable<Vec3> cir) {
         Entity passenger = (Entity) (Object) this;

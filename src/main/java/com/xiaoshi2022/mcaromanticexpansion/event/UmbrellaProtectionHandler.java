@@ -39,9 +39,10 @@ public class UmbrellaProtectionHandler {
 
         boolean hasOpenUmbrella = false;
 
-        if (mainHandStack.is(ModItems.UMBRELLA.get())) {
+        // 修复：使用 isUmbrella 检查所有形态
+        if (UmbrellaItem.isUmbrella(mainHandStack)) {
             hasOpenUmbrella = isUmbrellaOpen(mainHandStack);
-        } else if (offHandStack.is(ModItems.UMBRELLA.get())) {
+        } else if (UmbrellaItem.isUmbrella(offHandStack)) {
             hasOpenUmbrella = isUmbrellaOpen(offHandStack);
         }
 
@@ -74,6 +75,10 @@ public class UmbrellaProtectionHandler {
     }
 
     private static boolean isUmbrellaOpen(ItemStack stack) {
+        // 使用新的 isUmbrella 方法检查是否是伞，然后获取状态
+        if (!UmbrellaItem.isUmbrella(stack)) {
+            return false;
+        }
         float state = UmbrellaItem.getUmbrellaState(stack);
         return state >= 0.5F;
     }

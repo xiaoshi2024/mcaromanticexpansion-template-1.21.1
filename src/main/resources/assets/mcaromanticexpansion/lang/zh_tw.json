@@ -163,6 +163,8 @@
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 目前不在備孕期！",
 
   "block.mcaromanticexpansion.umbrella_stand": "傘架",
+  "item.mcaromanticexpansion.umbrella_stand": "傘架",
+
 
   "event.mcaromanticexpansion.share_story.player": "§d你與對方分享了一個有趣的故事...",
   "event.mcaromanticexpansion.share_story.partner": "§d對方與你分享了一個有趣的故事...",

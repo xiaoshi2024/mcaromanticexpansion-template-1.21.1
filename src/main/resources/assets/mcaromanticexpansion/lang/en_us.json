@@ -46,7 +46,12 @@
 
   "item.mcaromanticexpansion.red_veil": "Red Veil",
   "item.mcaromanticexpansion.golden_hairpin": "Golden Hairpin",
+
   "item.mcaromanticexpansion.umbrella": "Umbrella",
+  "item.mcaromanticexpansion.umbrella_closed": "Umbrella (Closed)",
+  "item.mcaromanticexpansion.umbrella_half": "Umbrella (Half Open)",
+  "item.mcaromanticexpansion.umbrella_open": "Umbrella (Open)",
+
   "item.mcaromanticexpansion.love_letter": "Love Letter",
 
   "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Write Love Letter ✉",
@@ -164,6 +169,7 @@
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s is not in a conception period!",
 
   "block.mcaromanticexpansion.umbrella_stand": "Umbrella Stand",
+  "item.mcaromanticexpansion.umbrella_stand": "Umbrella Stand",
 
   "event.mcaromanticexpansion.share_story.player": "§dYou shared an interesting story with each other...",
   "event.mcaromanticexpansion.share_story.partner": "§dThey shared an interesting story with you...",
@@ -410,5 +416,7 @@
 
   "message.mcaromanticexpansion.advancement.unlocked_event": "§d§l💕 Unlocked a romantic event via advancement: %s!",
   "message.mcaromanticexpansion.bouquet.accepted_by": "§a%s accepted your bouquet!",
-  "message.mcaromanticexpansion.bouquet.you_accepted": "§aYou accepted %s's bouquet!"
+  "message.mcaromanticexpansion.bouquet.you_accepted": "§aYou accepted %s's bouquet!",
+
+  "key.category.minecraft.key.categories.mcaromanticexpansion": "Mca: Romantic Expansion"
 }

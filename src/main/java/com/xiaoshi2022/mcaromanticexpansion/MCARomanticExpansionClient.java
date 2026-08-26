@@ -7,6 +7,7 @@ import com.xiaoshi2022.mcaromanticexpansion.client.ClientEventHandler;
 import com.xiaoshi2022.mcaromanticexpansion.client.gui.HUDConfigScreen;
 import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
 import com.xiaoshi2022.mcaromanticexpansion.client.particle.RainbowParticle;
+import com.xiaoshi2022.mcaromanticexpansion.client.renderer.UmbrellaStandRenderer;
 import com.xiaoshi2022.mcaromanticexpansion.config.HUDConfig;
 import com.xiaoshi2022.mcaromanticexpansion.network.CarryRequestPacket;
 import com.xiaoshi2022.mcaromanticexpansion.network.CarryStopPacket;
@@ -137,8 +138,8 @@ public class MCARomanticExpansionClient {
         event.registerLayerDefinition(WeddingClothesModel.LAYER_LOCATION, WeddingClothesModel::createBodyLayer);
     }
 
-//    @SubscribeEvent
-//    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-//        event.registerBlockEntityRenderer(ModBlockEntities.UMBRELLA_STAND_BLOCK_ENTITY.get(), UmbrellaStandRenderer::new);
-//    }
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.UMBRELLA_STAND_BLOCK_ENTITY.get(), UmbrellaStandRenderer::new);
+    }
 }

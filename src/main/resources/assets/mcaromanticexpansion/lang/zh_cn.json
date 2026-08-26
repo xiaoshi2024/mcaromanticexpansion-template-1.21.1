@@ -43,7 +43,12 @@
 
   "item.mcaromanticexpansion.red_veil": "红盖头",
   "item.mcaromanticexpansion.golden_hairpin": "金发簪",
+
   "item.mcaromanticexpansion.umbrella": "伞",
+  "item.mcaromanticexpansion.umbrella_closed": "伞（关闭）",
+  "item.mcaromanticexpansion.umbrella_half": "伞（半开）",
+  "item.mcaromanticexpansion.umbrella_open": "伞（全开）",
+
   "item.mcaromanticexpansion.love_letter": "情书",
 
   "mcaromanticexpansion.gui.love_letter.edit.title": "✉ 写情书 ✉",
@@ -164,6 +169,7 @@
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s 当前不在备孕期！",
 
   "block.mcaromanticexpansion.umbrella_stand": "伞架",
+  "item.mcaromanticexpansion.umbrella_stand": "伞架",
 
   "event.mcaromanticexpansion.share_story.player": "§d你与对方分享了一个有趣的故事...",
   "event.mcaromanticexpansion.share_story.partner": "§d对方与你分享了一个有趣的故事...",
@@ -410,5 +416,6 @@
 
   "message.mcaromanticexpansion.advancement.unlocked_event": "§d§l💕 通过成就解锁了浪漫事件: %s!",
   "message.mcaromanticexpansion.bouquet.accepted_by": "§a%s 接受了你的花束！",
-  "message.mcaromanticexpansion.bouquet.you_accepted": "§a你接受了 %s 的花束！"
+  "message.mcaromanticexpansion.bouquet.you_accepted": "§a你接受了 %s 的花束！",
+  "key.category.minecraft.key.categories.mcaromanticexpansion": "凡家物语：浪漫扩展"
 }

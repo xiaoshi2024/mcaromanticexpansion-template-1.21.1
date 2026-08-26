@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "model",
+    "model": "mcaromanticexpansion:item/umbrella",
+    "overrides": [
+      {"predicate": {"mcaromanticexpansion:umbrella_state": 0}, "model": "mcaromanticexpansion:item/umbrella_closed"},
+      {"predicate": {"mcaromanticexpansion:umbrella_state": 0.5}, "model": "mcaromanticexpansion:item/umbrella_half"},
+      {"predicate": {"mcaromanticexpansion:umbrella_state": 1}, "model": "mcaromanticexpansion:item/umbrella_open"}
+    ]
+  }
+}

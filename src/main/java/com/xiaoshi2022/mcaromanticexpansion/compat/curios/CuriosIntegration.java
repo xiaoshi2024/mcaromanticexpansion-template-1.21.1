@@ -1,9 +1,11 @@
 package com.xiaoshi2022.mcaromanticexpansion.compat.curios;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -18,16 +20,24 @@ public class CuriosIntegration {
     private static boolean curiosAvailable = false;
     private static final String RING_SLOT = "ring";
 
+    // 反射缓存（仅客户端使用）
+    private static Class<?> iCurioRendererClass;
+    private static Method registerMethod;
+
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             try {
-                Class.forName("top.theillusivec4.curios.api.SlotContext");
+                // 只在 Common 阶段检查 Curios API 是否存在（服务端可用的类）
+                Class.forName("top.theillusivec4.curios.api.CuriosApi");
                 curiosAvailable = true;
-                MCARomanticExpansion.LOGGER.info("Curios mod detected, enabling ring slot integration");
+                MCARomanticExpansion.LOGGER.info("Curios mod detected (soft dependency)");
             } catch (ClassNotFoundException e) {
                 curiosAvailable = false;
-                MCARomanticExpansion.LOGGER.info("Curios mod not detected, skipping ring slot integration");
+                MCARomanticExpansion.LOGGER.info("Curios mod not detected, skipping integration");
+            } catch (Exception e) {
+                curiosAvailable = false;
+                MCARomanticExpansion.LOGGER.warn("Failed to detect Curios: {}", e.getMessage());
             }
         });
     }
@@ -35,93 +45,50 @@ public class CuriosIntegration {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            if (curiosAvailable) {
-                try {
-                    registerCuriosRenderers();
-                    MCARomanticExpansion.LOGGER.info("Curios renderers registered successfully");
-                } catch (Exception e) {
-                    MCARomanticExpansion.LOGGER.warn("Curios renderer registration failed: {}", e.getMessage());
-                }
+            if (!curiosAvailable) {
+                return;
+            }
+
+            try {
+                // 在客户端安全地加载客户端专用类
+                iCurioRendererClass = Class.forName("top.theillusivec4.curios.api.client.ICurioRenderer");
+                registerMethod = iCurioRendererClass.getMethod("register",
+                        Item.class,
+                        Supplier.class);
+
+                registerRenderers();
+                MCARomanticExpansion.LOGGER.info("Curios renderers registered successfully (soft dependency)");
+            } catch (ClassNotFoundException e) {
+                MCARomanticExpansion.LOGGER.warn("Curios client API not found, renderers disabled");
+            } catch (NoSuchMethodException e) {
+                MCARomanticExpansion.LOGGER.warn("Curios API version mismatch: {}", e.getMessage());
+            } catch (Exception e) {
+                MCARomanticExpansion.LOGGER.warn("Failed to register Curios renderers: {}", e.getMessage());
             }
         });
     }
 
-    /**
-     * 使用反射注册渲染器 - 完全不依赖 Curios API 的硬编码
-     */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void registerRenderer(String modId, String itemName, Class<?> rendererClass) {
-        if (!curiosAvailable) {
-            return;
-        }
+    private static void registerRenderers() {
+        // 创建渲染器工厂
+        Supplier<Object> corsageSupplier = () -> new CorsageRenderer();
+        Supplier<Object> ringSupplier = () -> new RingCuriosRenderer();
+        Supplier<Object> headSupplier = () -> new HeadAdornmentRenderer();
+        Supplier<Object> weddingSupplier = () -> new WeddingClothesRenderer();
 
-        try {
-            // 检查物品是否存在
-            var itemOptional = BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(modId, itemName));
-            if (itemOptional.isEmpty()) {
-                MCARomanticExpansion.LOGGER.warn("Item not found: {}:{}", modId, itemName);
-                return;
-            }
+        // 注册所有物品...
+        registerItem("mca", "wedding_ring", ringSupplier);
+        registerItem("mca", "wedding_ring_rg", ringSupplier);
+        registerItem("mca", "engagement_ring", ringSupplier);
+        registerItem("mca", "engagement_ring_rg", ringSupplier);
 
-            Item item = itemOptional.get().value();
+        registerItem(MCARomanticExpansion.MODID, "rose_brooch_red", corsageSupplier);
+        registerItem(MCARomanticExpansion.MODID, "rose_brooch_pink", corsageSupplier);
+        registerItem(MCARomanticExpansion.MODID, "rose_brooch_white", corsageSupplier);
 
-            // 使用反射获取 ICurioRenderer 接口
-            Class<?> iCurioRendererClass = Class.forName("top.theillusivec4.curios.api.client.ICurioRenderer");
+        registerItem(MCARomanticExpansion.MODID, "red_veil", headSupplier);
+        registerItem(MCARomanticExpansion.MODID, "golden_hairpin", headSupplier);
 
-            // 检查渲染器类是否实现了 ICurioRenderer 接口
-            if (!iCurioRendererClass.isAssignableFrom(rendererClass)) {
-                MCARomanticExpansion.LOGGER.debug("Renderer {} does not implement ICurioRenderer, skipping", rendererClass.getSimpleName());
-                return;
-            }
-
-            // 获取 register 方法
-            Method registerMethod = iCurioRendererClass.getMethod("register", Item.class, Supplier.class);
-
-            // 创建 Supplier，返回渲染器实例
-            Supplier<Object> supplier = () -> {
-                try {
-                    return rendererClass.getDeclaredConstructor().newInstance();
-                } catch (Exception e) {
-                    MCARomanticExpansion.LOGGER.warn("Failed to create renderer instance for {}: {}", itemName, e.getMessage());
-                    return null;
-                }
-            };
-
-            // 调用注册方法
-            registerMethod.invoke(null, item, supplier);
-            MCARomanticExpansion.LOGGER.info("Registered renderer for {}", itemName);
-
-        } catch (ClassNotFoundException e) {
-            // Curios API 不存在，静默忽略
-            MCARomanticExpansion.LOGGER.debug("Curios API not available, skipping renderer registration for {}", itemName);
-        } catch (NoSuchMethodException e) {
-            MCARomanticExpansion.LOGGER.warn("ICurioRenderer.register method not found: {}", e.getMessage());
-        } catch (Exception e) {
-            MCARomanticExpansion.LOGGER.warn("Failed to register renderer for {}: {}", itemName, e.getMessage());
-        }
-    }
-
-    private static void registerCuriosRenderers() {
-        // 注册戒指渲染器 (MCA 模组的戒指)
-        registerRenderer("mca", "wedding_ring", RingCuriosRenderer.class);
-        registerRenderer("mca", "wedding_ring_rg", RingCuriosRenderer.class);
-        registerRenderer("mca", "engagement_ring", RingCuriosRenderer.class);
-        registerRenderer("mca", "engagement_ring_rg", RingCuriosRenderer.class);
-
-        // 注册胸花渲染器
-        registerRenderer(MCARomanticExpansion.MODID, "rose_brooch_red", CorsageRenderer.class);
-        registerRenderer(MCARomanticExpansion.MODID, "rose_brooch_pink", CorsageRenderer.class);
-        registerRenderer(MCARomanticExpansion.MODID, "rose_brooch_white", CorsageRenderer.class);
-
-        // 注册头饰渲染器
-        registerRenderer(MCARomanticExpansion.MODID, "red_veil", HeadAdornmentRenderer.class);
-        registerRenderer(MCARomanticExpansion.MODID, "golden_hairpin", HeadAdornmentRenderer.class);
-
-        // 注册婚服渲染器
-        registerWeddingClothesRenderers();
-    }
-
-    private static void registerWeddingClothesRenderers() {
         String[] weddingClothes = {
                 "chinese_wedding_male", "chinese_wedding_female",
                 "western_wedding_male", "western_wedding_female",
@@ -134,7 +101,34 @@ public class CuriosIntegration {
                 "slavic_wedding_male", "slavic_wedding_female"
         };
         for (String name : weddingClothes) {
-            registerRenderer(MCARomanticExpansion.MODID, name, WeddingClothesRenderer.class);
+            registerItem(MCARomanticExpansion.MODID, name, weddingSupplier);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void registerItem(String modId, String itemName, Supplier<Object> rendererSupplier) {
+        try {
+            var optional = BuiltInRegistries.ITEM.get(
+                    Identifier.fromNamespaceAndPath(modId, itemName)
+            );
+
+            if (optional.isEmpty()) {
+                MCARomanticExpansion.LOGGER.debug("Item not found: {}:{}", modId, itemName);
+                return;
+            }
+
+            Holder.Reference<Item> holder = optional.get();
+            Item item = holder.value();  // ← 关键：提取真正的 Item 对象
+
+            // 现在传入的是 Item 对象，类型匹配
+            registerMethod.invoke(null, item, rendererSupplier);
+
+            MCARomanticExpansion.LOGGER.debug("Registered Curios renderer for {}:{}", modId, itemName);
+
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.warn("Failed to register renderer for {}:{}: {}",
+                    modId, itemName, e.getMessage());
+            e.printStackTrace();  // 临时加个堆栈打印以便调试
         }
     }
 
@@ -144,15 +138,5 @@ public class CuriosIntegration {
 
     public static String getRingSlot() {
         return RING_SLOT;
-    }
-
-    public static void safeExecute(Runnable action) {
-        if (curiosAvailable) {
-            try {
-                action.run();
-            } catch (Exception e) {
-                MCARomanticExpansion.LOGGER.warn("Curios operation failed: {}", e.getMessage());
-            }
-        }
     }
 }

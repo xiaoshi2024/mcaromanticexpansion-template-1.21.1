@@ -7,54 +7,57 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.client.ICurioRenderer;
 
-public class CorsageRenderer {
+public class CorsageRenderer implements ICurioRenderer {
 
-    public void render(
-            ItemStack itemStack,
-            Object slotContext,
+    @Override
+    public <S extends LivingEntityRenderState, M extends EntityModel<? super S>> void render(
+            ItemStack stack,
+            SlotContext slotContext,
             PoseStack poseStack,
-            RenderLayerParent<HumanoidRenderState, HumanoidModel<HumanoidRenderState>> renderLayerParent,
             SubmitNodeCollector submitNodeCollector,
-            int light,
-            float limbSwing,
-            float limbSwingAmount,
-            float partialTicks,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch) {
+            int packedLight,
+            S renderState,
+            RenderLayerParent<S, M> renderLayerParent,
+            EntityRendererProvider.Context context,
+            float yRotation,
+            float xRotation) {
 
-        if (!(itemStack.getItem() instanceof CorsageItem)) {
+        if (!(stack.getItem() instanceof CorsageItem)) {
             return;
         }
 
         poseStack.pushPose();
 
-        HumanoidModel<HumanoidRenderState> humanoidModel = renderLayerParent.getModel();
-        if (humanoidModel != null) {
-            // 在 NeoForge 26.2 中，translateAndRotate 可能已被移除或签名改变
-            // 使用 body 的变换
+        M model = renderLayerParent.getModel();
+        if (model instanceof HumanoidModel<?> humanoidModel) {
             humanoidModel.body.translateAndRotate(poseStack);
 
             poseStack.translate(0.16F, 0.25F, -0.15F);
             poseStack.scale(0.3F, 0.3F, 0.3F);
             poseStack.mulPose(Axis.YP.rotationDegrees(180));
 
-            // 使用 ItemInHandRenderer 渲染
-            Minecraft.getInstance().gameRenderer.itemInHandRenderer.renderItem(
-                    null,
-                    itemStack,
-                    ItemDisplayContext.FIXED,
-                    poseStack,
-                    submitNodeCollector,
-                    light
-            );
+            // 从 SlotContext 获取实体
+            LivingEntity entity = slotContext.entity();
+
+            Minecraft.getInstance().getEntityRenderDispatcher()
+                    .getItemInHandRenderer().renderItem(
+                            entity,  // 传递实体而不是 null
+                            stack,
+                            ItemDisplayContext.FIXED,
+                            poseStack,
+                            submitNodeCollector,
+                            packedLight
+                    );
         }
 
         poseStack.popPose();
