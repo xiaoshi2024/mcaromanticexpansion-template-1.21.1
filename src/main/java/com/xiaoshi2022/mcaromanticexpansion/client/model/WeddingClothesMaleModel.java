@@ -17,26 +17,32 @@ public class WeddingClothesMaleModel extends WeddingClothesModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         var Waist = createBaseParts(meshdefinition);
 
-        // 男性手臂：4格宽（比标准多1格）
+        // 男性手臂：4格宽，向外扩展
+        // 右臂：x偏移从 -2.0F 改为 -3.0F，宽度从 3 改为 4
         Waist.addOrReplaceChild("RightArm",
                 CubeListBuilder.create()
-                        .texOffs(40, 16).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(40, 16)
+                        .addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(-5.0F, -10.0F, 0.0F));
 
+        // 左臂：x偏移保持 -1.0F，宽度从 3 改为 4
         Waist.addOrReplaceChild("LeftArm",
                 CubeListBuilder.create()
-                        .texOffs(32, 48).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(32, 48)
+                        .addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(5.0F, -10.0F, 0.0F));
 
-        // 男性腿：标准 4 格宽
+        // 腿保持不变
         meshdefinition.getRoot().addOrReplaceChild("RightLeg",
                 CubeListBuilder.create()
-                        .texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(0, 16)
+                        .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(-1.9F, 12.0F, 0.0F));
 
         meshdefinition.getRoot().addOrReplaceChild("LeftLeg",
                 CubeListBuilder.create()
-                        .texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(16, 48)
+                        .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(1.9F, 12.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);

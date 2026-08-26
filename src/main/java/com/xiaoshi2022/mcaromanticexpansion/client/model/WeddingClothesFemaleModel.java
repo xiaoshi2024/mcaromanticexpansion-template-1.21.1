@@ -17,26 +17,32 @@ public class WeddingClothesFemaleModel extends WeddingClothesModel {
         MeshDefinition meshdefinition = new MeshDefinition();
         var Waist = createBaseParts(meshdefinition);
 
-        // 女性手臂：3格宽（标准大小）
+        // ✅ 女性手臂：3格宽，标准对齐
+        // 右臂：x偏移 -2.0F，宽度3
         Waist.addOrReplaceChild("RightArm",
                 CubeListBuilder.create()
-                        .texOffs(40, 16).addBox(-1.5F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(40, 16)
+                        .addBox(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(-5.0F, -10.0F, 0.0F));
 
+        // 左臂：x偏移 -1.0F，宽度3
         Waist.addOrReplaceChild("LeftArm",
                 CubeListBuilder.create()
-                        .texOffs(32, 48).addBox(-1.5F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(32, 48)
+                        .addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(5.0F, -10.0F, 0.0F));
 
-        // 女性腿：标准 4 格宽（或者更细，但这里保持标准）
+        // 腿保持不变
         meshdefinition.getRoot().addOrReplaceChild("RightLeg",
                 CubeListBuilder.create()
-                        .texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(0, 16)
+                        .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(-1.9F, 12.0F, 0.0F));
 
         meshdefinition.getRoot().addOrReplaceChild("LeftLeg",
                 CubeListBuilder.create()
-                        .texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
+                        .texOffs(16, 48)
+                        .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(1.9F, 12.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
