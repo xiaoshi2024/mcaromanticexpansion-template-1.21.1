@@ -1,17 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     " P ",
     "PWP",
     " P "
   ],
   "key": {
-    "P": { "item": "minecraft:paper" },
-    "W": { "item": "minecraft:writable_book" }
+    "P": "minecraft:paper",
+    "W": "minecraft:writable_book"
   },
   "result": {
     "id": "mcaromanticexpansion:love_letter",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

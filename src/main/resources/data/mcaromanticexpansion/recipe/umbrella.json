@@ -1,21 +1,18 @@
 {
     "type": "minecraft:crafting_shaped",
-    "category": "misc",
+    "category": "equipment",
     "pattern": [
         "S S",
         "WWW",
         " S "
     ],
     "key": {
-        "S": {
-            "item": "minecraft:stick"
-        },
-        "W": {
-            "item": "minecraft:white_wool"
-        }
+        "S": "minecraft:stick",
+        "W": "minecraft:white_wool"
     },
     "result": {
         "id": "mcaromanticexpansion:umbrella",
         "count": 1
-    }
+    },
+    "show_notification": true
 }

@@ -1,24 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "pattern": [
     "ABA",
     "BCB",
     "ABA"
   ],
   "key": {
-    "A": {
-      "item": "minecraft:paper"
-    },
-    "B": {
-      "item": "minecraft:string"
-    },
-    "C": {
-      "tag": "minecraft:planks"
-    }
+    "A": "minecraft:paper",
+    "B": "minecraft:string",
+    "C": "#minecraft:planks"
   },
   "result": {
     "id": "mcaromanticexpansion:gift_box",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

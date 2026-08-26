@@ -1,19 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     "WUW",
     "GAG",
     "WUW"
   ],
   "key": {
-    "W": { "item": "minecraft:white_wool" },
-    "U": { "item": "minecraft:blue_dye" },
-    "G": { "item": "minecraft:gold_ingot" },
-    "A": { "item": "minecraft:diamond" }
+    "W": "minecraft:white_wool",
+    "U": "minecraft:blue_dye",
+    "G": "minecraft:gold_ingot",
+    "A": "minecraft:diamond"
   },
   "result": {
     "id": "mcaromanticexpansion:scottish_wedding_female",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

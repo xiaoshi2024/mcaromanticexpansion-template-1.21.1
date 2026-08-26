@@ -12,6 +12,7 @@ import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
@@ -69,7 +70,8 @@ public class SharedUmbrellaManager {
         ItemStack offHand = initiator.getOffhandItem();
         MCARomanticExpansion.LOGGER.debug("Sending shared umbrella request: {} has umbrella in {}",
                 initiator.getName().getString(),
-                mainHand.is(ModItems.UMBRELLA.get()) ? "main hand" : "off hand");
+                UmbrellaItem.isUmbrella(mainHand) ? "main hand" :
+                        (UmbrellaItem.isUmbrella(offHand) ? "off hand" : "no umbrella"));
 
         if (initiator.distanceTo(target) > MAX_DISTANCE) {
             initiator.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.too_far"));
@@ -122,19 +124,25 @@ public class SharedUmbrellaManager {
             ItemStack offHand = requester.getOffhandItem();
 
             // 首先检查是否持有伞
-            if (!mainHand.is(ModItems.UMBRELLA.get()) && !offHand.is(ModItems.UMBRELLA.get())) {
+            // 首先检查是否持有伞 - 使用 isUmbrella
+            if (!UmbrellaItem.isUmbrella(mainHand) && !UmbrellaItem.isUmbrella(offHand)) {
                 requester.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.lost_self"));
                 responder.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.umbrella.lost_other"));
                 return;
             }
 
-            // 然后检查伞是否打开
+// 然后检查伞是否打开
             if (!hasOpenUmbrella(requester)) {
-                // 尝试强制打开
-                if (mainHand.is(ModItems.UMBRELLA.get())) {
-                    UmbrellaItem.setUmbrellaState(mainHand, UmbrellaItem.State.FULL_OPEN);
-                } else if (offHand.is(ModItems.UMBRELLA.get())) {
-                    UmbrellaItem.setUmbrellaState(offHand, UmbrellaItem.State.FULL_OPEN);
+                // 尝试强制打开 - 使用 isUmbrella 检查
+                if (UmbrellaItem.isUmbrella(mainHand)) {
+                    // 替换为全开状态
+                    ItemStack newStack = UmbrellaItem.getStackForState(UmbrellaItem.State.FULL_OPEN);
+                    newStack.setCount(1);
+                    requester.setItemInHand(InteractionHand.MAIN_HAND, newStack);
+                } else if (UmbrellaItem.isUmbrella(offHand)) {
+                    ItemStack newStack = UmbrellaItem.getStackForState(UmbrellaItem.State.FULL_OPEN);
+                    newStack.setCount(1);
+                    requester.setItemInHand(InteractionHand.OFF_HAND, newStack);
                 }
 
                 if (!hasOpenUmbrella(requester)) {
@@ -222,10 +230,11 @@ public class SharedUmbrellaManager {
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offHand = player.getOffhandItem();
 
-        if (mainHand.is(ModItems.UMBRELLA.get()) && isUmbrellaFullyOpen(mainHand)) {
+        // 修复：使用 UmbrellaItem.isUmbrella 检查所有状态
+        if (UmbrellaItem.isUmbrella(mainHand) && isUmbrellaFullyOpen(mainHand)) {
             return true;
         }
-        if (offHand.is(ModItems.UMBRELLA.get()) && isUmbrellaFullyOpen(offHand)) {
+        if (UmbrellaItem.isUmbrella(offHand) && isUmbrellaFullyOpen(offHand)) {
             return true;
         }
         return false;

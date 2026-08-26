@@ -1,18 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     " W ",
     "NGN",
     "W W"
   ],
   "key": {
-    "W": { "item": "minecraft:white_wool" },
-    "N": { "item": "minecraft:green_dye" },
-    "G": { "item": "minecraft:gold_ingot" }
+    "W": "minecraft:white_wool",
+    "N": "minecraft:green_dye",
+    "G": "minecraft:gold_ingot"
   },
   "result": {
     "id": "mcaromanticexpansion:german_wedding_male",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     " R ",
     "RGR",
     " R "
   ],
   "key": {
-    "R": { "item": "minecraft:pink_petals" },
-    "G": { "item": "minecraft:gold_nugget" }
+    "R": "minecraft:pink_petals",
+    "G": "minecraft:gold_nugget"
   },
   "result": {
     "id": "mcaromanticexpansion:rose_brooch_pink",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

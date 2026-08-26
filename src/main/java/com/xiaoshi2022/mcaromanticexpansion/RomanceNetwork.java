@@ -1,7 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion;
 
 import com.xiaoshi2022.mcaromanticexpansion.network.*;
-import com.xiaoshi2022.mcaromanticexpansion.util.CarryRuntime;
 import com.xiaoshi2022.mcaromanticexpansion.util.SharedUmbrellaManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
@@ -9,12 +8,20 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class RomanceNetwork {
+
+    // ✅ 添加静态 CHANNEL 字段供 CarryRuntime 使用
+    public static PayloadRegistrar CHANNEL;
+
     public static void registerPackets(IEventBus modEventBus) {
         modEventBus.addListener(RomanceNetwork::registerNetworkPackets);
     }
 
     public static void registerNetworkPackets(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar(MCARomanticExpansion.MODID).versioned("1.0.0");
+        // ✅ 关键修复：使用 optional() 而不是 versioned()
+        // 这样客户端即使没有这些通道也能连接
+        CHANNEL = event.registrar(MCARomanticExpansion.MODID).optional();
+        PayloadRegistrar registrar = CHANNEL;
+
 
         registrar.playToClient(
                 UmbrellaStandSyncPacket.TYPE,
@@ -112,64 +119,6 @@ public class RomanceNetwork {
                 (payload, context) -> context.enqueueWork(() -> {
                     if (context.player() instanceof ServerPlayer serverPlayer) {
                         SharedUmbrellaManager.handleResponse(serverPlayer, payload);
-                    }
-                })
-        );
-
-        registrar.playToServer(
-                CarryRequestPacket.TYPE,
-                CarryRequestPacket.STREAM_CODEC,
-                (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof ServerPlayer serverPlayer) {
-                        CarryRuntime.handleCarryRequest(serverPlayer, payload);
-                    }
-                })
-        );
-
-        registrar.playToClient(
-                CarryInvitePacket.TYPE,
-                CarryInvitePacket.STREAM_CODEC,
-                (payload, context) -> context.enqueueWork(() -> {
-                    try {
-                        Class<?> handlerClass = Class.forName("com.xiaoshi2022.mcaromanticexpansion.network.GUIPacketHandlers");
-                        java.lang.reflect.Method method = handlerClass.getMethod("handleOpenPrincessCarryGUI", CarryInvitePacket.class);
-                        method.invoke(null, payload);
-                    } catch (Exception e) {
-                        MCARomanticExpansion.LOGGER.warn("Failed to handle CarryInvitePacket (likely server-side)", e);
-                    }
-                })
-        );
-
-        registrar.playToServer(
-                CarryResponsePacket.TYPE,
-                CarryResponsePacket.STREAM_CODEC,
-                (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof ServerPlayer serverPlayer) {
-                        CarryRuntime.handleCarryResponse(serverPlayer, payload);
-                    }
-                })
-        );
-
-        registrar.playToClient(
-                CarryStatePayload.TYPE,
-                CarryStatePayload.STREAM_CODEC,
-                (payload, context) -> context.enqueueWork(() -> {
-                    try {
-                        Class<?> handlerClass = Class.forName("com.xiaoshi2022.mcaromanticexpansion.network.GUIPacketHandlers");
-                        java.lang.reflect.Method method = handlerClass.getMethod("handleCarryState", CarryStatePayload.class);
-                        method.invoke(null, payload);
-                    } catch (Exception e) {
-                        MCARomanticExpansion.LOGGER.warn("Failed to handle CarryStatePayload (likely server-side)", e);
-                    }
-                })
-        );
-
-        registrar.playToServer(
-                CarryStopPacket.TYPE,
-                CarryStopPacket.STREAM_CODEC,
-                (payload, context) -> context.enqueueWork(() -> {
-                    if (context.player() instanceof ServerPlayer serverPlayer) {
-                        CarryRuntime.handleStopRequest(serverPlayer);
                     }
                 })
         );

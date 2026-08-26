@@ -1,19 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
-    "WYW",
+    "WBW",
     "GAG",
-    "WYW"
+    "WBW"
   ],
   "key": {
-    "W": { "item": "minecraft:white_wool" },
-    "Y": { "item": "minecraft:yellow_dye" },
-    "G": { "item": "minecraft:gold_ingot" },
-    "A": { "item": "minecraft:diamond" }
+    "W": "minecraft:white_wool",
+    "B": "minecraft:black_dye",
+    "G": "minecraft:gold_ingot",
+    "A": "minecraft:diamond"
   },
   "result": {
-    "id": "mcaromanticexpansion:west_african_wedding_female",
+    "id": "mcaromanticexpansion:western_wedding_female",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

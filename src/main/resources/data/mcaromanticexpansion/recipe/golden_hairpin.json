@@ -1,18 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     " G ",
     "GRG",
     " S "
   ],
   "key": {
-    "G": { "item": "minecraft:gold_ingot" },
-    "R": { "item": "minecraft:red_dye" },
-    "S": { "item": "minecraft:stick" }
+    "G": "minecraft:gold_ingot",
+    "R": "minecraft:red_dye",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "mcaromanticexpansion:golden_hairpin",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

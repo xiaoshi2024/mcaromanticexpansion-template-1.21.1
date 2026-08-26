@@ -1,17 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     "WWW",
     "WRW",
     "WWW"
   ],
   "key": {
-    "W": { "item": "minecraft:white_wool" },
-    "R": { "item": "minecraft:red_dye" }
+    "W": "minecraft:white_wool",
+    "R": "minecraft:red_dye"
   },
   "result": {
     "id": "mcaromanticexpansion:red_veil",
     "count": 1
-  }
+  },
+  "show_notification": true
 }

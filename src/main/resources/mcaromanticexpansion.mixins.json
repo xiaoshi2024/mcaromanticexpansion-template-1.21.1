@@ -1,19 +1,15 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "com.xiaoshi2022.mcaromanticexpansion.mixin",
+  "refmap": "mcaromanticexpansion.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "EntityCarryPassengerMixin",
     "LevelMixin"
   ],
   "client": [
-    "client.PlayerCarryArmsMixin",
-    "client.PlayerCarryPoseRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "overwrites": {
-    "requireAnnotations": true
   }
 }

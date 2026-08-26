@@ -1,5 +1,6 @@
 package com.xiaoshi2022.mcaromanticexpansion.item;
 
+import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -48,15 +49,13 @@ public class UmbrellaItem extends Item {
         super(properties.stacksTo(1));
     }
 
-    // ========== 原有方法（保持不变） ==========
+    // ========== 状态方法 ==========
 
     public static float getUmbrellaState(ItemStack stack) {
-        // 新增：如果物品是独立的伞状态物品，直接返回对应值
         if (stack.is(ModItems.UMBRELLA_CLOSED.get())) return State.CLOSED.getValue();
         if (stack.is(ModItems.UMBRELLA_HALF.get())) return State.HALF_OPEN.getValue();
         if (stack.is(ModItems.UMBRELLA_OPEN.get())) return State.FULL_OPEN.getValue();
 
-        // 原有的 NBT 读取逻辑
         CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
         if (customData != null) {
             CompoundTag tag = customData.copyTag();
@@ -74,20 +73,12 @@ public class UmbrellaItem extends Item {
     }
 
     public static State getState(ItemStack stack) {
-        // 新增：如果物品是独立的伞状态物品，直接返回对应状态
         if (stack.is(ModItems.UMBRELLA_CLOSED.get())) return State.CLOSED;
         if (stack.is(ModItems.UMBRELLA_HALF.get())) return State.HALF_OPEN;
         if (stack.is(ModItems.UMBRELLA_OPEN.get())) return State.FULL_OPEN;
-
-        // 原有的 fromValue 逻辑
         return State.fromValue(getUmbrellaState(stack));
     }
 
-    // ========== 新增方法 ==========
-
-    /**
-     * 检查是否是伞（任意状态）
-     */
     public static boolean isUmbrella(ItemStack stack) {
         return stack.is(ModItems.UMBRELLA.get()) ||
                 stack.is(ModItems.UMBRELLA_CLOSED.get()) ||
@@ -95,9 +86,6 @@ public class UmbrellaItem extends Item {
                 stack.is(ModItems.UMBRELLA_OPEN.get());
     }
 
-    /**
-     * 根据状态获取对应的物品实例
-     */
     public static ItemStack getStackForState(State state) {
         return switch (state) {
             case CLOSED -> new ItemStack(ModItems.UMBRELLA_CLOSED.get());
@@ -106,58 +94,26 @@ public class UmbrellaItem extends Item {
         };
     }
 
-    // ========== 原有的 use 方法（修改为支持物品切换） ==========
+    // ========== use 方法 - 只处理切换状态，不处理玩家交互 ==========
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // 检查是否正在看向其他玩家
-        if (isLookingAtPlayer(player)) {
-            if (!level.isClientSide()) {
-                // 直接切换到全开独立物品
-                ItemStack newStack = getStackForState(State.FULL_OPEN);
-                newStack.setCount(1);
-                player.setItemInHand(hand, newStack);
-            }
-            return InteractionResult.SUCCESS;
-        }
+        // ===== 只处理空手切换状态，不处理玩家交互 =====
+        // 玩家交互由 PlayerInteractionHandler.onPlayerInteractEntity 处理
+        // 不在这里检查是否看向玩家，避免与 PlayerInteractionHandler 冲突
 
-        // 切换伞状态（只在服务端修改）
         if (!level.isClientSide()) {
             State currentState = getState(stack);
             State nextState = currentState.next();
 
-            // 所有情况都切换到独立物品实例
             ItemStack newStack = getStackForState(nextState);
             newStack.setCount(1);
             player.setItemInHand(hand, newStack);
 
-//            System.out.println("Umbrella state: " + currentState + " -> " + nextState);
+            MCARomanticExpansion.LOGGER.debug("Umbrella state: {} -> {} for {}",
+                    currentState, nextState, player.getName().getString());
         }
         return InteractionResult.SUCCESS;
-    }
-
-    /**
-     * 检查玩家是否正在看向其他玩家（距离足够近，用于共伞检测）
-     */
-    private boolean isLookingAtPlayer(Player player) {
-        double maxDistance = 8.0;
-        var start = player.getEyePosition(1.0F);
-        var look = player.getLookAngle();
-
-        var aabb = player.getBoundingBox().inflate(maxDistance);
-        var entities = player.level().getEntities(player, aabb);
-
-        for (var entity : entities) {
-            if (entity instanceof Player otherPlayer && otherPlayer != player && otherPlayer.isAlive()) {
-                var toEntity = otherPlayer.getEyePosition(1.0F).subtract(start).normalize();
-                double dot = toEntity.dot(look);
-                double distance = player.distanceTo(otherPlayer);
-                if (dot > 0.85 && distance <= maxDistance) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
