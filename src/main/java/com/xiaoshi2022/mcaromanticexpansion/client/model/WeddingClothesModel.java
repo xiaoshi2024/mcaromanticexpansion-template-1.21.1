@@ -9,28 +9,24 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
-public class WeddingClothesModel<T extends Entity> extends EntityModel<T> {
+public abstract class WeddingClothesModel<T extends LivingEntity> extends EntityModel<T> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            new ResourceLocation(MCARomanticExpansion.MODID, "wedding_clothes"), "main"
+    public static final ModelLayerLocation LAYER_LOCATION_MALE = new ModelLayerLocation(
+            new ResourceLocation(MCARomanticExpansion.MODID, "wedding_clothes_male"), "main"
+    );
+    public static final ModelLayerLocation LAYER_LOCATION_FEMALE = new ModelLayerLocation(
+            new ResourceLocation(MCARomanticExpansion.MODID, "wedding_clothes_female"), "main"
     );
 
-    private final ModelPart Waist;
-    private final ModelPart Head;
-    private final ModelPart Body;
-    private final ModelPart RightArm;
-    private final ModelPart LeftArm;
-    private final ModelPart RightLeg;
-    private final ModelPart LeftLeg;
-
-    public ModelPart getHead() { return Head; }
-    public ModelPart getBody() { return Body; }
-    public ModelPart getRightArm() { return RightArm; }
-    public ModelPart getLeftArm() { return LeftArm; }
-    public ModelPart getRightLeg() { return RightLeg; }
-    public ModelPart getLeftLeg() { return LeftLeg; }
+    protected final ModelPart Waist;
+    protected final ModelPart Head;
+    protected final ModelPart Body;
+    protected final ModelPart RightArm;
+    protected final ModelPart LeftArm;
+    protected final ModelPart RightLeg;
+    protected final ModelPart LeftLeg;
 
     public WeddingClothesModel(ModelPart root) {
         this.Waist = root.getChild("Waist");
@@ -42,8 +38,14 @@ public class WeddingClothesModel<T extends Entity> extends EntityModel<T> {
         this.LeftLeg = root.getChild("LeftLeg");
     }
 
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
+    public ModelPart getHead() { return Head; }
+    public ModelPart getBody() { return Body; }
+    public ModelPart getRightArm() { return RightArm; }
+    public ModelPart getLeftArm() { return LeftArm; }
+    public ModelPart getRightLeg() { return RightLeg; }
+    public ModelPart getLeftLeg() { return LeftLeg; }
+
+    protected static PartDefinition createBaseParts(MeshDefinition meshdefinition) {
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition Waist = partdefinition.addOrReplaceChild("Waist",
@@ -59,40 +61,17 @@ public class WeddingClothesModel<T extends Entity> extends EntityModel<T> {
                         .texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(0.0F, -12.0F, 0.0F));
 
-        PartDefinition RightArm = Waist.addOrReplaceChild("RightArm",
-                CubeListBuilder.create()
-                        .texOffs(40, 16).addBox(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(-5.0F, -10.0F, 0.0F));
-
-        PartDefinition LeftArm = Waist.addOrReplaceChild("LeftArm",
-                CubeListBuilder.create()
-                        .texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(5.0F, -10.0F, 0.0F));
-
-        PartDefinition RightLeg = partdefinition.addOrReplaceChild("RightLeg",
-                CubeListBuilder.create()
-                        .texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(-1.9F, 12.0F, 0.0F));
-
-        PartDefinition LeftLeg = partdefinition.addOrReplaceChild("LeftLeg",
-                CubeListBuilder.create()
-                        .texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(1.9F, 12.0F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        return Waist;
     }
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
                           float netHeadYaw, float headPitch) {
-        // 空实现
     }
 
-    // 【修复】renderToBuffer 方法签名：8 个参数 (包含颜色)
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
                                float red, float green, float blue, float alpha) {
-        // 【修复】使用 8 参数版本的 render 方法
         Waist.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         RightLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         LeftLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
