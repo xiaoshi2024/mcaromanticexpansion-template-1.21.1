@@ -11,30 +11,25 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class WeddingClothesModel<T extends Entity> extends EntityModel<T> {
+public abstract class WeddingClothesModel extends EntityModel<Entity> {
 
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "wedding_clothes"), "main"
+    public static final ModelLayerLocation LAYER_LOCATION_MALE = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "wedding_clothes_male"), "main"
+    );
+    public static final ModelLayerLocation LAYER_LOCATION_FEMALE = new ModelLayerLocation(
+            ResourceLocation.fromNamespaceAndPath(MCARomanticExpansion.MODID, "wedding_clothes_female"), "main"
     );
 
-    private final ModelPart Waist;
-    private final ModelPart Head;
-    private final ModelPart Body;
-    private final ModelPart RightArm;
-    private final ModelPart LeftArm;
-    private final ModelPart RightLeg;
-    private final ModelPart LeftLeg;
-
-    // 在 WeddingClothesModel 类中添加 getter 方法（如果需要外部访问）
-
-    public ModelPart getHead() { return Head; }
-    public ModelPart getBody() { return Body; }
-    public ModelPart getRightArm() { return RightArm; }
-    public ModelPart getLeftArm() { return LeftArm; }
-    public ModelPart getRightLeg() { return RightLeg; }
-    public ModelPart getLeftLeg() { return LeftLeg; }
+    protected final ModelPart Waist;
+    protected final ModelPart Head;
+    protected final ModelPart Body;
+    protected final ModelPart RightArm;
+    protected final ModelPart LeftArm;
+    protected final ModelPart RightLeg;
+    protected final ModelPart LeftLeg;
 
     public WeddingClothesModel(ModelPart root) {
+        super();
         this.Waist = root.getChild("Waist");
         this.Head = this.Waist.getChild("Head");
         this.Body = this.Waist.getChild("Body");
@@ -44,58 +39,46 @@ public class WeddingClothesModel<T extends Entity> extends EntityModel<T> {
         this.LeftLeg = root.getChild("LeftLeg");
     }
 
-    public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = new MeshDefinition();
+    // Getter 方法
+    public ModelPart getHead() { return Head; }
+    public ModelPart getBody() { return Body; }
+    public ModelPart getRightArm() { return RightArm; }
+    public ModelPart getLeftArm() { return LeftArm; }
+    public ModelPart getRightLeg() { return RightLeg; }
+    public ModelPart getLeftLeg() { return LeftLeg; }
+
+    // 创建基础模型（不含手臂和腿，由子类各自定义）
+    protected static PartDefinition createBaseParts(MeshDefinition meshdefinition) {
         PartDefinition partdefinition = meshdefinition.getRoot();
 
+        // ✅ 直接创建腰（不需要额外偏移）
         PartDefinition Waist = partdefinition.addOrReplaceChild("Waist",
-                CubeListBuilder.create(), PartPose.offset(0.0F, 12.0F, 0.0F));
+                CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
+        // ✅ 头部：相对 Waist 偏移 -12.0F（在腰部上方 12 格）
         PartDefinition Head = Waist.addOrReplaceChild("Head",
                 CubeListBuilder.create()
                         .texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(0.0F, -12.0F, 0.0F));
 
+        // ✅ 身体：相对 Waist 偏移 -12.0F
         PartDefinition Body = Waist.addOrReplaceChild("Body",
                 CubeListBuilder.create()
                         .texOffs(16, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
                 PartPose.offset(0.0F, -12.0F, 0.0F));
 
-        PartDefinition RightArm = Waist.addOrReplaceChild("RightArm",
-                CubeListBuilder.create()
-                        .texOffs(40, 16).addBox(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(-5.0F, -10.0F, 0.0F));
-
-        PartDefinition LeftArm = Waist.addOrReplaceChild("LeftArm",
-                CubeListBuilder.create()
-                        .texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(5.0F, -10.0F, 0.0F));
-
-        PartDefinition RightLeg = partdefinition.addOrReplaceChild("RightLeg",
-                CubeListBuilder.create()
-                        .texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(-1.9F, 12.0F, 0.0F));
-
-        PartDefinition LeftLeg = partdefinition.addOrReplaceChild("LeftLeg",
-                CubeListBuilder.create()
-                        .texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.2F)),
-                PartPose.offset(1.9F, 12.0F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        return Waist;
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
+    public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
                           float netHeadYaw, float headPitch) {
-        // 可以保留空实现，或者根据需要添加动画
+        // 子类可以覆盖此方法实现自定义动画
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        // Waist 及其子部件 (Head, Body, 手臂)
         Waist.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-
-        // 腿部（独立于 Waist）
         RightLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
         LeftLeg.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }

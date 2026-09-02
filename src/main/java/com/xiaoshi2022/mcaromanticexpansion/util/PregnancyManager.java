@@ -98,16 +98,6 @@ public class PregnancyManager {
     // ========== 持久化方法 ==========
 
     /**
-     * 保存所有玩家的备孕期数据到持久化存储
-     * 建议在服务器关闭时调用
-     */
-    public static void saveAllToPersistentData() {
-        // 注意：这个方法需要在正确获取 ServerPlayer 列表的地方调用
-        // 由于没有现成的 player 实例，这个方法需要传入 player 或由外部调用
-        MCARomanticExpansion.LOGGER.debug("Saving all pregnancy data to persistent storage");
-    }
-
-    /**
      * 保存单个玩家的备孕期数据
      */
     public static void saveToPersistentData(ServerPlayer player) {
@@ -217,7 +207,7 @@ public class PregnancyManager {
      */
     private static ServerPlayer findOnlinePlayer(UUID playerId) {
         try {
-            net.minecraft.server.MinecraftServer server = net.neoforged.neoforge.common.NeoForge.getServer();
+            net.minecraft.server.MinecraftServer server = net.neoforged.neoforge.server.ServerLifecycleHooks.getCurrentServer();
             if (server != null) {
                 return server.getPlayerList().getPlayer(playerId);
             }
@@ -306,5 +296,14 @@ public class PregnancyManager {
                 }
             }
         }
+    }
+
+    /**
+     * 清除内存缓存（不操作 NBT）
+     * 用于玩家登出时，数据已经保存到 NBT，只需要清理内存
+     */
+    public static void clearMemoryCache(UUID playerId) {
+        playerPregnancyData.remove(playerId);
+        MCARomanticExpansion.LOGGER.debug("Cleared pregnancy memory cache for player {}", playerId);
     }
 }

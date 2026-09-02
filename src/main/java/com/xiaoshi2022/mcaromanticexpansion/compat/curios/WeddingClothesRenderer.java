@@ -1,14 +1,18 @@
 package com.xiaoshi2022.mcaromanticexpansion.compat.curios;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesFemaleModel;
+import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesMaleModel;
 import com.xiaoshi2022.mcaromanticexpansion.client.model.WeddingClothesModel;
 import com.xiaoshi2022.mcaromanticexpansion.item.WeddingClothesItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,134 +21,134 @@ import net.minecraft.world.item.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
+// ❌ 移除 implements ICurioRenderer
 public class WeddingClothesRenderer {
 
-    // ========== 纹理常量（保留原有4个） ==========
-    private static final ResourceLocation TEXTURE_CHINESE_MALE = ResourceLocation.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/chinese_male.png");
-    private static final ResourceLocation TEXTURE_CHINESE_FEMALE = ResourceLocation.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/chinese_female.png");
-    private static final ResourceLocation TEXTURE_WESTERN_MALE = ResourceLocation.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/western_male.png");
-    private static final ResourceLocation TEXTURE_WESTERN_FEMALE = ResourceLocation.fromNamespaceAndPath(
-            MCARomanticExpansion.MODID, "textures/armor/western_female.png");
+    private static final Map<String, ResourceLocation> TEXTURE_CACHE = new HashMap<>();
+    private WeddingClothesModel maleModel;
+    private WeddingClothesModel femaleModel;
 
-    // ========== 新增文化纹理缓存 ==========
-    private static final Map<String, ResourceLocation> CULTURE_TEXTURE_CACHE = new HashMap<>();
-
-    private WeddingClothesModel<LivingEntity> model;
-
-    private WeddingClothesModel<LivingEntity> getModel() {
-        if (model == null) {
-            model = new WeddingClothesModel<>(
-                    Minecraft.getInstance().getEntityModels().bakeLayer(WeddingClothesModel.LAYER_LOCATION)
+    private WeddingClothesModel getMaleModel() {
+        if (maleModel == null) {
+            maleModel = new WeddingClothesMaleModel(
+                    Minecraft.getInstance().getEntityModels()
+                            .bakeLayer(WeddingClothesModel.LAYER_LOCATION_MALE)
             );
         }
-        return model;
+        return maleModel;
     }
 
-    // 通用的渲染方法，不依赖 Curios API
+    private WeddingClothesModel getFemaleModel() {
+        if (femaleModel == null) {
+            femaleModel = new WeddingClothesFemaleModel(
+                    Minecraft.getInstance().getEntityModels()
+                            .bakeLayer(WeddingClothesModel.LAYER_LOCATION_FEMALE)
+            );
+        }
+        return femaleModel;
+    }
+
+    /**
+     * 主渲染方法 - 供 CuriosIntegration 通过反射调用
+     */
+    public void render(
+            ItemStack stack,
+            Object slotContext,  // 使用 Object 避免直接依赖 SlotContext
+            PoseStack poseStack,
+            RenderLayerParent<? extends LivingEntity, ? extends EntityModel<? extends LivingEntity>> renderLayerParent,
+            MultiBufferSource bufferSource,
+            int packedLight,
+            float limbSwing,
+            float limbSwingAmount,
+            float partialTick,
+            float ageInTicks,
+            float netHeadYaw,
+            float headPitch) {
+
+        if (!(stack.getItem() instanceof WeddingClothesItem item)) {
+            return;
+        }
+
+        WeddingClothesModel clothesModel = item.getGender() == WeddingClothesItem.Gender.FEMALE
+                ? getFemaleModel() : getMaleModel();
+
+        ResourceLocation texture = getTexture(item);
+        RenderType renderType = RenderType.entityCutout(texture);
+
+        if (renderLayerParent.getModel() instanceof HumanoidModel<?> humanoidModel) {
+            @SuppressWarnings("unchecked")
+            HumanoidModel<LivingEntity> playerModel = (HumanoidModel<LivingEntity>) humanoidModel;
+
+            copyPose(playerModel.head, clothesModel.getHead());
+            copyPose(playerModel.body, clothesModel.getBody());
+            copyPose(playerModel.rightArm, clothesModel.getRightArm());
+            copyPose(playerModel.leftArm, clothesModel.getLeftArm());
+            copyPose(playerModel.rightLeg, clothesModel.getRightLeg());
+            copyPose(playerModel.leftLeg, clothesModel.getLeftLeg());
+
+            poseStack.pushPose();
+            clothesModel.renderToBuffer(poseStack, bufferSource.getBuffer(renderType),
+                    packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+            poseStack.popPose();
+        }
+    }
+
+    /**
+     * 辅助方法：支持直接传入 HumanoidModel
+     */
     public void render(
             ItemStack stack,
             LivingEntity entity,
             HumanoidModel<LivingEntity> playerModel,
             PoseStack poseStack,
-            MultiBufferSource buffer,
-            int light,
+            MultiBufferSource bufferSource,
+            int packedLight,
             float limbSwing,
             float limbSwingAmount,
-            float partialTicks,
+            float partialTick,
             float ageInTicks,
             float netHeadYaw,
             float headPitch) {
 
-        if (!(stack.getItem() instanceof WeddingClothesItem)) {
+        if (!(stack.getItem() instanceof WeddingClothesItem item)) {
             return;
         }
 
-        WeddingClothesItem item = (WeddingClothesItem) stack.getItem();
-        WeddingClothesModel<LivingEntity> clothesModel = getModel();
-        ResourceLocation texture = getTextureForItem(item);
+        WeddingClothesModel clothesModel = item.getGender() == WeddingClothesItem.Gender.FEMALE
+                ? getFemaleModel() : getMaleModel();
 
-        RenderType renderType = RenderType.entityCutoutNoCull(texture);
-        VertexConsumer consumer = buffer.getBuffer(renderType);
-        int color = 0xFFFFFFFF;
-        int overlay = OverlayTexture.NO_OVERLAY;
+        ResourceLocation texture = getTexture(item);
+        RenderType renderType = RenderType.entityCutout(texture);
 
-        // ========== 1. 渲染头部 - 跟随玩家头部 ==========
+        copyPose(playerModel.head, clothesModel.getHead());
+        copyPose(playerModel.body, clothesModel.getBody());
+        copyPose(playerModel.rightArm, clothesModel.getRightArm());
+        copyPose(playerModel.leftArm, clothesModel.getLeftArm());
+        copyPose(playerModel.rightLeg, clothesModel.getRightLeg());
+        copyPose(playerModel.leftLeg, clothesModel.getLeftLeg());
+
         poseStack.pushPose();
-        playerModel.head.translateAndRotate(poseStack);
-        poseStack.translate(0.0F, 0.75F, 0.0F);
-        clothesModel.getHead().render(poseStack, consumer, light, overlay, color);
-        poseStack.popPose();
-
-        // ========== 2. 渲染身体 - 跟随玩家身体 ==========
-        poseStack.pushPose();
-        playerModel.body.translateAndRotate(poseStack);
-        poseStack.translate(0.0F, 0.74F, 0.0F);
-        clothesModel.getBody().render(poseStack, consumer, light, overlay, color);
-        poseStack.popPose();
-
-        // ========== 3. 渲染右臂 - 跟随玩家右臂 ==========
-        poseStack.pushPose();
-        playerModel.rightArm.translateAndRotate(poseStack);
-        poseStack.translate(0.32F, 0.6F, 0.0F);
-        clothesModel.getRightArm().render(poseStack, consumer, light, overlay, color);
-        poseStack.popPose();
-
-        // ========== 4. 渲染左臂 - 跟随玩家左臂 ==========
-        poseStack.pushPose();
-        playerModel.leftArm.translateAndRotate(poseStack);
-        poseStack.translate(-0.32F, 0.6F, 0.0F);
-        clothesModel.getLeftArm().render(poseStack, consumer, light, overlay, color);
-        poseStack.popPose();
-
-        // ========== 5. 渲染右腿 - 跟随玩家右腿 ==========
-        poseStack.pushPose();
-        playerModel.rightLeg.translateAndRotate(poseStack);
-        poseStack.translate(0.12F, -0.8F, 0.0F);
-        clothesModel.getRightLeg().render(poseStack, consumer, light, overlay, color);
-        poseStack.popPose();
-
-        // ========== 6. 渲染左腿 - 跟随玩家左腿 ==========
-        poseStack.pushPose();
-        playerModel.leftLeg.translateAndRotate(poseStack);
-        poseStack.translate(-0.12F, -0.8F, 0.0F);
-        clothesModel.getLeftLeg().render(poseStack, consumer, light, overlay, color);
+        clothesModel.renderToBuffer(poseStack, bufferSource.getBuffer(renderType),
+                packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
         poseStack.popPose();
     }
 
-    /**
-     * 根据物品获取纹理（兼容新旧两种枚举）
-     */
-    private ResourceLocation getTextureForItem(WeddingClothesItem item) {
-        WeddingClothesItem.WeddingCulture culture = item.getCulture();
-        WeddingClothesItem.Gender gender = item.getGender();
+    private void copyPose(ModelPart source, ModelPart target) {
+        target.xRot = source.xRot;
+        target.yRot = source.yRot;
+        target.zRot = source.zRot;
+        target.x = source.x;
+        target.y = source.y;
+        target.z = source.z;
+    }
 
-        // 如果是 CHINESE 或 WESTERN，使用原有常量（保证向后兼容）
-        if (culture == WeddingClothesItem.WeddingCulture.CHINESE) {
-            return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_CHINESE_MALE : TEXTURE_CHINESE_FEMALE;
-        }
-        if (culture == WeddingClothesItem.WeddingCulture.WESTERN) {
-            return gender == WeddingClothesItem.Gender.MALE ? TEXTURE_WESTERN_MALE : TEXTURE_WESTERN_FEMALE;
-        }
-
-        // 新文化：从缓存或动态构建
-        String key = culture.getName() + "_" + gender.getName();
-        return CULTURE_TEXTURE_CACHE.computeIfAbsent(key, k ->
+    private ResourceLocation getTexture(WeddingClothesItem item) {
+        String key = item.getCulture().getName() + "_" + item.getGender().getName();
+        return TEXTURE_CACHE.computeIfAbsent(key, k ->
                 ResourceLocation.fromNamespaceAndPath(
                         MCARomanticExpansion.MODID,
-                        "textures/armor/" + culture.getName() + "_" + gender.getName() + ".png"
+                        "textures/armor/" + k + ".png"
                 )
         );
-    }
-
-    // 保留旧的 getTexture 方法（以防其他地方调用）
-    @Deprecated
-    private ResourceLocation getTexture(ItemStack stack, LivingEntity entity) {
-        if (stack.getItem() instanceof WeddingClothesItem item) {
-            return getTextureForItem(item);
-        }
-        return TEXTURE_CHINESE_MALE;
     }
 }

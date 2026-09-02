@@ -18,6 +18,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+//1.21.1neoforge
 public class PregnancyAttemptHandler {
     // 使用线程安全的 ConcurrentHashMap
     private static final ConcurrentHashMap<UUID, BlockPos> sleepingPlayers = new ConcurrentHashMap<>();

@@ -32,6 +32,8 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
+import java.util.UUID;
+
 @Mod(MCARomanticExpansion.MODID)
 public class MCARomanticExpansion {
     public static final String MODID = "mcaromanticexpansion";
@@ -95,8 +97,16 @@ public class MCARomanticExpansion {
     @SubscribeEvent
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            UUID playerId = serverPlayer.getUUID();
+
+            // 先保存
             PregnancyManager.saveToPersistentData(serverPlayer);
-            CarryRuntime.onPlayerLoggedOut(serverPlayer.serverLevel(), serverPlayer.getUUID());
+
+            // 然后只清除内存，不调用 removePregnancyPeriod (因为它会清除NBT)
+            // 直接操作内存缓存
+            PregnancyManager.clearMemoryCache(playerId);
+
+            CarryRuntime.onPlayerLoggedOut(serverPlayer.serverLevel(), playerId);
         }
     }
 

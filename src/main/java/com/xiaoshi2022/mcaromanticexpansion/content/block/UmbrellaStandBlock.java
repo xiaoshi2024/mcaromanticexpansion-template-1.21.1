@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+//1.21.1
 public class UmbrellaStandBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<UmbrellaStandBlock> CODEC = simpleCodec(UmbrellaStandBlock::new);
 
