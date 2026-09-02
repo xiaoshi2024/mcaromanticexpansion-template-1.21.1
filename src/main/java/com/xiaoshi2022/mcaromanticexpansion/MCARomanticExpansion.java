@@ -113,6 +113,8 @@ public class MCARomanticExpansion {
     public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PregnancyManager.saveToPersistentData(serverPlayer);
+            // ✅ 新增：清理内存缓存
+            PregnancyManager.clearMemoryCache(serverPlayer.getUUID());
             CarryRuntime.onPlayerLoggedOut(serverPlayer.serverLevel(), serverPlayer.getUUID());
         }
     }

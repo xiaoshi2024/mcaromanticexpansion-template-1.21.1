@@ -1,10 +1,13 @@
 package com.xiaoshi2022.mcaromanticexpansion.util;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.event.PregnancyAttemptHandler;
 import forge.net.conczin.mca.server.world.data.PlayerSaveData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Map;
 import java.util.UUID;
@@ -41,35 +44,14 @@ public class PregnancyManager {
             this.active = true;
         }
 
-        public UUID getPartnerUUID() {
-            return partnerUUID;
-        }
+        public UUID getPartnerUUID() { return partnerUUID; }
+        public long getStartTime() { return startTime; }
+        public void setStartTime(long startTime) { this.startTime = startTime; }
+        public int getDurationTicks() { return durationTicks; }
+        public void setDurationTicks(int durationTicks) { this.durationTicks = durationTicks; }
+        public boolean isActive() { return active; }
+        public void setActive(boolean active) { this.active = active; }
 
-        public long getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(long startTime) {
-            this.startTime = startTime;
-        }
-
-        public int getDurationTicks() {
-            return durationTicks;
-        }
-
-        public void setDurationTicks(int durationTicks) {
-            this.durationTicks = durationTicks;
-        }
-
-        public boolean isActive() {
-            return active;
-        }
-
-        public void setActive(boolean active) {
-            this.active = active;
-        }
-
-        // 将数据写入 NBT
         public CompoundTag serialize() {
             CompoundTag tag = new CompoundTag();
             tag.putUUID(TAG_PARTNER_UUID, partnerUUID);
@@ -79,7 +61,6 @@ public class PregnancyManager {
             return tag;
         }
 
-        // 从 NBT 读取数据
         public static PregnancyData deserialize(CompoundTag tag) {
             if (tag == null || tag.isEmpty()) {
                 return null;
@@ -97,19 +78,6 @@ public class PregnancyManager {
 
     // ========== 持久化方法 ==========
 
-    /**
-     * 保存所有玩家的备孕期数据到持久化存储
-     * 建议在服务器关闭时调用
-     */
-    public static void saveAllToPersistentData() {
-        // 注意：这个方法需要在正确获取 ServerPlayer 列表的地方调用
-        // 由于没有现成的 player 实例，这个方法需要传入 player 或由外部调用
-        MCARomanticExpansion.LOGGER.debug("Saving all pregnancy data to persistent storage");
-    }
-
-    /**
-     * 保存单个玩家的备孕期数据
-     */
     public static void saveToPersistentData(ServerPlayer player) {
         if (player == null) return;
 
@@ -121,16 +89,11 @@ public class PregnancyManager {
             persistentData.put(PREGNANCY_DATA_KEY, pregnancyData);
             MCARomanticExpansion.LOGGER.debug("Saved pregnancy data for player: {}", player.getName().getString());
         } else {
-            // 如果没有活跃的备孕期，清除旧数据
             persistentData.remove(PREGNANCY_DATA_KEY);
             MCARomanticExpansion.LOGGER.debug("Cleared pregnancy data for player: {}", player.getName().getString());
         }
     }
 
-    /**
-     * 从持久化存储加载玩家的备孕期数据
-     * 应在玩家登录时调用
-     */
     public static void loadFromPersistentData(ServerPlayer player) {
         if (player == null) return;
 
@@ -146,18 +109,14 @@ public class PregnancyManager {
         }
     }
 
-    /**
-     * 清除玩家的持久化备孕期数据
-     */
     public static void clearPersistentData(ServerPlayer player) {
         if (player == null) return;
-
         CompoundTag persistentData = player.getPersistentData();
         persistentData.remove(PREGNANCY_DATA_KEY);
         MCARomanticExpansion.LOGGER.debug("Cleared persistent pregnancy data for player: {}", player.getName().getString());
     }
 
-    // ========== 原有方法（修改后） ==========
+    // ========== 核心方法 ==========
 
     public static boolean isPlayerInPregnancyPeriod(UUID playerId) {
         PregnancyData data = playerPregnancyData.get(playerId);
@@ -175,7 +134,6 @@ public class PregnancyManager {
         PregnancyData data = new PregnancyData(partnerId, worldTime, PREGNANCY_PERIOD_TICKS);
         playerPregnancyData.put(playerId, data);
 
-        // 保存到持久化数据
         saveToPersistentData(player);
 
         MCARomanticExpansion.LOGGER.debug("Player {} started pregnancy period with partner {}",
@@ -189,10 +147,18 @@ public class PregnancyManager {
                 player.getName().getString()));
     }
 
+    // ✅ 修复：移除备孕期时同时清理内存和 NBT
     public static void removePregnancyPeriod(UUID playerId) {
         PregnancyData data = playerPregnancyData.remove(playerId);
         if (data != null) {
             MCARomanticExpansion.LOGGER.debug("Removed pregnancy period for player {}", playerId);
+            ServerPlayer player = findOnlinePlayer(playerId);
+            if (player != null) {
+                clearPersistentData(player);
+                MCARomanticExpansion.LOGGER.debug("Also cleared persistent data for player {}", playerId);
+            } else {
+                MCARomanticExpansion.LOGGER.debug("Player {} not online, persistent data will be cleaned on next login", playerId);
+            }
         }
     }
 
@@ -201,6 +167,12 @@ public class PregnancyManager {
             removePregnancyPeriod(player.getUUID());
             clearPersistentData(player);
         }
+    }
+
+    // ✅ 新增：清除内存缓存（不操作 NBT）
+    public static void clearMemoryCache(UUID playerId) {
+        playerPregnancyData.remove(playerId);
+        MCARomanticExpansion.LOGGER.debug("Cleared pregnancy memory cache for player {}", playerId);
     }
 
     public static void deactivatePregnancyPeriod(UUID playerId) {
@@ -222,7 +194,6 @@ public class PregnancyManager {
     }
 
     public static boolean isFullSatiated(Player player) {
-        // 需要 90% 饱食度（18 点 = 9 个鸡腿）
         return player.getFoodData().getFoodLevel() >= 18;
     }
 
@@ -244,26 +215,55 @@ public class PregnancyManager {
         return Math.min(chance, 1.0);
     }
 
+    private static ServerPlayer findOnlinePlayer(UUID playerId) {
+        try {
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            if (server != null) {
+                return server.getPlayerList().getPlayer(playerId);
+            }
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.debug("Could not find online player {}: {}", playerId, e.getMessage());
+        }
+        return null;
+    }
+
+    // ✅ 修复：玩家死亡时清除备孕期数据并重置性别缓存
     public static void onPlayerDeath(ServerPlayer player) {
-        UUID playerId = player.getUUID();
-        removePregnancyPeriod(playerId);
-        clearPersistentData(player);
+        try {
+            UUID playerId = player.getUUID();
+            MCARomanticExpansion.LOGGER.debug("Processing death for player {}, UUID: {}",
+                    player.getName().getString(), playerId);
 
-        PregnancyData partnerData = playerPregnancyData.values().stream()
-                .filter(data -> data.isActive() && data.getPartnerUUID().equals(playerId))
-                .findFirst().orElse(null);
+            // ✅ 清除性别缓存
+            PregnancyAttemptHandler.clearGenderCache(player);
 
-        if (partnerData != null) {
-            for (Map.Entry<UUID, PregnancyData> entry : playerPregnancyData.entrySet()) {
-                if (entry.getValue().equals(partnerData)) {
-                    removePregnancyPeriod(entry.getKey());
-                    ServerPlayer partner = player.getServer().getPlayerList().getPlayer(entry.getKey());
-                    if (partner != null) {
-                        clearPersistentData(partner);
-                        partner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
-                                "message.mcaromanticexpansion.pregnancy_ended_death"));
-                    }
-                    break;
+            // 清除死亡玩家自身的备孕期数据（内存 + NBT）
+            removePregnancyPeriod(playerId);
+            clearPersistentData(player);
+
+            // 清除伴侣那边引用了死亡玩家的备孕期数据
+            clearPartnerPregnancyIfDead(playerId);
+
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.error("Error processing pregnancy state on death for player {}: {}",
+                    player.getName().getString(), e.getMessage(), e);
+        }
+    }
+
+    public static void clearPartnerPregnancyIfDead(UUID deadPlayerId) {
+        for (UUID pregnancyOwnerId : playerPregnancyData.keySet().toArray(new UUID[0])) {
+            PregnancyData data = playerPregnancyData.get(pregnancyOwnerId);
+            if (data != null && data.isActive() && data.getPartnerUUID().equals(deadPlayerId)) {
+                MCARomanticExpansion.LOGGER.debug("Clearing pregnancy for {} because partner {} died",
+                        pregnancyOwnerId, deadPlayerId);
+
+                removePregnancyPeriod(pregnancyOwnerId);
+
+                ServerPlayer partner = findOnlinePlayer(pregnancyOwnerId);
+                if (partner != null) {
+                    clearPersistentData(partner);
+                    partner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
+                            "message.mcaromanticexpansion.pregnancy_ended_death"));
                 }
             }
         }
