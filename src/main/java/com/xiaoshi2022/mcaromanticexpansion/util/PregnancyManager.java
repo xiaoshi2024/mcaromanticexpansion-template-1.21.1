@@ -31,6 +31,15 @@ public class PregnancyManager {
     // 运行时缓存
     private static final Map<UUID, PregnancyData> playerPregnancyData = new ConcurrentHashMap<>();
 
+    /**
+     * 清除内存缓存（不操作 NBT）
+     * 用于玩家登出时，数据已经保存到 NBT，只需要清理内存
+     */
+    public static void clearMemoryCache(UUID playerId) {
+        playerPregnancyData.remove(playerId);
+        MCARomanticExpansion.LOGGER.debug("Cleared pregnancy memory cache for player {}", playerId);
+    }
+
     public static class PregnancyData {
         private final UUID partnerUUID;
         private long startTime;
@@ -176,11 +185,38 @@ public class PregnancyManager {
                 player.getName().getString()));
     }
 
+    /**
+     * 移除玩家的备孕期数据（通过UUID）
+     * 同时清理内存缓存和持久化NBT数据
+     */
     public static void removePregnancyPeriod(UUID playerId) {
         PregnancyData data = playerPregnancyData.remove(playerId);
         if (data != null) {
             MCARomanticExpansion.LOGGER.debug("Removed pregnancy period for player {}", playerId);
+            // ✅ 同时尝试清除持久化数据
+            ServerPlayer player = findOnlinePlayer(playerId);
+            if (player != null) {
+                clearPersistentData(player);
+                MCARomanticExpansion.LOGGER.debug("Also cleared persistent data for player {}", playerId);
+            } else {
+                MCARomanticExpansion.LOGGER.debug("Player {} not online, persistent data will be cleaned on next login", playerId);
+            }
         }
+    }
+
+    /**
+     * 通过 UUID 查找在线的 ServerPlayer
+     */
+    private static ServerPlayer findOnlinePlayer(UUID playerId) {
+        try {
+            net.minecraft.server.MinecraftServer server = net.neoforged.neoforge.server.ServerLifecycleHooks.getCurrentServer();
+            if (server != null) {
+                return server.getPlayerList().getPlayer(playerId);
+            }
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.debug("Could not find online player {}: {}", playerId, e.getMessage());
+        }
+        return null;
     }
 
     public static void removePregnancyPeriod(ServerPlayer player) {
@@ -239,28 +275,51 @@ public class PregnancyManager {
         return result;
     }
 
+    /**
+     * 玩家死亡时处理备孕期状态
+     */
     public static void onPlayerDeath(ServerPlayer player) {
-        UUID playerId = player.getUUID();
-        removePregnancyPeriod(playerId);
-        clearPersistentData(player);
+        try {
+            UUID playerId = player.getUUID();
+            MCARomanticExpansion.LOGGER.debug("Processing death for player {}, UUID: {}",
+                    player.getName().getString(), playerId);
 
-        PregnancyData partnerData = playerPregnancyData.values().stream()
-                .filter(data -> data.isActive() && data.getPartnerUUID().equals(playerId))
-                .findFirst().orElse(null);
+            // ✅ 清除性别缓存
+            PregnancyAttemptHandler.clearGenderCache(player);
 
-        if (partnerData != null) {
-            for (Map.Entry<UUID, PregnancyData> entry : playerPregnancyData.entrySet()) {
-                if (entry.getValue().equals(partnerData)) {
-                    removePregnancyPeriod(entry.getKey());
-                    if (player.level() instanceof ServerLevel serverLevel) {
-                        ServerPlayer partner = serverLevel.getServer().getPlayerList().getPlayer(entry.getKey());
-                        if (partner != null) {
-                            clearPersistentData(partner);
-                            partner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
-                                    "message.mcaromanticexpansion.pregnancy_ended_death"));
-                        }
-                    }
-                    break;
+            // 清除死亡玩家自身的备孕期数据（内存 + NBT）
+            removePregnancyPeriod(playerId);
+            clearPersistentData(player);
+
+            // 清除伴侣那边引用了死亡玩家的备孕期数据
+            clearPartnerPregnancyIfDead(playerId);
+        } catch (Exception e) {
+            MCARomanticExpansion.LOGGER.error("Error processing pregnancy state on death for player {}: {}",
+                    player.getName().getString(), e.getMessage(), e);
+        }
+    }
+
+    /**
+     * 查找所有 partnerUUID 指向指定 UUID 的备孕期数据并清除它们
+     * 当一方玩家死亡时，另一方的备孕期也应该被取消
+     */
+    public static void clearPartnerPregnancyIfDead(UUID deadPlayerId) {
+        // 使用 keySet 的快照，避免 ConcurrentModificationException
+        for (UUID pregnancyOwnerId : playerPregnancyData.keySet().toArray(new UUID[0])) {
+            PregnancyData data = playerPregnancyData.get(pregnancyOwnerId);
+            if (data != null && data.isActive() && data.getPartnerUUID().equals(deadPlayerId)) {
+                MCARomanticExpansion.LOGGER.debug("Clearing pregnancy for {} because partner {} died",
+                        pregnancyOwnerId, deadPlayerId);
+
+                // ✅ 清除伴侣的备孕期（内存 + NBT）
+                removePregnancyPeriod(pregnancyOwnerId);
+
+                // 如果伴侣在线，发送通知消息
+                ServerPlayer partner = findOnlinePlayer(pregnancyOwnerId);
+                if (partner != null) {
+                    clearPersistentData(partner);
+                    partner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
+                            "message.mcaromanticexpansion.pregnancy_ended_death"));
                 }
             }
         }

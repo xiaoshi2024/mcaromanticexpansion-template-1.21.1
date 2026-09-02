@@ -22,6 +22,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import org.slf4j.Logger;
 
@@ -51,6 +52,7 @@ public class MCARomanticExpansion {
         NeoForge.EVENT_BUS.register(this);
     }
 
+    // ✅ 1.21.1 使用 Identifier
     public static Identifier locate(String id) {
         return Identifier.fromNamespaceAndPath(MODID, id);
     }
@@ -67,6 +69,23 @@ public class MCARomanticExpansion {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PregnancyManager.loadFromPersistentData(serverPlayer);
             AffectionManager.initializeAffectionData(serverPlayer);
+        }
+    }
+
+    // ✅ 添加死亡事件监听
+    @SubscribeEvent
+    public void onPlayerDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            PregnancyManager.onPlayerDeath(player);
+        }
+    }
+
+    // ✅ 添加玩家登出事件（保存数据并清理内存）
+    @SubscribeEvent
+    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            PregnancyManager.saveToPersistentData(serverPlayer);
+            PregnancyManager.clearMemoryCache(serverPlayer.getUUID());
         }
     }
 }
