@@ -58,7 +58,7 @@ public class PregnancyAttemptHandler {
 
             if (elapsedTicks >= data.getDurationTicks()) {
                 attemptPregnancy(serverPlayer, data);
-                PregnancyManager.removePregnancyPeriod(playerId);
+                PregnancyManager.removePregnancyPeriod(serverPlayer);
                 serverPlayer.getServer().getPlayerList().broadcastSystemMessage(
                         Component.translatable("message.mcaromanticexpansion.pregnancy_success_partner", serverPlayer.getName().getString()), false);
             }
@@ -80,6 +80,23 @@ public class PregnancyAttemptHandler {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             // 登录时修复性别数据（修复MCA的大小写Bug）
             fixGenderData(serverPlayer);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+            MCARomanticExpansion.LOGGER.debug("Player {} respawned, checking state integrity", serverPlayer.getName().getString());
+            // 重生时修复性别数据（MCA可能在死亡/重生时重置了NBT）
+            fixGenderData(serverPlayer);
+            // 确保备孕期数据在死亡时已被正确清除（保险处理）
+            PregnancyManager.PregnancyData data = PregnancyManager.getPregnancyData(serverPlayer.getUUID());
+            if (data != null && data.isActive()) {
+                MCARomanticExpansion.LOGGER.warn("Player {} still has active pregnancy data after death, force removing", serverPlayer.getName().getString());
+                PregnancyManager.removePregnancyPeriod(serverPlayer);
+            }
+            // 同时清除伴侣的残留备孕期数据
+            PregnancyManager.clearPartnerPregnancyIfDead(serverPlayer.getUUID());
         }
     }
 
