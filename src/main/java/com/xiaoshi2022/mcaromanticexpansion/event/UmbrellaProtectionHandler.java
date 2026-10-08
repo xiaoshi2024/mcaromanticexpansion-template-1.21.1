@@ -5,6 +5,7 @@ import com.xiaoshi2022.mcaromanticexpansion.item.UmbrellaItem;
 import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +23,7 @@ public class UmbrellaProtectionHandler {
     private static final int HEARTS_PER_INTERVAL = 1;
     private static final int TICKS_PER_INTERVAL = 200;
     private static final Map<UUID, Long> lastHeartsAdd = new HashMap<>();
+    private static final Map<UUID, Long> lastDurabilityDamage = new HashMap<>();
 
     // 缓存 VillagerEntityMCA 相关反射方法
     private static Class<?> villagerEntityClass;
@@ -62,24 +64,40 @@ public class UmbrellaProtectionHandler {
         ItemStack mainHandStack = player.getMainHandItem();
         ItemStack offHandStack = player.getOffhandItem();
 
-        boolean hasOpenUmbrella = false;
+        ItemStack umbrellaStack = ItemStack.EMPTY;
+        InteractionHand umbrellaHand = null;
 
-        if (mainHandStack.is(ModItems.UMBRELLA.get())) {
-            hasOpenUmbrella = isUmbrellaOpen(mainHandStack);
-        } else if (offHandStack.is(ModItems.UMBRELLA.get())) {
-            hasOpenUmbrella = isUmbrellaOpen(offHandStack);
+        if (mainHandStack.is(ModItems.UMBRELLA.get()) && isUmbrellaOpen(mainHandStack)) {
+            umbrellaStack = mainHandStack;
+            umbrellaHand = InteractionHand.MAIN_HAND;
+        } else if (offHandStack.is(ModItems.UMBRELLA.get()) && isUmbrellaOpen(offHandStack)) {
+            umbrellaStack = offHandStack;
+            umbrellaHand = InteractionHand.OFF_HAND;
         }
 
-        if (!hasOpenUmbrella) {
+        if (umbrellaStack.isEmpty()) {
             return;
         }
 
-        // 如果 MCA 不可用，跳过
+        final InteractionHand hand = umbrellaHand;
+
+        long currentTime = level.getGameTime();
+
+        // 伞耐久消耗：下雨天手持打开的伞，每200 tick扣1点耐久（独立于村民/MCA）
+        if (currentTime - lastDurabilityDamage.getOrDefault(player.getUUID(), 0L) >= TICKS_PER_INTERVAL) {
+            int newDamage = umbrellaStack.getDamageValue() + 1;
+            if (newDamage >= umbrellaStack.getMaxDamage()) {
+                umbrellaStack.shrink(1);
+            } else {
+                umbrellaStack.setDamageValue(newDamage);
+            }
+            lastDurabilityDamage.put(player.getUUID(), currentTime);
+        }
+
+        // 如果 MCA 不可用，跳过村民加心
         if (villagerEntityClass == null) {
             return;
         }
-
-        long currentTime = level.getGameTime();
 
         for (Entity entity : level.getEntities(player, player.getBoundingBox().inflate(PROTECTION_RANGE))) {
             // 检查是否是 MCA 村民
@@ -103,6 +121,7 @@ public class UmbrellaProtectionHandler {
                         if (brain != null && rewardHeartsMethod != null) {
                             rewardHeartsMethod.invoke(brain, player, HEARTS_PER_INTERVAL);
                             lastHeartsAdd.put(villagerUUID, currentTime);
+
                             MCARomanticExpansion.LOGGER.debug("Gave {} hearts to villager {} from umbrella",
                                     HEARTS_PER_INTERVAL, villagerUUID);
                         }

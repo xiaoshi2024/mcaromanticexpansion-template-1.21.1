@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.event;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import forge.net.conczin.mca.entity.ai.relationship.Gender;
 import forge.net.conczin.mca.server.world.data.PlayerSaveData;
@@ -574,6 +575,14 @@ public class PregnancyAttemptHandler {
             return;
         }
 
+        // 备孕需结婚：若任一方要求结婚且双方未结婚，则阻止进入备孕期
+        if (MarriageConfig.shouldRequireMarriageForPregnancy(player1, player2) && !PregnancyManager.isMarriedTo(player1, player2)) {
+            MCARomanticExpansion.LOGGER.debug("Pregnancy check skipped: marriage required but not married");
+            player1.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy.marriage_required"));
+            player2.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy.marriage_required"));
+            return;
+        }
+
         if (PregnancyManager.isPlayerInPregnancyPeriod(player1.getUUID()) ||
                 PregnancyManager.isPlayerInPregnancyPeriod(player2.getUUID())) {
             MCARomanticExpansion.LOGGER.debug("One player already in pregnancy period");
@@ -621,7 +630,7 @@ public class PregnancyAttemptHandler {
         }
 
         try {
-            Class<?> babyItemClass = Class.forName("net.conczin.mca.item.BabyItem");
+            Class<?> babyItemClass = Class.forName("forge.net.conczin.mca.item.BabyItem");
             java.lang.reflect.Method createItemMethod = babyItemClass.getDeclaredMethod("createItem",
                     net.minecraft.world.entity.Entity.class,
                     net.minecraft.world.entity.Entity.class,
