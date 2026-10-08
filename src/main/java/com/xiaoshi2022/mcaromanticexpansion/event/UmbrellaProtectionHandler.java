@@ -5,6 +5,7 @@ import com.xiaoshi2022.mcaromanticexpansion.registry.ModItems;
 import net.conczin.mca.entity.VillagerEntityMCA;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +22,7 @@ public class UmbrellaProtectionHandler {
     private static final int HEARTS_PER_INTERVAL = 1;
     private static final int TICKS_PER_INTERVAL = 200;
     private static final Map<UUID, Long> lastHeartsAdd = new HashMap<>();
+    private static final Map<UUID, Long> lastDurabilityDamage = new HashMap<>();
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -37,20 +39,36 @@ public class UmbrellaProtectionHandler {
         ItemStack mainHandStack = player.getMainHandItem();
         ItemStack offHandStack = player.getOffhandItem();
 
-        boolean hasOpenUmbrella = false;
+        ItemStack umbrellaStack = ItemStack.EMPTY;
+        InteractionHand umbrellaHand = null;
 
         // 修复：使用 isUmbrella 检查所有形态
-        if (UmbrellaItem.isUmbrella(mainHandStack)) {
-            hasOpenUmbrella = isUmbrellaOpen(mainHandStack);
-        } else if (UmbrellaItem.isUmbrella(offHandStack)) {
-            hasOpenUmbrella = isUmbrellaOpen(offHandStack);
+        if (UmbrellaItem.isUmbrella(mainHandStack) && isUmbrellaOpen(mainHandStack)) {
+            umbrellaStack = mainHandStack;
+            umbrellaHand = InteractionHand.MAIN_HAND;
+        } else if (UmbrellaItem.isUmbrella(offHandStack) && isUmbrellaOpen(offHandStack)) {
+            umbrellaStack = offHandStack;
+            umbrellaHand = InteractionHand.OFF_HAND;
         }
 
-        if (!hasOpenUmbrella) {
+        if (umbrellaStack.isEmpty()) {
             return;
         }
 
+        final InteractionHand hand = umbrellaHand;
+
         long currentTime = level.getGameTime();
+
+        // 伞耐久消耗：下雨天手持打开的伞，每200 tick扣1点耐久（独立于村民）
+        if (currentTime - lastDurabilityDamage.getOrDefault(player.getUUID(), 0L) >= TICKS_PER_INTERVAL) {
+            int newDamage = umbrellaStack.getDamageValue() + 1;
+            if (newDamage >= umbrellaStack.getMaxDamage()) {
+                umbrellaStack.shrink(1);
+            } else {
+                umbrellaStack.setDamageValue(newDamage);
+            }
+            lastDurabilityDamage.put(player.getUUID(), currentTime);
+        }
 
         for (Entity entity : level.getEntities(player, player.getBoundingBox().inflate(PROTECTION_RANGE))) {
             if (entity instanceof VillagerEntityMCA villager && villager.isAlive()) {

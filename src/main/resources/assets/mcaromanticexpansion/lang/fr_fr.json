@@ -11,16 +11,13 @@
   "item.mcaromanticexpansion.engagement_ring.target": "Bague de Fiançailles - Avec %s",
   "item.mcaromanticexpansion.wedding_ring.given": "Alliance - De %s",
   "item.mcaromanticexpansion.wedding_ring.received": "Alliance - Pour %s",
-
   "item.mcaromanticexpansion.rose_brooch_red": "Broche Rose Rouge",
   "item.mcaromanticexpansion.rose_brooch_pink": "Broche Rose Rose",
   "item.mcaromanticexpansion.rose_brooch_white": "Broche Rose Blanche",
-
   "tooltip.mcaromanticexpansion.corsage": "§7Une broche élégante portée sur la poitrine",
   "tooltip.mcaromanticexpansion.corsage.red": "§cRose Rouge - Passion Ardente",
   "tooltip.mcaromanticexpansion.corsage.pink": "§dRose Rose - Douceur Tendre",
   "tooltip.mcaromanticexpansion.corsage.white": "§fRose Blanche - Pureté Immaculée",
-
   "item.mcaromanticexpansion.chinese_wedding_male": "Costume de Marié Chinois",
   "item.mcaromanticexpansion.chinese_wedding_female": "Robe de Mariée Chinoise",
   "item.mcaromanticexpansion.western_wedding_male": "Costume de Marié Occidental",
@@ -39,15 +36,12 @@
   "item.mcaromanticexpansion.scottish_wedding_female": "Robe de Mariée Écossaise",
   "item.mcaromanticexpansion.slavic_wedding_male": "Costume de Marié Slave",
   "item.mcaromanticexpansion.slavic_wedding_female": "Robe de Mariée Slave",
-
   "advancements.mcaromanticexpansion.root.title": "MC Extension Romantique",
   "advancements.mcaromanticexpansion.root.description": "Un voyage romantique commence",
-
   "item.mcaromanticexpansion.red_veil": "Voile Rouge",
   "item.mcaromanticexpansion.golden_hairpin": "Épingle à Cheveux Dorée",
   "item.mcaromanticexpansion.umbrella": "Parapluie",
   "item.mcaromanticexpansion.love_letter": "Lettre d'Amour",
-
   "mcaromanticexpansion.gui.love_letter.edit.title": "✉ Écrire une Lettre d'Amour ✉",
   "mcaromanticexpansion.gui.love_letter.read.title": "✉ Lettre d'Amour ✉",
   "mcaromanticexpansion.gui.love_letter.recipient_label": "À :",
@@ -60,42 +54,33 @@
   "mcaromanticexpansion.gui.love_letter.reply_title": "✉ Écrire une Réponse ✉",
   "mcaromanticexpansion.gui.love_letter.reply_message_label": "Message de réponse :",
   "mcaromanticexpansion.love_letter.not_written": "§eCette lettre d'amour est encore vierge, faites Shift+Clic droit pour commencer à écrire",
-
   "advancements.mcaromanticexpansion.love_letter_reply.title": "Lettres et Messages",
   "advancements.mcaromanticexpansion.love_letter_reply.description": "Répondez à une lettre d'amour reçue, deux cœurs se rapprochent",
-
   "curios.identifier.wedding": "Tenue de Mariage",
-
   "mcaromanticexpansion.gui.bouquet.title": "Bouquet Reçu",
   "mcaromanticexpansion.gui.bouquet.question": "%s vous a offert un bouquet !",
   "mcaromanticexpansion.gui.bouquet.accept": "Accepter",
   "mcaromanticexpansion.gui.bouquet.reject": "Refuser",
-
   "mcaromanticexpansion.gui.proposal.title": "Demande en Mariage",
   "mcaromanticexpansion.gui.proposal.question": "%s veut vous épouser !",
   "mcaromanticexpansion.gui.proposal.accept": "Oui, je le veux !",
   "mcaromanticexpansion.gui.proposal.reject": "Désolé, non",
-
   "mcaromanticexpansion.gui.marriage.title": "Cérémonie de Mariage",
   "mcaromanticexpansion.gui.marriage.question": "%s veut échanger les alliances !\nLes deux joueurs doivent avoir une alliance",
   "mcaromanticexpansion.gui.marriage.confirm": "Échanger les Alliances",
   "mcaromanticexpansion.gui.marriage.cancel": "Annuler",
-
   "mcaromanticexpansion.gui.shared_umbrella.title": "Invitation à Partager un Parapluie",
   "mcaromanticexpansion.gui.shared_umbrella.question": "%s vous invite à partager un parapluie !",
   "mcaromanticexpansion.gui.shared_umbrella.accept": "Accepter",
   "mcaromanticexpansion.gui.shared_umbrella.reject": "Refuser",
   "mcaromanticexpansion.gui.shared_umbrella.time_left": "Temps restant : %d s",
-
   "mcaromanticexpansion.proposal.accepted": "§a%s a accepté votre demande !",
   "mcaromanticexpansion.proposal.rejected": "§cDemande rejetée.",
   "mcaromanticexpansion.proposal.rejected_by": "§c%s a rejeté votre demande.",
-
   "mcaromanticexpansion.marriage.declined": "§cMariage annulé.",
   "mcaromanticexpansion.marriage.missing_ring": "§cLes deux joueurs doivent avoir une alliance !",
   "mcaromanticexpansion.marriage.success": "§dFélicitations ! Vous êtes marié avec %s !",
   "mcaromanticexpansion.marriage.failed": "§cÉchec du mariage. Assurez-vous que les deux ont des alliances.",
-
   "mcaromanticexpansion.message.cannot_propose": "Impossible de proposer : vous n'êtes pas compatible",
   "mcaromanticexpansion.message.proposal_sent": "§aDemande envoyée à %s !",
   "mcaromanticexpansion.message.cannot_marry": "Impossible de se marier : les deux joueurs doivent avoir une alliance",
@@ -104,51 +89,38 @@
   "mcaromanticexpansion.message.divorce_success": "Divorce réussi",
   "mcaromanticexpansion.message.gift_placed": "§aObjet placé dans la boîte cadeau",
   "mcaromanticexpansion.message.gift_opened": "§aBoîte ouverte et objet reçu",
-
   "mcaromanticexpansion.command.birthday.set.success": "§aAnniversaire défini au : %1$d/%2$d",
   "mcaromanticexpansion.command.birthday.check.success": "§eVotre anniversaire est le : %1$d/%2$d",
   "mcaromanticexpansion.command.birthday.check.not_set": "§cVous n'avez pas défini votre anniversaire ! Utilisation : /birthday set <mois> <jour>",
   "mcaromanticexpansion.command.birthday.today.success": "§a🎂 Joyeux Anniversaire ! C'est votre jour !",
   "mcaromanticexpansion.command.birthday.today.not_birthday": "§eVotre anniversaire est le : %1$d/%2$d",
   "mcaromanticexpansion.command.birthday.today.not_set": "§cVous n'avez pas défini votre anniversaire !",
-
   "mcaromanticexpansion.ring.tooltip.engaged_to": "Fiancé(e) de %s",
   "mcaromanticexpansion.ring.tooltip.married_to": "Marié(e) à %s",
   "mcaromanticexpansion.ring.tooltip.blessing": "Bénédictions à vous deux",
-
   "mcaromanticexpansion.command.birthday.check.other.success": "L'anniversaire de %s est le %d/%d",
   "mcaromanticexpansion.command.birthday.check.other.not_set": "%s n'a pas encore défini son anniversaire !",
-
   "advancements.mcaromanticexpansion.unveil_veil.title": "Voile Soulevé",
   "advancements.mcaromanticexpansion.unveil_veil.description": "Lors de la cérémonie, le marié soulève le voile rouge de la mariée",
-
   "advancements.mcaromanticexpansion.first_umbrella_gift.title": "Un Parapluie pour Toi",
   "advancements.mcaromanticexpansion.first_umbrella_gift.description": "Offrez un parapluie à un joueur pour la première fois",
-
   "advancements.mcaromanticexpansion.rainy_umbrella_gift.title": "Chanson sous la Pluie",
   "advancements.mcaromanticexpansion.rainy_umbrella_gift.description": "Offrez un parapluie à un joueur sous la pluie 10 fois au total",
-
   "advancements.mcaromanticexpansion.mutual_umbrella_gift.title": "Notre Parapluie",
   "advancements.mcaromanticexpansion.mutual_umbrella_gift.description": "Échangez des parapluies avec le même joueur 20 fois au total",
-
   "advancements.mcaromanticexpansion.heart_to_heart.title": "Cœur à Cœur",
   "advancements.mcaromanticexpansion.heart_to_heart.description": "Déclenchez l'événement Cœur à Cœur en partageant un parapluie",
-
   "advancements.mcaromanticexpansion.rainbow_pact.title": "Pacte de l'Arc-en-ciel",
   "advancements.mcaromanticexpansion.rainbow_pact.description": "Déclenchez l'événement Pacte de l'Arc-en-ciel en partageant un parapluie",
-
   "advancements.mcaromanticexpansion.time_stands_still.title": "Le Temps S'arrête",
   "advancements.mcaromanticexpansion.time_stands_still.description": "Déclenchez l'événement Le Temps S'arrête en partageant un parapluie",
-
   "advancements.mcaromanticexpansion.synchrony_test.title": "Épreuve de Synchronisation",
   "advancements.mcaromanticexpansion.synchrony_test.description": "Déclenchez l'événement Épreuve de Synchronisation en partageant un parapluie",
-
   "message.mcaromanticexpansion.pregnancy_start": "§dVous et %s entrez en période de conception !",
   "message.mcaromanticexpansion.pregnancy_start_partner": "§dVous et %s entrez en période de conception !",
   "message.mcaromanticexpansion.pregnancy_success": "§aFélicitations ! Vous êtes enceinte !",
   "message.mcaromanticexpansion.pregnancy_success_partner": "§aFélicitations ! %s est enceinte !",
   "message.mcaromanticexpansion.pregnancy_ended_death": "§cVotre partenaire est malheureusement décédé(e), la période de conception est terminée",
-
   "mcaromanticexpansion.command.pregnancy.status.active": "§ePériode de conception en cours : %d tick écoulés / %d tick au total (%d tick restants)",
   "mcaromanticexpansion.command.pregnancy.status.inactive": "§cVous n'êtes pas en période de conception",
   "mcaromanticexpansion.command.pregnancy.status.active.other": "Période de conception de %s en cours : %d tick écoulés / %d tick au total (%d tick restants)",
@@ -161,66 +133,46 @@
   "mcaromanticexpansion.command.pregnancy.cancel.failure": "§cVous n'êtes pas en période de conception !",
   "mcaromanticexpansion.command.pregnancy.cancel.success.other": "§aPériode de conception de %s annulée",
   "mcaromanticexpansion.command.pregnancy.cancel.failure.other": "§c%s n'est pas en période de conception !",
-
   "block.mcaromanticexpansion.umbrella_stand": "Porte-parapluie",
   "item.mcaromanticexpansion.umbrella_stand": "Porte-parapluie",
-
   "event.mcaromanticexpansion.share_story.player": "§dVous partagez une histoire intéressante avec l'autre...",
   "event.mcaromanticexpansion.share_story.partner": "§dL'autre partage une histoire intéressante avec vous...",
-
   "event.mcaromanticexpansion.hold_hands.player": "§dVos mains se touchent par inadvertance, le cœur s'emballe...",
   "event.mcaromanticexpansion.hold_hands.partner": "§dVos mains se touchent par inadvertance, le cœur s'emballe...",
-
   "event.mcaromanticexpansion.whisper_love.player": "§dVous murmurez les mots cachés au fond de votre cœur...",
   "event.mcaromanticexpansion.whisper_love.partner": "§dL'autre murmure les mots cachés au fond de son cœur...",
-
   "event.mcaromanticexpansion.gentle_kiss.player": "§dSous le parapluie, vous échangez un tendre baiser...",
   "event.mcaromanticexpansion.gentle_kiss.partner": "§dSous le parapluie, vous échangez un tendre baiser...",
-
   "event.mcaromanticexpansion.confession.player": "§dVous prenez courage et vous confessez !",
   "event.mcaromanticexpansion.confession.partner": "§dL'autre prend courage et se confesse à vous !",
-
   "event.mcaromanticexpansion.heart_to_heart.player": "§dCœur à Cœur : vous recevez la bénédiction de la chance et de la vitesse !",
   "event.mcaromanticexpansion.heart_to_heart.partner": "§dCœur à Cœur : vous recevez la bénédiction de la chance et de la vitesse !",
-
   "event.mcaromanticexpansion.rainbow_pact.player": "§dPacte de l'Arc-en-ciel : un magnifique arc-en-ciel apparaît autour de vous !",
   "event.mcaromanticexpansion.rainbow_pact.partner": "§dPacte de l'Arc-en-ciel : un magnifique arc-en-ciel apparaît autour de vous !",
-
   "event.mcaromanticexpansion.time_stands_still.player": "§dLe Temps S'arrête : sous le parapluie, le temps semble ralentir...",
   "event.mcaromanticexpansion.time_stands_still.partner": "§dLe Temps S'arrête : sous le parapluie, le temps semble ralentir...",
-
   "event.mcaromanticexpansion.synchrony_test.player": "§dÉpreuve de Synchronisation : pendant la prochaine minute, sautez en même temps !",
   "event.mcaromanticexpansion.synchrony_test.partner": "§dÉpreuve de Synchronisation : pendant la prochaine minute, sautez en même temps !",
-
   "message.mcaromanticexpansion.affection.decay.attacker": "§cVous avez blessé %s, l'affection a diminué de %d points !",
   "message.mcaromanticexpansion.affection.decay.target": "§c%s vous a blessé, l'affection a diminué de %d points !",
-
   "advancements.mcaromanticexpansion.hero_resque.title": "Héros Sauveteur",
   "advancements.mcaromanticexpansion.hero_resque.description": "Déclenchez l'événement 'Héros Sauveteur' et protégez votre amour !",
-
   "advancements.mcaromanticexpansion.moonlight_serenade.title": "Sérénade au Clair de Lune",
   "advancements.mcaromanticexpansion.moonlight_serenade.description": "Profitez d'une nuit romantique au clair de lune !",
-
   "advancements.mcaromanticexpansion.starfall.title": "Pluie d'Étoiles",
   "advancements.mcaromanticexpansion.starfall.description": "Faites un vœu sous la pluie d'étoiles !",
-
   "event.mcaromanticexpansion.hero_resque.player": "§c⚠️ Danger ! Des zombies approchent ! Protégez votre amour !",
   "event.mcaromanticexpansion.hero_resque.partner": "§c⚠️ Danger ! Des zombies approchent ! Votre amour vous protégera !",
-
   "event.mcaromanticexpansion.moonlight_serenade.player": "§d🌙 La lumière de la lune illumine la nuit...",
   "event.mcaromanticexpansion.moonlight_serenade.partner": "§d🌙 La lumière de la lune illumine la nuit...",
-
   "event.mcaromanticexpansion.starfall.player": "§e🌟 Une étoile filante traverse le ciel, faites un vœu !",
   "event.mcaromanticexpansion.starfall.partner": "§e🌟 Une étoile filante traverse le ciel, faisant un vœu avec vous !",
-
   "key.categories.mcaromanticexpansion": "MCA Extension Romantique",
   "key.mcaromanticexpansion.princess_carry": "Porter comme une princesse (Demander/Lâcher)",
-
   "mcaromanticexpansion.gui.princess_carry.title": "Invitation au Port Princesse",
   "mcaromanticexpansion.gui.princess_carry.question": "%s veut vous porter comme une princesse !",
   "mcaromanticexpansion.gui.princess_carry.accept": "Accepter",
   "mcaromanticexpansion.gui.princess_carry.reject": "Refuser",
-
   "message.mcaromanticexpansion.carry.sent": "§dDemande de port envoyée à %s, en attente de réponse...",
   "message.mcaromanticexpansion.carry.rejected": "§c%s a refusé votre invitation au port princesse.",
   "message.mcaromanticexpansion.carry.busy": "§cVous ou l'autre êtes déjà en train de porter, impossible de porter à nouveau.",
@@ -229,19 +181,15 @@
   "message.mcaromanticexpansion.carry.failed": "§cÉchec du port, l'autre monte peut-être une autre entité.",
   "message.mcaromanticexpansion.carry.no_target": "§7Aucun autre joueur en vue, faites face à un autre joueur et appuyez sur la touche.",
   "message.mcaromanticexpansion.carry.self_release_hint": "§7L'un ou l'autre peut appuyer sur Shift (s'accroupir) ou à nouveau sur H pour terminer le port.",
-
-
   "tooltip.mcaromanticexpansion.gift_box.from": "§7De: §f%s",
   "tooltip.mcaromanticexpansion.gift_box.message": "§7Message: §o§f%s",
   "tooltip.mcaromanticexpansion.gift_box.birthday": "§d§l🎂 Cadeau d'Anniversaire ! 🎂",
-
   "tooltip.mcaromanticexpansion.love_letter.to": "§dÀ: §f%s",
   "tooltip.mcaromanticexpansion.love_letter.from": "§7De: §f%s",
   "tooltip.mcaromanticexpansion.love_letter.replied": "§b↩ Répondu: §f%s",
   "tooltip.mcaromanticexpansion.love_letter.usage": "§8Clic droit pour lire · Shift+Clic droit pour éditer",
   "tooltip.mcaromanticexpansion.love_letter.blank": "§7Une lettre d'amour vierge",
   "tooltip.mcaromanticexpansion.love_letter.write_hint": "§8Shift+Clic droit pour écrire votre message d'amour",
-
   "tooltip.mcaromanticexpansion.hairpin.line1": "§7Épingle à cheveux dorée chinoise",
   "tooltip.mcaromanticexpansion.red_veil.line1": "§7Voile rouge de mariée chinoise",
   "tooltip.mcaromanticexpansion.wedding_clothes.line1": "§7Tenue de %s%s",
@@ -249,7 +197,6 @@
   "tooltip.mcaromanticexpansion.wedding_clothes.type.western": "Marié Occidental ",
   "tooltip.mcaromanticexpansion.wedding_clothes.gender.male": "Marié",
   "tooltip.mcaromanticexpansion.wedding_clothes.gender.female": "Mariée",
-
   "culture.mcaromanticexpansion.chinese": "Chinois",
   "culture.mcaromanticexpansion.western": "Occidental",
   "culture.mcaromanticexpansion.east_african": "Est-Africain",
@@ -259,13 +206,10 @@
   "culture.mcaromanticexpansion.german": "Allemand",
   "culture.mcaromanticexpansion.scottish": "Écossais",
   "culture.mcaromanticexpansion.slavic": "Slave",
-
   "gender.mcaromanticexpansion.male": "Masculin",
   "gender.mcaromanticexpansion.female": "Féminin",
-
   "tooltip.mcaromanticexpansion.wearable.head": "§7Peut être porté dans l'emplacement de tête",
   "tooltip.mcaromanticexpansion.wearable.curio": "§7Peut être porté dans un emplacement de curiosité",
-
   "message.mcaromanticexpansion.interact.self": "§cVous ne pouvez pas utiliser ceci sur vous-même !",
   "message.mcaromanticexpansion.gift_box.empty": "§cLa boîte cadeau est vide ! Veuillez d'abord placer un objet.",
   "message.mcaromanticexpansion.gift_box.has_gift": "§cLa boîte cadeau contient déjà un cadeau ! Impossible d'en placer un autre !",
@@ -331,17 +275,13 @@
   "message.mcaromanticexpansion.gender.set.male": "§a[MCA] Votre genre a été défini sur : Masculin",
   "message.mcaromanticexpansion.gender.set.female": "§a[MCA] Votre genre a été défini sur : Féminin",
   "message.mcaromanticexpansion.need_set_gender": "§cUtilisez /mca editor pour définir votre genre !",
-
-
   "mcaromanticexpansion.command.birthday.setgift.success": "§aLa boîte cadeau dans votre main a été définie comme cadeau d'anniversaire !",
   "mcaromanticexpansion.command.birthday.setgift.need_gift_box": "§cVous devez tenir une boîte cadeau !",
-
   "hud.mcaromanticexpansion.affection.title": "♥ Affection avec %s",
   "hud.mcaromanticexpansion.affection.level.passionate": "❤ Amour Passionné",
   "hud.mcaromanticexpansion.affection.level.crush": "♥ Cœur qui bat",
   "hud.mcaromanticexpansion.affection.level.favorable": "♡ Sympathie",
   "hud.mcaromanticexpansion.affection.level.acquainted": "♢ Connaissances",
-
   "command.mcaromanticexpansion.marriageconfig.enabled": "§aMariage de même genre activé (global)",
   "command.mcaromanticexpansion.marriageconfig.disabled": "§cMariage de même genre désactivé (global)",
   "command.mcaromanticexpansion.marriageconfig.reloaded": "§aConfiguration du mariage de même genre rechargée !",
@@ -360,7 +300,6 @@
   "command.mcaromanticexpansion.marriageconfig.help.player_allow": "§7/marriageconfig player <joueur> allowSameGender <true/false> - Définir le remplacement par joueur",
   "command.mcaromanticexpansion.marriageconfig.help.player_reset": "§7/marriageconfig player <joueur> reset - Réinitialiser le remplacement par joueur (utiliser le paramètre global)",
   "command.mcaromanticexpansion.marriageconfig.help.status": "§7/marriageconfig status - Voir l'état actuel de la configuration",
-
   "mcaromanticexpansion.gui.hud_config.title": "Configuration du HUD",
   "mcaromanticexpansion.gui.hud_config.position": "Position",
   "mcaromanticexpansion.gui.hud_config.position.top_left": "En haut à gauche",
@@ -385,12 +324,10 @@
   "mcaromanticexpansion.gui.hud_config.editing": "§eÉdition...",
   "mcaromanticexpansion.gui.hud_config.click_to_edit": "§7Cliquez ✏ pour éditer",
   "mcaromanticexpansion.gui.hud_config.auto_coordinate": "§7Sélectionnez une position pour afficher automatiquement les coordonnées",
-
   "mcaromanticexpansion.gui.love_letter.read.to": "§dÀ: §f%s",
   "mcaromanticexpansion.gui.love_letter.read.from": "§7—— De §f%s",
   "mcaromanticexpansion.gui.love_letter.read.reply_header": "§b✦ Réponse ✦",
   "mcaromanticexpansion.gui.love_letter.read.reply_from": "§7—— Réponse de §f%s",
-
   "message.mcaromanticexpansion.update.found": " §e🎉 Une nouvelle version est disponible !",
   "message.mcaromanticexpansion.update.current_version": "§7Version actuelle : §c%s",
   "message.mcaromanticexpansion.update.changelog": "§7Changements : §f%s",
@@ -398,7 +335,6 @@
   "message.mcaromanticexpansion.update.view_project": "§b§n[📖 Voir le projet]",
   "message.mcaromanticexpansion.update.reminder": "§a💡 Veuillez mettre à jour rapidement pour profiter des dernières fonctionnalités et corrections !",
   "message.mcaromanticexpansion.update.checking": "§a🔍 Recherche de mises à jour sur Modrinth...",
-
   "message.mcaromanticexpansion.advancement.unlocked_event": "§d§l💕 Événement romantique débloqué via un succès : %s !",
   "message.mcaromanticexpansion.bouquet.accepted_by": "§a%s a accepté votre bouquet !",
   "message.mcaromanticexpansion.bouquet.you_accepted": "§aVous avez accepté le bouquet de %s !",
@@ -409,5 +345,24 @@
   "message.mcaromanticexpansion.update.notify.enabled": "§aNotifications de mise à jour à la connexion activées.",
   "message.mcaromanticexpansion.update.notify.disabled": "§7Notifications de mise à jour à la connexion désactivées. Utilisez §6/mcaupdate notify true §7pour les réactiver.",
   "message.mcaromanticexpansion.update.notify.status.enabled": "§7Notifications de mise à jour à la connexion : §aActivées",
-  "message.mcaromanticexpansion.update.notify.status.disabled": "§7Notifications de mise à jour à la connexion : §cDésactivées"
+  "message.mcaromanticexpansion.update.notify.status.disabled": "§7Notifications de mise à jour à la connexion : §cDésactivées",
+  "command.mcaromanticexpansion.marriageconfig.pregnancy_requires_marriage.enabled": "§aLa grossesse nécessite désormais le mariage (global)",
+  "command.mcaromanticexpansion.marriageconfig.pregnancy_requires_marriage.disabled": "§cLa grossesse ne nécessite plus le mariage (global)",
+  "command.mcaromanticexpansion.marriageconfig.status.pregnancy_requires_marriage.enabled": "§eGrossesse nécessite le mariage: §aOui",
+  "command.mcaromanticexpansion.marriageconfig.status.pregnancy_requires_marriage.disabled": "§eGrossesse nécessite le mariage: §cNon",
+  "command.mcaromanticexpansion.marriageconfig.help.pregnancy_requires_marriage": "§7/marriageconfig pregnancyRequiresMarriage <true/false> - Définir si le mariage est requis pour concevoir",
+  "message.mcaromanticexpansion.pregnancy.marriage_required": "§cLe mariage est requis pour concevoir. Faites d'abord votre demande en mariage !",
+  "command.mcaromanticexpansion.marriageconfig.player.pregnancy_requires_marriage.required": "§a%s nécessite désormais le mariage pour la grossesse (remplace le global)",
+  "command.mcaromanticexpansion.marriageconfig.player.pregnancy_requires_marriage.exempt": "§c%s est exempté de l'exigence de mariage pour la grossesse (remplace le global)",
+  "command.mcaromanticexpansion.marriageconfig.player.reset_pregnancy": "§aRéinitialisé l'exigence de mariage pour la grossesse de %s, suit maintenant le paramètre global",
+  "command.mcaromanticexpansion.marriageconfig.status.pregnancy_overrides": "§eRemplacements mariage-grossesse par joueur:",
+  "command.mcaromanticexpansion.marriageconfig.status.pregnancy_override_entry.required": "  §7- %s: §cMariage requis",
+  "command.mcaromanticexpansion.marriageconfig.status.pregnancy_override_entry.exempt": "  §7- %s: §aExempté",
+  "command.mcaromanticexpansion.marriageconfig.status.no_pregnancy_overrides": "§7Aucun remplacement de grossesse de joueur pour le moment",
+  "command.mcaromanticexpansion.marriageconfig.help.player_pregnancy_requires_marriage": "§7/marriageconfig player <joueur> pregnancyRequiresMarriage <true/false> - Définir le remplacement individuel d'exigence de mariage pour la grossesse",
+  "command.mcaromanticexpansion.marriageconfig.help.player_reset_pregnancy": "§7/marriageconfig player <joueur> resetPregnancy - Réinitialiser le remplacement de grossesse du joueur (utiliser le paramètre global)",
+  "item.mcaromanticexpansion.umbrella_closed": "Parapluie (fermé)",
+  "item.mcaromanticexpansion.umbrella_half": "Parapluie (semi-ouvert)",
+  "item.mcaromanticexpansion.umbrella_open": "Parapluie (ouvert)",
+  "key.category.minecraft.key.categories.mcaromanticexpansion": "MCA: Extension Romantique"
 }

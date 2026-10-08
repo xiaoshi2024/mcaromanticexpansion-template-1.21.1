@@ -46,7 +46,7 @@ public class UmbrellaItem extends Item {
     }
 
     public UmbrellaItem(Properties properties) {
-        super(properties.stacksTo(1));
+        super(properties);
     }
 
     // ========== 状态方法 ==========
@@ -109,6 +109,8 @@ public class UmbrellaItem extends Item {
 
             ItemStack newStack = getStackForState(nextState);
             newStack.setCount(1);
+            // 保留耐久度，防止切换状态时重置
+            newStack.setDamageValue(stack.getDamageValue());
             player.setItemInHand(hand, newStack);
 
             MCARomanticExpansion.LOGGER.debug("Umbrella state: {} -> {} for {}",

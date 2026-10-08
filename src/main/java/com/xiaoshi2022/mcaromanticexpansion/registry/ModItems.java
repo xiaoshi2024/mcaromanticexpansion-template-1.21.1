@@ -196,25 +196,25 @@ public class ModItems {
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA =
             ITEMS.registerItem("umbrella",
                     UmbrellaItem::new,
-                    p -> p.stacksTo(1));
+                    p -> p.durability(64));
 
     // 关闭状态的伞（独立物品）
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA_CLOSED =
             ITEMS.registerItem("umbrella_closed",
                     UmbrellaItem::new,
-                    p -> p.stacksTo(1));
+                    p -> p.durability(64));
 
     // 半开状态的伞（独立物品）
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA_HALF =
             ITEMS.registerItem("umbrella_half",
                     UmbrellaItem::new,
-                    p -> p.stacksTo(1));
+                    p -> p.durability(64));
 
     // 全开状态的伞（独立物品）
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA_OPEN =
             ITEMS.registerItem("umbrella_open",
                     UmbrellaItem::new,
-                    p -> p.stacksTo(1));
+                    p -> p.durability(64));
 
 
     // 情书
