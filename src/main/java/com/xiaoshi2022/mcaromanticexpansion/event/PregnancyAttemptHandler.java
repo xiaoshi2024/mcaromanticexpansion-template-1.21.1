@@ -1,6 +1,7 @@
 package com.xiaoshi2022.mcaromanticexpansion.event;
 
 import com.xiaoshi2022.mcaromanticexpansion.MCARomanticExpansion;
+import com.xiaoshi2022.mcaromanticexpansion.util.MarriageConfig;
 import com.xiaoshi2022.mcaromanticexpansion.util.PregnancyManager;
 import net.conczin.mca.entity.ai.relationship.Gender;
 import net.conczin.mca.server.world.data.PlayerSaveData;
@@ -288,6 +289,14 @@ public class PregnancyAttemptHandler {
                     player2.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.need_set_gender"));
                 }
             }
+            return;
+        }
+
+        // 备孕需结婚：若任一方要求结婚且双方未结婚，则阻止进入备孕期
+        if (MarriageConfig.shouldRequireMarriageForPregnancy(player1, player2) && !PregnancyManager.isMarriedTo(player1, player2)) {
+            MCARomanticExpansion.LOGGER.debug("Pregnancy check skipped: marriage required but not married");
+            player1.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy.marriage_required"));
+            player2.sendSystemMessage(Component.translatable("message.mcaromanticexpansion.pregnancy.marriage_required"));
             return;
         }
 

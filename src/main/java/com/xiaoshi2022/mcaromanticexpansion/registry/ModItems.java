@@ -131,9 +131,9 @@ public class ModItems {
     public static final DeferredHolder<Item, HairPinItem> GOLDEN_HAIRPIN = ITEMS.register("golden_hairpin",
             () -> new HairPinItem(new Item.Properties().stacksTo(1)));
 
-    // 伞
+    // 伞（带耐久，防止无限使用）
     public static final DeferredHolder<Item, UmbrellaItem> UMBRELLA = ITEMS.register("umbrella",
-            () -> new UmbrellaItem(new Item.Properties().stacksTo(1)));
+            () -> new UmbrellaItem(new Item.Properties().durability(64)));
 
     // 情书
     public static final DeferredHolder<Item, LoveLetterItem> LOVE_LETTER = ITEMS.register("love_letter",

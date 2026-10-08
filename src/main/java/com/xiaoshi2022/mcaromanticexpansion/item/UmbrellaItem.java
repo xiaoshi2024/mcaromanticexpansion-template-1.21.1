@@ -44,7 +44,7 @@ public class UmbrellaItem extends Item {
     }
 
     public UmbrellaItem(Properties properties) {
-        super(properties.stacksTo(1));
+        super(properties);
     }
 
     public static float getUmbrellaState(ItemStack stack) {
